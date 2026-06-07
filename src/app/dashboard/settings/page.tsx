@@ -1,82 +1,83 @@
+"use client";
+
+const settingsSections = [
+  {
+    title: "Organization",
+    icon: "🏢",
+    items: [
+      { label: "Organization Profile", desc: "Company name, logo, and branding", current: "Acme Corp" },
+      { label: "Billing & Subscription", desc: "Plan details and payment method", current: "Growth Plan" },
+      { label: "Working Hours", desc: "Business hours and holidays", current: "Mon-Fri, 9AM-6PM EST" },
+      { label: "Timezone", desc: "Default timezone for the organization", current: "America/New_York" },
+    ],
+  },
+  {
+    title: "AI Configuration",
+    icon: "🤖",
+    items: [
+      { label: "AI Agent Settings", desc: "Configure AI behavior and response style", current: "Active" },
+      { label: "Auto-Resolution Rules", desc: "When AI should auto-resolve tickets", current: "70% confidence" },
+      { label: "Escalation Triggers", desc: "Conditions that trigger human escalation", current: "5 rules active" },
+      { label: "Knowledge Base AI", desc: "AI search and article suggestions", current: "Enabled" },
+    ],
+  },
+  {
+    title: "Channels",
+    icon: "📡",
+    items: [
+      { label: "Web Chat Widget", desc: "Embed and customize the chat widget", current: "Connected" },
+      { label: "WhatsApp Business", desc: "WhatsApp Business API integration", current: "Connected" },
+      { label: "Email Integration", desc: "IMAP/SMTP email configuration", current: "Connected" },
+      { label: "SMS (Twilio)", desc: "SMS messaging configuration", current: "Connected" },
+      { label: "Facebook Messenger", desc: "Messenger integration", current: "Connected" },
+      { label: "Instagram DM", desc: "Instagram Direct Messages", current: "Connected" },
+    ],
+  },
+  {
+    title: "Security",
+    icon: "🔒",
+    items: [
+      { label: "Authentication", desc: "SSO, 2FA, and login settings", current: "2FA Enabled" },
+      { label: "Roles & Permissions", desc: "RBAC configuration", current: "5 roles" },
+      { label: "API Keys", desc: "Manage API keys and tokens", current: "3 active keys" },
+      { label: "Audit Log", desc: "Activity tracking and compliance", current: "Enabled" },
+    ],
+  },
+];
+
 export default function SettingsPage() {
   return (
     <div>
-      <h1 className="text-2xl font-bold text-gray-900 mb-6">Settings</h1>
-
-      <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
-        {/* Settings Nav */}
-        <div className="lg:col-span-1">
-          <div className="rounded-xl border border-gray-200 bg-white p-4">
-            <nav className="space-y-1">
-              {["General", "Channels", "AI Agents", "Members", "Billing", "API Keys", "Security"].map((item, i) => (
-                <button
-                  key={item}
-                  className={`w-full text-left rounded-lg px-3 py-2 text-sm font-medium transition-colors ${
-                    i === 0 ? "bg-blue-50 text-blue-700" : "text-gray-600 hover:bg-gray-50"
-                  }`}
-                >
-                  {item}
-                </button>
-              ))}
-            </nav>
-          </div>
+      <div className="flex items-center justify-between mb-6">
+        <div>
+          <h1 className="text-2xl font-bold text-gray-900">Settings</h1>
+          <p className="text-sm text-gray-500 mt-1">Configure your organization, AI, and integrations</p>
         </div>
+      </div>
 
-        {/* Settings Content */}
-        <div className="lg:col-span-3">
-          <div className="rounded-xl border border-gray-200 bg-white p-6">
-            <h2 className="text-lg font-semibold text-gray-900 mb-6">General Settings</h2>
-            <div className="space-y-6 max-w-2xl">
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Organization Name</label>
-                <input type="text" defaultValue="Acme Corp" className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500" />
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Support Email</label>
-                <input type="email" defaultValue="support@acme.com" className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500" />
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Timezone</label>
-                <select className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500">
-                  <option>UTC</option>
-                  <option>Eastern Time (ET)</option>
-                  <option>Pacific Time (PT)</option>
-                  <option>Central European Time (CET)</option>
-                </select>
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Language</label>
-                <select className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500">
-                  <option>English</option>
-                  <option>Spanish</option>
-                  <option>French</option>
-                  <option>German</option>
-                </select>
-              </div>
-              <div className="flex items-center justify-between rounded-lg border border-gray-200 p-4">
-                <div>
-                  <div className="text-sm font-medium text-gray-900">AI Auto-Resolution</div>
-                  <div className="text-xs text-gray-500">Allow AI to automatically resolve tickets</div>
+      <div className="space-y-6">
+        {settingsSections.map((section) => (
+          <div key={section.title} className="rounded-2xl border border-gray-200 bg-white overflow-hidden">
+            <div className="flex items-center gap-3 px-6 py-4 border-b border-gray-100 bg-gray-50/50">
+              <span className="text-lg">{section.icon}</span>
+              <h3 className="text-base font-semibold text-gray-900">{section.title}</h3>
+            </div>
+            <div className="divide-y divide-gray-50">
+              {section.items.map((item) => (
+                <div key={item.label} className="flex items-center justify-between px-6 py-4 hover:bg-gray-50/50 transition-colors cursor-pointer group">
+                  <div>
+                    <div className="text-sm font-medium text-gray-900 group-hover:text-blue-600 transition">{item.label}</div>
+                    <div className="text-xs text-gray-500 mt-0.5">{item.desc}</div>
+                  </div>
+                  <div className="flex items-center gap-3">
+                    <span className="text-sm text-gray-500">{item.current}</span>
+                    <svg className="w-4 h-4 text-gray-400 group-hover:text-gray-600 transition" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" /></svg>
+                  </div>
                 </div>
-                <button className="relative inline-flex h-6 w-11 items-center rounded-full bg-blue-600">
-                  <span className="inline-block h-4 w-4 transform rounded-full bg-white translate-x-6" />
-                </button>
-              </div>
-              <div className="flex items-center justify-between rounded-lg border border-gray-200 p-4">
-                <div>
-                  <div className="text-sm font-medium text-gray-900">Satisfaction Survey</div>
-                  <div className="text-xs text-gray-500">Send CSAT survey after ticket resolution</div>
-                </div>
-                <button className="relative inline-flex h-6 w-11 items-center rounded-full bg-blue-600">
-                  <span className="inline-block h-4 w-4 transform rounded-full bg-white translate-x-6" />
-                </button>
-              </div>
-              <button className="rounded-lg bg-blue-600 px-6 py-2.5 text-sm font-semibold text-white hover:bg-blue-700 transition-colors">
-                Save Changes
-              </button>
+              ))}
             </div>
           </div>
-        </div>
+        ))}
       </div>
     </div>
   );
