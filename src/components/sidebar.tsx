@@ -6,6 +6,7 @@ import { usePathname } from "next/navigation";
 const nav = [
   { label: "Dashboard", href: "/dashboard", icon: "📊" },
   { label: "Tickets", href: "/dashboard/tickets", icon: "🎫" },
+  { label: "Inbox", href: "/dashboard/inbox", icon: "📥" },
   { label: "Customers", href: "/dashboard/customers", icon: "👥" },
   { label: "Knowledge Base", href: "/dashboard/knowledge", icon: "📚" },
   { label: "Analytics", href: "/dashboard/analytics", icon: "📈" },
@@ -18,7 +19,7 @@ export function Sidebar() {
   const pathname = usePathname();
 
   return (
-    <aside className="fixed inset-y-0 left-0 z-40 w-64 border-r border-gray-200 bg-white hidden lg:block">
+    <aside className="fixed inset-y-0 left-0 z-40 w-64 border-r border-gray-200 bg-white hidden lg:flex flex-col">
       <div className="flex h-16 items-center gap-2 border-b border-gray-100 px-6">
         <div className="h-8 w-8 rounded-lg bg-blue-600 flex items-center justify-center">
           <span className="text-white font-bold text-sm">SF</span>
@@ -27,7 +28,7 @@ export function Sidebar() {
           SupportFlow<span className="text-blue-600"> AI</span>
         </span>
       </div>
-      <nav className="p-4 space-y-1">
+      <nav className="flex-1 p-4 space-y-1 overflow-y-auto">
         {nav.map((item) => {
           const isActive =
             pathname === item.href ||
@@ -48,6 +49,15 @@ export function Sidebar() {
           );
         })}
       </nav>
+      <div className="p-4 border-t border-gray-100">
+        <Link
+          href="/"
+          className="flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium text-gray-500 hover:bg-gray-50 hover:text-gray-700 transition-colors"
+        >
+          <span>🌐</span>
+          View Website
+        </Link>
+      </div>
     </aside>
   );
 }

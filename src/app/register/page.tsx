@@ -3,71 +3,41 @@ import Link from "next/link";
 export default function RegisterPage() {
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-50 px-4">
-      <div className="w-full max-w-sm">
+      <div className="w-full max-w-md">
         <div className="text-center mb-8">
-          <div className="mx-auto h-12 w-12 rounded-xl bg-blue-600 flex items-center justify-center mb-4">
-            <span className="text-white font-bold text-lg">SF</span>
-          </div>
-          <h1 className="text-2xl font-bold text-gray-900">Create account</h1>
-          <p className="mt-1 text-sm text-gray-500">
-            Start your free trial of SupportFlow AI
+          <Link href="/" className="inline-flex items-center gap-2 mb-6">
+            <div className="h-10 w-10 rounded-xl bg-blue-600 flex items-center justify-center">
+              <span className="text-white font-bold text-lg">SF</span>
+            </div>
+          </Link>
+          <h1 className="text-2xl font-bold text-gray-900">Account Creation</h1>
+          <p className="mt-2 text-sm text-gray-500">
+            New accounts are created by your organization administrator.
           </p>
         </div>
-        <div className="rounded-xl border border-gray-200 bg-white p-6 shadow-sm">
-          <form className="space-y-4">
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                Full Name
-              </label>
-              <input
-                type="text"
-                className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
-                placeholder="John Doe"
-              />
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                Work Email
-              </label>
-              <input
-                type="email"
-                className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
-                placeholder="you@company.com"
-              />
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                Company Name
-              </label>
-              <input
-                type="text"
-                className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
-                placeholder="Acme Corp"
-              />
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                Password
-              </label>
-              <input
-                type="password"
-                className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
-                placeholder="••••••••"
-              />
-            </div>
-            <button
-              type="submit"
-              className="w-full rounded-lg bg-blue-600 px-4 py-2.5 text-sm font-semibold text-white hover:bg-blue-700 transition-colors"
-            >
-              Create Account
-            </button>
-          </form>
-        </div>
-        <p className="mt-4 text-center text-sm text-gray-500">
-          Already have an account?{" "}
-          <Link href="/login" className="text-blue-600 hover:text-blue-700 font-medium">
-            Sign in
+        <div className="rounded-xl border border-gray-200 bg-white p-8 shadow-sm text-center">
+          <div className="h-16 w-16 rounded-2xl bg-blue-50 flex items-center justify-center text-3xl mx-auto mb-6">
+            🔒
+          </div>
+          <h2 className="text-lg font-semibold text-gray-900 mb-2">Admin-Only Account Creation</h2>
+          <p className="text-sm text-gray-600 mb-6 leading-relaxed">
+            To maintain data integrity and security, new team member accounts can only be created by your organization&apos;s administrator. Please contact your admin to get an invite.
+          </p>
+          <div className="bg-gray-50 rounded-lg p-4 mb-6">
+            <p className="text-sm text-gray-500">
+              <strong>Already have an account?</strong><br />
+              Sign in with your credentials provided by your administrator.
+            </p>
+          </div>
+          <Link
+            href="/login"
+            className="inline-flex w-full items-center justify-center rounded-lg bg-blue-600 px-4 py-3 text-sm font-semibold text-white hover:bg-blue-700 transition-colors"
+          >
+            Sign In
           </Link>
+        </div>
+        <p className="mt-6 text-center text-xs text-gray-400">
+          Need help? Contact your system administrator.
         </p>
       </div>
     </div>
