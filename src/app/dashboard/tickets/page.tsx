@@ -1,16 +1,19 @@
+"use client";
+
+import { useState } from "react";
 import Link from "next/link";
 
 const tickets = [
-  { id: "#1234", subject: "Cannot access my account after password reset", customer: "Sarah Chen", status: "open", priority: "high", channel: "WhatsApp", sla: "23m left", assignee: "Alex Kim", updatedAt: "2m ago" },
-  { id: "#1233", subject: "Refund request for order #98765", customer: "Marcus Johnson", status: "pending", priority: "medium", channel: "Email", sla: "OK", assignee: "Unassigned", updatedAt: "15m ago" },
-  { id: "#1232", subject: "API returning 500 errors intermittently", customer: "Dev Team - Acme Corp", status: "escalated", priority: "urgent", channel: "Web", sla: "BREACHED", assignee: "Jordan Lee", updatedAt: "1h ago" },
-  { id: "#1231", subject: "How to integrate with Salesforce?", customer: "Emily Rodriguez", status: "open", priority: "low", channel: "Messenger", sla: "5h left", assignee: "Alex Kim", updatedAt: "2h ago" },
-  { id: "#1230", subject: "Billing discrepancy on invoice #4521", customer: "James Park", status: "resolved", priority: "medium", channel: "SMS", sla: "Done", assignee: "Sam Taylor", updatedAt: "3h ago" },
-  { id: "#1229", subject: "Feature request: Dark mode support", customer: "Lisa Wang", status: "open", priority: "low", channel: "Email", sla: "24h left", assignee: "Unassigned", updatedAt: "4h ago" },
-  { id: "#1228", subject: "App crashes on iOS 17.2", customer: "Tom Miller", status: "open", priority: "high", channel: "Instagram", sla: "45m left", assignee: "Jordan Lee", updatedAt: "5h ago" },
-  { id: "#1227", subject: "Cannot download invoice PDF", customer: "Anna Smith", status: "pending", priority: "medium", channel: "WhatsApp", sla: "OK", assignee: "Sam Taylor", updatedAt: "6h ago" },
-  { id: "#1226", subject: "Upgrade plan from Starter to Growth", customer: "Mike Davis", status: "open", priority: "medium", channel: "Web", sla: "3h left", assignee: "Alex Kim", updatedAt: "7h ago" },
-  { id: "#1225", subject: "Two-factor authentication not working", customer: "Rachel Green", status: "resolved", priority: "high", channel: "Email", sla: "Done", assignee: "Jordan Lee", updatedAt: "8h ago" },
+  { id: "SF-1234", subject: "Can't access my account after password reset", customer: "Sarah Chen", company: "Acme Corp", status: "open", priority: "high", channel: "WhatsApp", channelIcon: "📱", assignee: "AI Agent", sla: "23m left", slaStatus: "ok", createdAt: "2 min ago", lastReply: "1 min ago", sentiment: "negative", tags: ["account", "urgent"], aiConfidence: 94 },
+  { id: "SF-1233", subject: "Refund request for order #98765", customer: "Marcus Johnson", company: "TechStart", status: "pending", priority: "medium", channel: "Email", channelIcon: "📧", assignee: "Sarah K.", sla: "1h 45m", slaStatus: "ok", createdAt: "15 min ago", lastReply: "10 min ago", sentiment: "neutral", tags: ["billing", "refund"], aiConfidence: 88 },
+  { id: "SF-1232", subject: "API returning 500 errors intermittently", customer: "Dev Team", company: "TechStart Inc", status: "escalated", priority: "urgent", channel: "Web", channelIcon: "💬", assignee: "Marcus J.", sla: "BREACHED", slaStatus: "breached", createdAt: "1h ago", lastReply: "30 min ago", sentiment: "angry", tags: ["api", "bug", "critical"], aiConfidence: 72 },
+  { id: "SF-1231", subject: "How to integrate with Salesforce?", customer: "Emily Rodriguez", company: "Design Studio", status: "open", priority: "low", channel: "Messenger", channelIcon: "💬", assignee: "AI Agent", sla: "5h left", slaStatus: "ok", createdAt: "2h ago", lastReply: "1h ago", sentiment: "neutral", tags: ["integration", "how-to"], aiConfidence: 96 },
+  { id: "SF-1230", subject: "Billing discrepancy on invoice #4521", customer: "James Park", company: "RetailCo", status: "resolved", priority: "medium", channel: "SMS", channelIcon: "💬", assignee: "AI Agent", sla: "Done", slaStatus: "done", createdAt: "3h ago", lastReply: "2h ago", sentiment: "positive", tags: ["billing"], aiConfidence: 97 },
+  { id: "SF-1229", subject: "Feature request: dark mode support", customer: "Lisa Wang", company: "StartupApp", status: "open", priority: "low", channel: "Web", channelIcon: "💬", assignee: "Unassigned", sla: "8h left", slaStatus: "ok", createdAt: "4h ago", lastReply: "4h ago", sentiment: "positive", tags: ["feature-request"], aiConfidence: 99 },
+  { id: "SF-1228", subject: "App crashes on iOS 17.2", customer: "Tom Miller", company: "MobileDev", status: "open", priority: "high", channel: "Instagram", channelIcon: "📸", assignee: "AI Agent", sla: "45m left", slaStatus: "warning", createdAt: "5h ago", lastReply: "3h ago", sentiment: "frustrated", tags: ["bug", "ios", "mobile"], aiConfidence: 85 },
+  { id: "SF-1227", subject: "Cannot download invoice PDF", customer: "Anna Smith", company: "CorpNet", status: "resolved", priority: "low", channel: "WhatsApp", channelIcon: "📱", assignee: "AI Agent", sla: "Done", slaStatus: "done", createdAt: "6h ago", lastReply: "5h ago", sentiment: "positive", tags: ["billing"], aiConfidence: 98 },
+  { id: "SF-1226", subject: "Want to upgrade to Growth plan", customer: "Mike Davis", company: "GrowthIO", status: "open", priority: "low", channel: "Web", channelIcon: "💬", assignee: "AI Agent", sla: "12h left", slaStatus: "ok", createdAt: "7h ago", lastReply: "7h ago", sentiment: "positive", tags: ["sales", "upgrade"], aiConfidence: 99 },
+  { id: "SF-1225", subject: "Two-factor auth not working", customer: "Rachel Green", company: "Coffee Co", status: "open", priority: "medium", channel: "Email", channelIcon: "📧", assignee: "AI Agent", sla: "2h left", slaStatus: "ok", createdAt: "8h ago", lastReply: "7h ago", sentiment: "negative", tags: ["account", "security"], aiConfidence: 91 },
 ];
 
 const statusColor: Record<string, string> = {
@@ -24,83 +27,225 @@ const priorityColor: Record<string, string> = {
   low: "text-gray-500",
   medium: "text-amber-600",
   high: "text-orange-600 font-semibold",
-  urgent: "text-red-600 font-bold",
+  urgent: "text-red-600 font-semibold",
 };
 
 const slaColor: Record<string, string> = {
-  BREACHED: "text-red-600 font-semibold",
-  OK: "text-green-600",
-  Done: "text-gray-400",
+  ok: "text-green-600",
+  warning: "text-amber-600 font-semibold",
+  breached: "text-red-600 font-semibold",
+  done: "text-gray-400",
+};
+
+const sentimentIcon: Record<string, string> = {
+  positive: "😊",
+  neutral: "😐",
+  negative: "😟",
+  angry: "😡",
+  frustrated: "😤",
 };
 
 export default function TicketsPage() {
+  const [statusFilter, setStatusFilter] = useState("all");
+  const [selectedTickets, setSelectedTickets] = useState<string[]>([]);
+
+  const filteredTickets = tickets.filter((t) => {
+    if (statusFilter === "all") return true;
+    return t.status === statusFilter;
+  });
+
+  const toggleTicket = (id: string) => {
+    setSelectedTickets((prev) =>
+      prev.includes(id) ? prev.filter((t) => t !== id) : [...prev, id]
+    );
+  };
+
   return (
     <div>
       <div className="flex items-center justify-between mb-6">
-        <h1 className="text-2xl font-bold text-gray-900">Tickets</h1>
-        <Link
-          href="/dashboard/tickets/new"
-          className="rounded-lg bg-blue-600 px-4 py-2 text-sm font-semibold text-white hover:bg-blue-700 transition-colors"
-        >
-          + New Ticket
-        </Link>
+        <div>
+          <h1 className="text-2xl font-bold text-gray-900">Tickets</h1>
+          <p className="text-sm text-gray-500 mt-1">Manage and track all customer conversations</p>
+        </div>
+        <div className="flex items-center gap-3">
+          <button className="btn-secondary">
+            <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" /></svg>
+            Export
+          </button>
+          <button className="btn-primary">
+            <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" /></svg>
+            New Ticket
+          </button>
+        </div>
       </div>
 
-      {/* Filters */}
-      <div className="flex flex-wrap gap-2 mb-6">
-        {["All", "Open", "Pending", "Escalated", "Resolved"].map((f) => (
+      {/* Stats */}
+      <div className="grid grid-cols-5 gap-4 mb-6">
+        {[
+          { label: "Open", count: 6, color: "bg-blue-500", icon: "📂" },
+          { label: "Pending", count: 1, color: "bg-amber-500", icon: "⏳" },
+          { label: "Escalated", count: 1, color: "bg-red-500", icon: "🚨" },
+          { label: "Resolved", count: 2, color: "bg-green-500", icon: "✅" },
+          { label: "SLA Breached", count: 1, color: "bg-red-600", icon: "⚠️" },
+        ].map((s) => (
           <button
-            key={f}
-            className={`rounded-full px-4 py-1.5 text-sm font-medium transition-colors ${
-              f === "All"
-                ? "bg-blue-100 text-blue-700"
-                : "bg-white border border-gray-200 text-gray-600 hover:bg-gray-50"
+            key={s.label}
+            onClick={() => setStatusFilter(s.label.toLowerCase().split(" ")[0])}
+            className={`rounded-xl border p-4 text-left transition-all ${
+              statusFilter === s.label.toLowerCase().split(" ")[0] ? "border-blue-300 bg-blue-50 shadow-sm" : "border-gray-200 bg-white hover:bg-gray-50"
             }`}
           >
-            {f}
+            <div className="flex items-center gap-2 mb-1">
+              <span className="text-lg">{s.icon}</span>
+              <span className="text-xs text-gray-500">{s.label}</span>
+            </div>
+            <div className="text-2xl font-bold text-gray-900">{s.count}</div>
           </button>
         ))}
       </div>
 
+      {/* Filters */}
+      <div className="flex items-center gap-3 mb-4">
+        <div className="flex-1 relative">
+          <svg className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg>
+          <input type="text" placeholder="Search tickets by ID, subject, customer..." className="input-search" />
+        </div>
+        <select className="rounded-xl border border-gray-200 px-3 py-2.5 text-sm bg-white focus:border-blue-500 focus:outline-none">
+          <option>All Channels</option>
+          <option>WhatsApp</option>
+          <option>Email</option>
+          <option>Web Chat</option>
+          <option>SMS</option>
+          <option>Messenger</option>
+          <option>Instagram</option>
+        </select>
+        <select className="rounded-xl border border-gray-200 px-3 py-2.5 text-sm bg-white focus:border-blue-500 focus:outline-none">
+          <option>All Priority</option>
+          <option>Urgent</option>
+          <option>High</option>
+          <option>Medium</option>
+          <option>Low</option>
+        </select>
+        <select className="rounded-xl border border-gray-200 px-3 py-2.5 text-sm bg-white focus:border-blue-500 focus:outline-none">
+          <option>All Assignees</option>
+          <option>AI Agent</option>
+          <option>Marcus J.</option>
+          <option>Sarah K.</option>
+          <option>Unassigned</option>
+        </select>
+      </div>
+
+      {/* Bulk Actions */}
+      {selectedTickets.length > 0 && (
+        <div className="flex items-center gap-3 mb-4 p-3 bg-blue-50 rounded-xl border border-blue-200">
+          <span className="text-sm text-blue-700 font-medium">{selectedTickets.length} selected</span>
+          <button className="btn-ghost text-xs">Assign to...</button>
+          <button className="btn-ghost text-xs">Change status</button>
+          <button className="btn-ghost text-xs">Add tag</button>
+          <button className="btn-ghost text-xs text-red-600">Close tickets</button>
+        </div>
+      )}
+
       {/* Ticket Table */}
       <div className="rounded-xl border border-gray-200 bg-white overflow-hidden">
         <table className="w-full">
-          <thead className="bg-gray-50 border-b border-gray-200">
-            <tr>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Ticket</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Customer</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Status</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Priority</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Channel</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Assignee</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">SLA</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Updated</th>
+          <thead>
+            <tr className="border-b border-gray-100 bg-gray-50/50">
+              <th className="w-10 px-4 py-3">
+                <input type="checkbox" className="rounded border-gray-300" />
+              </th>
+              <th className="text-left px-4 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wider">Ticket</th>
+              <th className="text-left px-4 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wider">Customer</th>
+              <th className="text-left px-4 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wider">Status</th>
+              <th className="text-left px-4 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wider">Priority</th>
+              <th className="text-left px-4 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wider">Assignee</th>
+              <th className="text-left px-4 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wider">SLA</th>
+              <th className="text-left px-4 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wider">AI</th>
+              <th className="text-right px-4 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wider">Actions</th>
             </tr>
           </thead>
-          <tbody className="divide-y divide-gray-100">
-            {tickets.map((t) => (
-              <tr key={t.id} className="hover:bg-gray-50 cursor-pointer">
-                <td className="px-6 py-4">
-                  <Link href={`/dashboard/tickets/${t.id.replace("#", "")}`} className="block">
-                    <span className="text-sm font-mono text-gray-400">{t.id}</span>
-                    <div className="text-sm font-medium text-gray-900 mt-0.5 max-w-xs truncate">{t.subject}</div>
+          <tbody className="divide-y divide-gray-50">
+            {filteredTickets.map((t) => (
+              <tr key={t.id} className="hover:bg-gray-50/50 transition-colors group">
+                <td className="px-4 py-3">
+                  <input
+                    type="checkbox"
+                    checked={selectedTickets.includes(t.id)}
+                    onChange={() => toggleTicket(t.id)}
+                    className="rounded border-gray-300"
+                  />
+                </td>
+                <td className="px-4 py-3">
+                  <Link href={`/dashboard/tickets/${t.id.replace("SF-", "")}`} className="block">
+                    <div className="flex items-center gap-2 mb-0.5">
+                      <span className="text-xs font-mono text-gray-400">{t.id}</span>
+                      <span>{t.channelIcon}</span>
+                    </div>
+                    <div className="text-sm font-medium text-gray-900 group-hover:text-blue-600 transition truncate max-w-xs">{t.subject}</div>
+                    <div className="flex items-center gap-1.5 mt-1">
+                      {t.tags.slice(0, 2).map((tag) => (
+                        <span key={tag} className="text-[10px] px-1.5 py-0.5 rounded bg-gray-100 text-gray-500">{tag}</span>
+                      ))}
+                    </div>
                   </Link>
                 </td>
-                <td className="px-6 py-4 text-sm text-gray-600">{t.customer}</td>
-                <td className="px-6 py-4">
-                  <span className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium ${statusColor[t.status]}`}>
+                <td className="px-4 py-3">
+                  <div className="flex items-center gap-2">
+                    <div className="h-7 w-7 rounded-full bg-gray-100 flex items-center justify-center text-[10px] font-semibold text-gray-600">
+                      {t.customer.split(" ").map((n) => n[0]).join("")}
+                    </div>
+                    <div>
+                      <div className="text-sm font-medium text-gray-900">{t.customer}</div>
+                      <div className="text-xs text-gray-400">{t.company}</div>
+                    </div>
+                  </div>
+                </td>
+                <td className="px-4 py-3">
+                  <span className={`inline-flex items-center rounded-full px-2.5 py-1 text-xs font-medium ${statusColor[t.status]}`}>
                     {t.status}
                   </span>
                 </td>
-                <td className={`px-6 py-4 text-sm ${priorityColor[t.priority]}`}>{t.priority}</td>
-                <td className="px-6 py-4 text-sm text-gray-600">{t.channel}</td>
-                <td className="px-6 py-4 text-sm text-gray-600">{t.assignee}</td>
-                <td className={`px-6 py-4 text-xs font-medium ${slaColor[t.sla] || "text-gray-500"}`}>{t.sla}</td>
-                <td className="px-6 py-4 text-sm text-gray-400">{t.updatedAt}</td>
+                <td className="px-4 py-3">
+                  <span className={`text-xs ${priorityColor[t.priority]}`}>{t.priority}</span>
+                </td>
+                <td className="px-4 py-3">
+                  <span className="text-sm text-gray-600">{t.assignee}</span>
+                </td>
+                <td className="px-4 py-3">
+                  <div className={`text-xs font-medium ${slaColor[t.slaStatus]}`}>{t.sla}</div>
+                </td>
+                <td className="px-4 py-3">
+                  <div className="flex items-center gap-1.5">
+                    <span className="text-sm">{sentimentIcon[t.sentiment]}</span>
+                    <span className="text-xs text-gray-500">{t.aiConfidence}%</span>
+                  </div>
+                </td>
+                <td className="px-4 py-3 text-right">
+                  <div className="flex items-center gap-1 justify-end opacity-0 group-hover:opacity-100 transition">
+                    <button className="h-7 w-7 rounded-lg hover:bg-gray-100 flex items-center justify-center text-gray-400 hover:text-gray-600">
+                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" /></svg>
+                    </button>
+                    <button className="h-7 w-7 rounded-lg hover:bg-gray-100 flex items-center justify-center text-gray-400 hover:text-gray-600">
+                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z" /></svg>
+                    </button>
+                    <button className="h-7 w-7 rounded-lg hover:bg-gray-100 flex items-center justify-center text-gray-400 hover:text-gray-600">
+                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 5v.01M12 12v.01M12 19v.01M12 6a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2z" /></svg>
+                    </button>
+                  </div>
+                </td>
               </tr>
             ))}
           </tbody>
         </table>
+        <div className="flex items-center justify-between px-4 py-3 border-t border-gray-100 bg-gray-50/50">
+          <span className="text-sm text-gray-500">Showing {filteredTickets.length} of {tickets.length} tickets</span>
+          <div className="flex items-center gap-2">
+            <button className="btn-ghost text-xs" disabled>Previous</button>
+            <button className="h-8 w-8 rounded-lg bg-blue-600 text-white text-xs font-medium">1</button>
+            <button className="h-8 w-8 rounded-lg hover:bg-gray-100 text-xs font-medium text-gray-600">2</button>
+            <button className="btn-ghost text-xs">Next</button>
+          </div>
+        </div>
       </div>
     </div>
   );
