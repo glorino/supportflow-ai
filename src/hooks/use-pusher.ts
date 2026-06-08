@@ -8,10 +8,20 @@ interface PusherEvent {
   [key: string]: unknown;
 }
 
+interface PusherChannel {
+  bind: (event: string, callback: (data: PusherEvent) => void) => void;
+  unbind: () => void;
+}
+
+interface PusherClient {
+  subscribe: (channel: string) => PusherChannel;
+  disconnect: () => void;
+}
+
 export function usePusher(channel: string, event: string, callback: (data: PusherEvent) => void) {
   useEffect(() => {
-    let pusherClient: unknown = null;
-    let subscription: unknown = null;
+    let client: PusherClient | null = null;
+    let sub: PusherChannel | null = null;
 
     const loadPusher = async () => {
       const { default: PusherJS } = await import("pusher-js");
@@ -20,21 +30,20 @@ export function usePusher(channel: string, event: string, callback: (data: Pushe
 
       if (!key) return;
 
-      pusherClient = new PusherJS(key, {
+      client = new PusherJS(key, {
         cluster,
         forceTLS: true,
-      });
+      }) as unknown as PusherClient;
 
-      subscription = (pusherClient as { subscribe: (ch: string) => { bind: (evt: string, cb: (d: PusherEvent) => void) => void } }).subscribe(channel);
-      subscription.bind(event, callback);
+      sub = client.subscribe(channel);
+      sub.bind(event, callback);
     };
 
     loadPusher();
 
     return () => {
-      if (subscription && pusherClient) {
-        (subscription as { unsubscribe: () => void }).unsubscribe();
-      }
+      if (sub) sub.unbind();
+      if (client) client.disconnect();
     };
   }, [channel, event, callback]);
 }

@@ -8,23 +8,27 @@ const pusher = new Pusher({
   useTLS: true,
 });
 
-export async function broadcastChannel(channel: string, event: string, data: unknown) {
+interface BroadcastPayload {
+  [key: string]: unknown;
+}
+
+export async function broadcastChannel(channel: string, event: string, data: BroadcastPayload) {
   await pusher.trigger(channel, event, data);
 }
 
-export async function broadcastTicketUpdate(ticketId: string, data: unknown) {
+export async function broadcastTicketUpdate(ticketId: string, data: BroadcastPayload) {
   await pusher.trigger("tickets", "ticket-updated", { ticketId, ...data });
 }
 
-export async function broadcastNewMessage(conversationId: string, data: unknown) {
+export async function broadcastNewMessage(conversationId: string, data: BroadcastPayload) {
   await pusher.trigger(`conversation-${conversationId}`, "new-message", data);
 }
 
-export async function broadcastInboxUpdate(data: unknown) {
+export async function broadcastInboxUpdate(data: BroadcastPayload) {
   await pusher.trigger("inbox", "inbox-updated", data);
 }
 
-export async function broadcastAgentActivity(data: unknown) {
+export async function broadcastAgentActivity(data: BroadcastPayload) {
   await pusher.trigger("ai-agents", "agent-activity", data);
 }
 

@@ -1,22 +1,15 @@
 "use client";
 
-import { useChat } from "ai/react";
+import { useChat } from "@ai-sdk/react";
 import { useRef, useEffect, useState } from "react";
-
-interface Message {
-  id: string;
-  role: "user" | "assistant" | "system";
-  content: string;
-}
 
 export function ChatWidget() {
   const [isOpen, setIsOpen] = useState(false);
-  const { messages, input, handleInputChange, handleSubmit, isLoading, error } = useChat({
-    api: "/api/chat",
-    onError: (err) => console.error("Chat error:", err),
-  });
+  const { messages, sendMessage, status, error } = useChat();
+  const [input, setInput] = useState("");
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
+  const isLoading = status === "streaming" || status === "submitted";
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -25,6 +18,13 @@ export function ChatWidget() {
   useEffect(() => {
     if (isOpen) inputRef.current?.focus();
   }, [isOpen]);
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!input.trim() || isLoading) return;
+    sendMessage({ text: input });
+    setInput("");
+  };
 
   const quickActions = [
     { label: "Reset my password", icon: "🔑" },
@@ -89,8 +89,8 @@ export function ChatWidget() {
                     <button
                       key={action.label}
                       onClick={() => {
-                        handleInputChange({ target: { value: action.label } } as React.ChangeEvent<HTMLInputElement>);
-                        handleSubmit(new Event("submit") as any);
+                        setInput(action.label);
+                        sendMessage({ text: action.label });
                       }}
                       className="flex items-center gap-2 p-2.5 rounded-xl border border-gray-200 hover:border-blue-300 hover:bg-blue-50 text-left text-xs text-gray-700 transition-all"
                     >
@@ -122,12 +122,17 @@ export function ChatWidget() {
                       <span className="text-[10px] font-medium text-gray-500">SupportFlow AI</span>
                     </div>
                   )}
-                  <p className="whitespace-pre-wrap">{message.content}</p>
+                  <p className="whitespace-pre-wrap">
+                    {message.parts
+                      ?.filter((p) => p.type === "text")
+                      .map((p) => p.text)
+                      .join("") || ""}
+                  </p>
                 </div>
               </div>
             ))}
 
-            {isLoading && messages.length > 0 && messages[messages.length - 1].role === "user" && (
+            {isLoading && (
               <div className="flex justify-start">
                 <div className="bg-gray-100 rounded-2xl rounded-bl-md px-4 py-3">
                   <div className="flex items-center gap-1.5 mb-1.5">
@@ -165,7 +170,7 @@ export function ChatWidget() {
               <input
                 ref={inputRef}
                 value={input}
-                onChange={handleInputChange}
+                onChange={(e) => setInput(e.target.value)}
                 placeholder="Type a message..."
                 disabled={isLoading}
                 className="flex-1 rounded-xl border border-gray-200 bg-gray-50 px-4 py-3 text-sm placeholder-gray-400 focus:border-blue-500 focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500/20 transition-all disabled:opacity-50"
