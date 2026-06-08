@@ -60,10 +60,12 @@ const slaColor: Record<string, string> = {
 };
 
 const agentPerformance = [
-  { name: "Resolution Agent", role: "Auto-resolves tickets", resolved: 89, pending: 12, rating: 4.8, status: "active" },
-  { name: "QA Agent", role: "Reviews responses", reviewed: 142, approved: 138, rating: 4.9, status: "active" },
-  { name: "Intake Agent", role: "Classifies incoming", classified: 287, accuracy: "96%", rating: 4.7, status: "active" },
-  { name: "Escalation Agent", role: "Routes to humans", handled: 23, avgTime: "3m", rating: 4.6, status: "active" },
+  { name: "Resolution Agent", role: "Auto-resolves tickets", resolved: 89, pending: 12, rating: 4.8, status: "active", color: "from-green-500 to-emerald-600", specialty: "Drafts contextual replies, executes actions", confidence: 94 },
+  { name: "QA Agent", role: "Reviews responses", reviewed: 142, approved: 138, rating: 4.9, status: "active", color: "from-amber-500 to-orange-600", specialty: "Verifies accuracy, tone, compliance", confidence: 97 },
+  { name: "Intake Agent", role: "Classifies incoming", classified: 287, accuracy: "96%", rating: 4.7, status: "active", color: "from-blue-500 to-cyan-600", specialty: "Intent detection, priority, entity extraction", confidence: 96 },
+  { name: "Escalation Agent", role: "Routes to humans", handled: 23, avgTime: "3m", rating: 4.6, status: "active", color: "from-red-500 to-rose-600", specialty: "Skill matching, load balancing, VIP routing", confidence: 91 },
+  { name: "Sentiment Agent", role: "Tracks emotions", tracked: 312, alerts: 14, rating: 4.5, status: "active", color: "from-pink-500 to-fuchsia-600", specialty: "Real-time emotion, trend detection", confidence: 88 },
+  { name: "Knowledge Agent", role: "RAG retrieval", articles: 157, accuracy: "93%", rating: 4.7, status: "active", color: "from-purple-500 to-indigo-600", specialty: "Semantic search, context synthesis", confidence: 93 },
 ];
 
 const sentimentTrend = [
@@ -217,8 +219,8 @@ export default function DashboardPage() {
           <p className="text-xs text-gray-500 mb-5">Real-time agent metrics</p>
           <div className="space-y-3">
             {agentPerformance.map((a) => (
-              <div key={a.name} className="flex items-center gap-4 p-4 bg-gray-50 rounded-xl hover:bg-gray-100 transition">
-                <div className="h-11 w-11 rounded-xl bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center text-white font-bold text-sm shrink-0 shadow-sm">
+              <div key={a.name} className="flex items-center gap-4 p-4 bg-gray-50 rounded-xl hover:bg-gray-100 transition group">
+                <div className={`h-12 w-12 rounded-xl bg-gradient-to-br ${a.color} flex items-center justify-center text-white font-bold text-sm shrink-0 shadow-sm group-hover:scale-105 transition`}>
                   {a.name.split(" ").map((n) => n[0]).join("")}
                 </div>
                 <div className="flex-1 min-w-0">
@@ -226,17 +228,20 @@ export default function DashboardPage() {
                     <span className="text-sm font-semibold text-gray-900">{a.name}</span>
                     <span className="h-1.5 w-1.5 rounded-full bg-green-500" />
                   </div>
-                  <div className="text-xs text-gray-500 mt-0.5">{a.role}</div>
+                  <div className="text-xs text-gray-500 mt-0.5">{a.specialty}</div>
                   <div className="text-xs text-gray-400 mt-0.5">
                     {a.resolved !== undefined && `${a.resolved} resolved · ${a.pending} pending`}
                     {a.reviewed !== undefined && `${a.reviewed} reviewed · ${a.approved} approved`}
                     {a.handled !== undefined && `${a.handled} handled · ${a.avgTime} avg`}
                     {a.classified !== undefined && `${a.classified} classified · ${a.accuracy} accuracy`}
+                    {a.tracked !== undefined && `${a.tracked} tracked · ${a.alerts} alerts`}
+                    {a.articles !== undefined && `${a.articles} articles · ${a.accuracy} accuracy`}
                   </div>
                 </div>
                 <div className="text-right">
                   <div className="text-lg font-bold text-gray-900">{a.rating}</div>
                   <div className="text-[10px] text-gray-400">rating</div>
+                  <div className="text-[10px] text-green-600 font-medium">{a.confidence}% conf</div>
                 </div>
               </div>
             ))}
