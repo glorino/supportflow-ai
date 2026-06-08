@@ -46,16 +46,16 @@ export default function CustomersPage() {
       </div>
 
       {/* Segment Cards */}
-      <div className="grid grid-cols-4 gap-4 mb-6">
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
         {[
-          { label: "Enterprise", count: 4, revenue: "$96,000", icon: "🏢", color: "from-purple-500 to-indigo-600" },
-          { label: "Business", count: 2, revenue: "$28,000", icon: "📈", color: "from-blue-500 to-cyan-600" },
-          { label: "Pro", count: 2, revenue: "$18,200", icon: "⭐", color: "from-green-500 to-emerald-600" },
-          { label: "Starter", count: 2, revenue: "$6,000", icon: "🚀", color: "from-gray-500 to-gray-600" },
+          { label: "Enterprise", count: 4, revenue: "$96,000", icon: "🏢", gradient: "from-purple-500 via-violet-500 to-indigo-600", cardBg: "card-gradient-purple" },
+          { label: "Business", count: 2, revenue: "$28,000", icon: "📈", gradient: "from-blue-500 via-blue-600 to-cyan-600", cardBg: "card-gradient-blue" },
+          { label: "Pro", count: 2, revenue: "$18,200", icon: "⭐", gradient: "from-green-500 via-emerald-500 to-teal-600", cardBg: "card-gradient-green" },
+          { label: "Starter", count: 2, revenue: "$6,000", icon: "🚀", gradient: "from-amber-400 via-orange-500 to-red-500", cardBg: "card-gradient-amber" },
         ].map((s) => (
-          <div key={s.label} className="rounded-2xl border border-gray-200 bg-white p-5 card-hover cursor-pointer">
+          <div key={s.label} className={`rounded-2xl border border-gray-200 p-5 card-glow cursor-pointer group ${s.cardBg}`}>
             <div className="flex items-center gap-3 mb-3">
-              <div className={`h-10 w-10 rounded-xl bg-gradient-to-br ${s.color} flex items-center justify-center text-white text-lg shadow-sm`}>{s.icon}</div>
+              <div className={`h-11 w-11 rounded-xl bg-gradient-to-br ${s.gradient} flex items-center justify-center text-white text-lg shadow-lg group-hover:scale-110 transition-transform duration-300`}>{s.icon}</div>
               <div>
                 <div className="text-sm font-semibold text-gray-900">{s.label}</div>
                 <div className="text-xs text-gray-500">{s.count} customers</div>

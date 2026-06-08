@@ -3,12 +3,12 @@
 import Link from "next/link";
 
 const stats = [
-  { label: "Open Tickets", value: "142", change: "+12", up: true, icon: "🎫", color: "from-blue-500 to-blue-600", bgLight: "bg-blue-50" },
-  { label: "Avg Response", value: "1.2m", change: "-18%", up: true, icon: "⚡", color: "from-green-500 to-emerald-600", bgLight: "bg-green-50" },
-  { label: "Resolution Rate", value: "94%", change: "+3%", up: true, icon: "✅", color: "from-purple-500 to-indigo-600", bgLight: "bg-purple-50" },
-  { label: "CSAT Score", value: "4.7/5", change: "+0.2", up: true, icon: "⭐", color: "from-amber-500 to-orange-600", bgLight: "bg-amber-50" },
-  { label: "AI Resolved", value: "67%", change: "+5%", up: true, icon: "🤖", color: "from-cyan-500 to-blue-600", bgLight: "bg-cyan-50" },
-  { label: "SLA Compliance", value: "91%", change: "-2%", up: false, icon: "⏱️", color: "from-rose-500 to-pink-600", bgLight: "bg-rose-50" },
+  { label: "Open Tickets", value: "142", change: "+12", up: true, icon: "🎫", gradient: "from-blue-500 via-blue-600 to-indigo-600", cardClass: "card-gradient-blue" },
+  { label: "Avg Response", value: "1.2m", change: "-18%", up: true, icon: "⚡", gradient: "from-green-500 via-emerald-500 to-teal-600", cardClass: "card-gradient-green" },
+  { label: "Resolution Rate", value: "94%", change: "+3%", up: true, icon: "✅", gradient: "from-purple-500 via-violet-500 to-indigo-600", cardClass: "card-gradient-purple" },
+  { label: "CSAT Score", value: "4.7/5", change: "+0.2", up: true, icon: "⭐", gradient: "from-amber-400 via-orange-500 to-red-500", cardClass: "card-gradient-amber" },
+  { label: "AI Resolved", value: "67%", change: "+5%", up: true, icon: "🤖", gradient: "from-cyan-500 via-blue-500 to-indigo-600", cardClass: "card-gradient-cyan" },
+  { label: "SLA Compliance", value: "91%", change: "-2%", up: false, icon: "⏱️", gradient: "from-rose-500 via-pink-500 to-fuchsia-600", cardClass: "card-gradient-red" },
 ];
 
 const weeklyData = [
@@ -102,13 +102,13 @@ export default function DashboardPage() {
       {/* Stats Grid */}
       <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4">
         {stats.map((s) => (
-          <div key={s.label} className="rounded-2xl border border-gray-200 bg-white p-5 card-glow cursor-pointer group">
+          <div key={s.label} className={`rounded-2xl border border-gray-200 p-5 card-glow cursor-pointer group ${s.cardClass}`}>
             <div className="flex items-center justify-between mb-3">
-              <div className={`h-11 w-11 rounded-xl ${s.bgLight} flex items-center justify-center text-xl group-hover:scale-110 transition-transform duration-300`}>{s.icon}</div>
-              <span className={`text-xs font-semibold px-2 py-0.5 rounded-full ${s.up ? "bg-green-50 text-green-600" : "bg-red-50 text-red-500"}`}>{s.change}</span>
+              <div className={`h-11 w-11 rounded-xl bg-gradient-to-br ${s.gradient} flex items-center justify-center text-xl text-white shadow-lg group-hover:scale-110 transition-transform duration-300`}>{s.icon}</div>
+              <span className={`text-xs font-semibold px-2 py-0.5 rounded-full ${s.up ? "bg-green-100 text-green-700" : "bg-red-100 text-red-600"}`}>{s.change}</span>
             </div>
             <div className="text-2xl font-bold text-gray-900 mb-0.5 tracking-tight">{s.value}</div>
-            <div className="text-xs text-gray-500 font-medium">{s.label}</div>
+            <div className="text-xs text-gray-600 font-medium">{s.label}</div>
           </div>
         ))}
       </div>
@@ -116,7 +116,7 @@ export default function DashboardPage() {
       {/* Charts Row */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Ticket Volume */}
-        <div className="lg:col-span-2 rounded-2xl border border-gray-200 bg-white p-6">
+        <div className="lg:col-span-2 rounded-2xl border border-gray-200 p-6 card-gradient-blue">
           <div className="flex items-center justify-between mb-6">
             <div>
               <h3 className="text-base font-semibold text-gray-900">Ticket Volume</h3>
@@ -149,7 +149,7 @@ export default function DashboardPage() {
         </div>
 
         {/* Sentiment */}
-        <div className="rounded-2xl border border-gray-200 bg-white p-6">
+        <div className="rounded-2xl border border-gray-200 p-6 card-gradient-purple">
           <h3 className="text-base font-semibold text-gray-900 mb-1">Sentiment Today</h3>
           <p className="text-xs text-gray-500 mb-5">Customer emotion distribution</p>
           <div className="space-y-4">
@@ -159,13 +159,13 @@ export default function DashboardPage() {
                   <span className="text-gray-600">{s.label}</span>
                   <span className="font-semibold text-gray-900">{s.pct}%</span>
                 </div>
-                <div className="h-3 rounded-full bg-gray-100 overflow-hidden">
-                  <div className={`h-full ${s.color} rounded-full transition-all duration-500`} style={{ width: `${s.pct}%` }} />
+                <div className="h-3 rounded-full bg-white/80 overflow-hidden border border-purple-100/50">
+                  <div className={`h-full ${s.color} rounded-full transition-all duration-500 shadow-sm`} style={{ width: `${s.pct}%` }} />
                 </div>
               </div>
             ))}
           </div>
-          <div className="mt-6 p-4 bg-gradient-to-r from-blue-50 to-indigo-50 rounded-xl border border-blue-100">
+          <div className="mt-6 p-4 bg-gradient-to-r from-purple-50 to-fuchsia-50 rounded-xl border border-purple-100">
             <div className="text-xs text-gray-500 mb-1">Avg Sentiment Score</div>
             <div className="flex items-baseline gap-2">
               <span className="text-2xl font-bold text-gray-900">+0.34</span>
@@ -178,7 +178,7 @@ export default function DashboardPage() {
       {/* Channel & Agent Row */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Channel Distribution */}
-        <div className="rounded-2xl border border-gray-200 bg-white p-6">
+        <div className="rounded-2xl border border-gray-200 p-6 card-gradient-blue">
           <h3 className="text-base font-semibold text-gray-900 mb-1">Channel Distribution</h3>
           <p className="text-xs text-gray-500 mb-5">Tickets by communication channel</p>
           <div className="space-y-3">
@@ -188,8 +188,8 @@ export default function DashboardPage() {
                   <span>{ch.icon}</span>
                   <span className="text-sm text-gray-600">{ch.name}</span>
                 </div>
-                <div className="flex-1 h-8 bg-gray-100 rounded-full overflow-hidden">
-                  <div className={`h-full ${ch.color} rounded-full flex items-center pl-3 transition-all duration-500`} style={{ width: `${Math.max(ch.pct * 3.5, 8)}%` }}>
+                <div className="flex-1 h-8 bg-white/80 rounded-full overflow-hidden border border-gray-100">
+                  <div className={`h-full ${ch.color} rounded-full flex items-center pl-3 transition-all duration-500 shadow-sm`} style={{ width: `${Math.max(ch.pct * 3.5, 8)}%` }}>
                     <span className="text-xs font-semibold text-white">{ch.count}</span>
                   </div>
                 </div>
@@ -197,16 +197,16 @@ export default function DashboardPage() {
               </div>
             ))}
           </div>
-          <div className="mt-5 pt-5 border-t border-gray-100 grid grid-cols-3 gap-4 text-center">
-            <div className="bg-gray-50 rounded-xl p-3">
+          <div className="mt-5 pt-5 border-t border-blue-100/50 grid grid-cols-3 gap-4 text-center">
+            <div className="bg-white/80 rounded-xl p-3 border border-blue-100">
               <div className="text-xl font-bold text-gray-900">122</div>
               <div className="text-[11px] text-gray-500">Total Today</div>
             </div>
-            <div className="bg-green-50 rounded-xl p-3">
+            <div className="bg-green-50 rounded-xl p-3 border border-green-100">
               <div className="text-xl font-bold text-green-600">78%</div>
               <div className="text-[11px] text-gray-500">AI Handled</div>
             </div>
-            <div className="bg-blue-50 rounded-xl p-3">
+            <div className="bg-blue-50 rounded-xl p-3 border border-blue-100">
               <div className="text-xl font-bold text-blue-600">4.8m</div>
               <div className="text-[11px] text-gray-500">Avg Handle</div>
             </div>
@@ -214,13 +214,13 @@ export default function DashboardPage() {
         </div>
 
         {/* Agent Performance */}
-        <div className="rounded-2xl border border-gray-200 bg-white p-6">
+        <div className="rounded-2xl border border-gray-200 p-6 card-gradient-purple">
           <h3 className="text-base font-semibold text-gray-900 mb-1">AI Agent Performance</h3>
           <p className="text-xs text-gray-500 mb-5">Real-time agent metrics</p>
           <div className="space-y-3">
             {agentPerformance.map((a) => (
-              <div key={a.name} className="flex items-center gap-4 p-4 bg-gray-50 rounded-xl hover:bg-gray-100 transition group">
-                <div className={`h-12 w-12 rounded-xl bg-gradient-to-br ${a.color} flex items-center justify-center text-white font-bold text-sm shrink-0 shadow-sm group-hover:scale-105 transition`}>
+              <div key={a.name} className="flex items-center gap-4 p-4 bg-white/80 rounded-xl hover:bg-white border border-purple-100/50 transition group">
+                <div className={`h-12 w-12 rounded-xl bg-gradient-to-br ${a.color} flex items-center justify-center text-white font-bold text-sm shrink-0 shadow-lg group-hover:scale-105 transition`}>
                   {a.name.split(" ").map((n) => n[0]).join("")}
                 </div>
                 <div className="flex-1 min-w-0">
@@ -250,8 +250,8 @@ export default function DashboardPage() {
       </div>
 
       {/* Recent Tickets */}
-      <div className="rounded-2xl border border-gray-200 bg-white">
-        <div className="flex items-center justify-between border-b border-gray-100 px-6 py-4">
+      <div className="rounded-2xl border border-gray-200 card-gradient-green overflow-hidden">
+        <div className="flex items-center justify-between border-b border-green-100/50 px-6 py-4">
           <div>
             <h2 className="text-base font-semibold text-gray-900">Recent Tickets</h2>
             <p className="text-xs text-gray-500 mt-0.5">Latest customer conversations</p>
@@ -299,7 +299,7 @@ export default function DashboardPage() {
 
       {/* SLA & AI Activity */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <div className="rounded-2xl border border-gray-200 bg-white p-6">
+        <div className="rounded-2xl border border-gray-200 p-6 card-gradient-green">
           <h3 className="text-base font-semibold text-gray-900 mb-1">SLA Compliance</h3>
           <p className="text-xs text-gray-500 mb-5">Service level agreement metrics</p>
           <div className="space-y-5">
@@ -318,31 +318,29 @@ export default function DashboardPage() {
                     <span className="font-semibold text-gray-900">{s.value}</span>
                   </div>
                 </div>
-                <div className="h-2.5 rounded-full bg-gray-100 overflow-hidden">
-                  <div className={`h-full ${s.color} rounded-full transition-all duration-500`} style={{ width: s.width }} />
+                <div className="h-3 rounded-full bg-white/80 overflow-hidden border border-green-100/50">
+                  <div className={`h-full ${s.color} rounded-full transition-all duration-500 shadow-sm`} style={{ width: s.width }} />
                 </div>
               </div>
             ))}
           </div>
         </div>
 
-        <div className="rounded-2xl border border-gray-200 bg-white p-6">
+        <div className="rounded-2xl border border-gray-200 p-6 card-gradient-amber">
           <h3 className="text-base font-semibold text-gray-900 mb-1">AI Activity Feed</h3>
           <p className="text-xs text-gray-500 mb-5">Real-time agent actions</p>
           <div className="space-y-3">
             {[
-              { agent: "Resolution Agent", action: "Auto-resolved ticket SF-1228", time: "2m ago", type: "success" },
-              { agent: "QA Agent", action: "Approved response for SF-1225", time: "5m ago", type: "success" },
-              { agent: "Escalation Agent", action: "Escalated SF-1224 to billing team", time: "8m ago", type: "warning" },
-              { agent: "Intake Agent", action: "Classified 14 new tickets", time: "12m ago", type: "info" },
-              { agent: "Sentiment Agent", action: "Flagged negative trend on WhatsApp", time: "15m ago", type: "warning" },
-              { agent: "Knowledge Agent", action: "Updated article: Password Reset", time: "22m ago", type: "info" },
-              { agent: "Resolution Agent", action: "Drafted response for SF-1219", time: "28m ago", type: "success" },
+              { agent: "Resolution Agent", action: "Auto-resolved ticket SF-1228", time: "2m ago", type: "success", icon: "✅" },
+              { agent: "QA Agent", action: "Approved response for SF-1225", time: "5m ago", type: "success", icon: "👍" },
+              { agent: "Escalation Agent", action: "Escalated SF-1224 to billing team", time: "8m ago", type: "warning", icon: "⚠️" },
+              { agent: "Intake Agent", action: "Classified 14 new tickets", time: "12m ago", type: "info", icon: "📋" },
+              { agent: "Sentiment Agent", action: "Flagged negative trend on WhatsApp", time: "15m ago", type: "warning", icon: "🔴" },
+              { agent: "Knowledge Agent", action: "Updated article: Password Reset", time: "22m ago", type: "info", icon: "📝" },
+              { agent: "Resolution Agent", action: "Drafted response for SF-1219", time: "28m ago", type: "success", icon: "✍️" },
             ].map((a, i) => (
-              <div key={i} className="flex items-start gap-3 text-sm p-3 rounded-xl hover:bg-gray-50 transition">
-                <div className={`mt-0.5 h-2.5 w-2.5 rounded-full shrink-0 ${
-                  a.type === "success" ? "bg-green-500" : a.type === "warning" ? "bg-amber-500" : "bg-blue-500"
-                }`} />
+              <div key={i} className="flex items-start gap-3 text-sm p-3 bg-white/80 rounded-xl hover:bg-white border border-amber-100/50 transition">
+                <div className="text-base mt-0.5">{a.icon}</div>
                 <div className="min-w-0 flex-1">
                   <span className="font-semibold text-gray-900">{a.agent}</span>{" "}
                   <span className="text-gray-600">{a.action}</span>
