@@ -56,11 +56,14 @@ export default function SettingsPage() {
       </div>
 
       <div className="space-y-6">
-        {settingsSections.map((section) => (
-          <div key={section.title} className="rounded-2xl border border-gray-200 bg-white overflow-hidden">
-            <div className="flex items-center gap-3 px-6 py-4 border-b border-gray-100 bg-gray-50/50">
+        {settingsSections.map((section, i) => {
+          const colors = ["card-gradient-blue", "card-gradient-green", "card-gradient-purple", "card-gradient-amber"];
+          const gradients = ["from-blue-500 to-indigo-600", "from-green-500 to-emerald-600", "from-purple-500 to-violet-600", "from-amber-400 to-orange-500"];
+          return (
+          <div key={section.title} className="rounded-2xl border border-gray-200 overflow-hidden card-glow">
+            <div className={`flex items-center gap-3 px-6 py-4 bg-gradient-to-r ${gradients[i % gradients.length]} text-white`}>
               <span className="text-lg">{section.icon}</span>
-              <h3 className="text-base font-semibold text-gray-900">{section.title}</h3>
+              <h3 className="text-base font-semibold">{section.title}</h3>
             </div>
             <div className="divide-y divide-gray-50">
               {section.items.map((item) => (
@@ -77,7 +80,8 @@ export default function SettingsPage() {
               ))}
             </div>
           </div>
-        ))}
+        );
+        })}
       </div>
     </div>
   );

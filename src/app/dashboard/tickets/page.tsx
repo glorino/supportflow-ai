@@ -80,24 +80,24 @@ export default function TicketsPage() {
       </div>
 
       {/* Stats */}
-      <div className="grid grid-cols-5 gap-4 mb-6">
+      <div className="grid grid-cols-2 sm:grid-cols-5 gap-4 mb-6">
         {[
-          { label: "Open", count: 6, color: "bg-blue-500", icon: "📂" },
-          { label: "Pending", count: 1, color: "bg-amber-500", icon: "⏳" },
-          { label: "Escalated", count: 1, color: "bg-red-500", icon: "🚨" },
-          { label: "Resolved", count: 2, color: "bg-green-500", icon: "✅" },
-          { label: "SLA Breached", count: 1, color: "bg-red-600", icon: "⚠️" },
+          { label: "Open", count: 6, gradient: "from-blue-500 to-indigo-600", cardBg: "card-gradient-blue", icon: "📂" },
+          { label: "Pending", count: 1, gradient: "from-amber-400 to-orange-500", cardBg: "card-gradient-amber", icon: "⏳" },
+          { label: "Escalated", count: 1, gradient: "from-red-500 to-rose-600", cardBg: "card-gradient-red", icon: "🚨" },
+          { label: "Resolved", count: 2, gradient: "from-green-500 to-emerald-600", cardBg: "card-gradient-green", icon: "✅" },
+          { label: "SLA Breached", count: 1, gradient: "from-red-600 to-red-800", cardBg: "card-gradient-red", icon: "⚠️" },
         ].map((s) => (
           <button
             key={s.label}
             onClick={() => setStatusFilter(s.label.toLowerCase().split(" ")[0])}
-            className={`rounded-xl border p-4 text-left transition-all ${
-              statusFilter === s.label.toLowerCase().split(" ")[0] ? "border-blue-300 bg-blue-50 shadow-sm" : "border-gray-200 bg-white hover:bg-gray-50"
+            className={`rounded-2xl border p-4 text-left transition-all card-glow ${
+              statusFilter === s.label.toLowerCase().split(" ")[0] ? `${s.cardBg} border-transparent shadow-lg scale-[1.02]` : "border-gray-200 bg-white hover:bg-gray-50"
             }`}
           >
             <div className="flex items-center gap-2 mb-1">
               <span className="text-lg">{s.icon}</span>
-              <span className="text-xs text-gray-500">{s.label}</span>
+              <span className="text-xs text-gray-500 font-medium">{s.label}</span>
             </div>
             <div className="text-2xl font-bold text-gray-900">{s.count}</div>
           </button>

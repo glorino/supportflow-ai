@@ -97,12 +97,12 @@ export default function TeamsPage() {
       {view === "teams" ? (
         <>
           {/* Team Cards */}
-          <div className="grid grid-cols-2 gap-6 mb-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
             {teams.map((t) => (
-              <div key={t.id} className="rounded-2xl border border-gray-200 bg-white p-6 card-hover">
+              <div key={t.id} className="rounded-2xl border border-gray-200 p-6 card-glow hover:shadow-xl transition-all duration-300 group">
                 <div className="flex items-start justify-between mb-4">
                   <div className="flex items-center gap-3">
-                    <div className={`h-12 w-12 rounded-xl bg-gradient-to-br ${t.color} flex items-center justify-center text-white font-bold text-lg shadow-sm`}>
+                    <div className={`h-12 w-12 rounded-xl bg-gradient-to-br ${t.color} flex items-center justify-center text-white font-bold text-lg shadow-lg group-hover:scale-110 transition-transform duration-300`}>
                       {t.name.split(" ").map((n) => n[0]).join("")}
                     </div>
                     <div>
@@ -113,17 +113,17 @@ export default function TeamsPage() {
                   <button className="btn-ghost text-xs">Edit</button>
                 </div>
                 <div className="grid grid-cols-3 gap-4 mb-4">
-                  <div className="bg-gray-50 rounded-xl p-3 text-center">
-                    <div className="text-lg font-bold text-gray-900">{t.members}</div>
-                    <div className="text-[11px] text-gray-500">Members</div>
+                  <div className="bg-gradient-to-br from-blue-50 to-indigo-50 rounded-xl p-3 text-center border border-blue-100">
+                    <div className="text-lg font-bold text-blue-700">{t.members}</div>
+                    <div className="text-[11px] text-blue-500 font-medium">Members</div>
                   </div>
-                  <div className="bg-gray-50 rounded-xl p-3 text-center">
-                    <div className="text-lg font-bold text-gray-900">{t.openTickets}</div>
-                    <div className="text-[11px] text-gray-500">Open</div>
+                  <div className="bg-gradient-to-br from-amber-50 to-orange-50 rounded-xl p-3 text-center border border-amber-100">
+                    <div className="text-lg font-bold text-amber-700">{t.openTickets}</div>
+                    <div className="text-[11px] text-amber-500 font-medium">Open</div>
                   </div>
-                  <div className="bg-gray-50 rounded-xl p-3 text-center">
+                  <div className="bg-gradient-to-br from-green-50 to-emerald-50 rounded-xl p-3 text-center border border-green-100">
                     <div className="text-lg font-bold text-green-600">{t.avgResponse}</div>
-                    <div className="text-[11px] text-gray-500">Avg Response</div>
+                    <div className="text-[11px] text-green-500 font-medium">Avg Response</div>
                   </div>
                 </div>
                 <div className="flex items-center justify-between pt-4 border-t border-gray-100">
