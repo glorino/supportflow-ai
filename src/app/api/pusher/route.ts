@@ -1,5 +1,11 @@
 import { NextRequest, NextResponse } from "next/server";
-import { broadcastTicketUpdate, broadcastNewMessage, broadcastInboxUpdate } from "@/lib/pusher";
+import { broadcastTicketUpdate, broadcastInboxUpdate } from "@/lib/pusher";
+
+interface BroadcastData {
+  ticketId?: string;
+  conversationId?: string;
+  [key: string]: unknown;
+}
 
 export async function POST(req: NextRequest) {
   try {
@@ -10,14 +16,12 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: "Missing channel, event, or data" }, { status: 400 });
     }
 
-    const channelMap: Record<string, (d: unknown) => Promise<void>> = {
-      "tickets": (d) => broadcastTicketUpdate(d.ticketId || "", d),
-      "inbox": (d) => broadcastInboxUpdate(d),
-    };
+    const typedData = data as BroadcastData;
 
-    const broadcaster = channelMap[channel];
-    if (broadcaster) {
-      await broadcaster(data);
+    if (channel === "tickets") {
+      await broadcastTicketUpdate(typedData.ticketId || "", typedData);
+    } else if (channel === "inbox") {
+      await broadcastInboxUpdate(typedData);
     }
 
     return NextResponse.json({ success: true });
