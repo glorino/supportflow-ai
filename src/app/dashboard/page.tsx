@@ -83,11 +83,11 @@ export default function DashboardPage() {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900">Dashboard</h1>
+          <h1 className="text-2xl font-bold text-gray-900 tracking-tight">Dashboard</h1>
           <p className="text-sm text-gray-500 mt-1">Welcome back, Alex. Here&apos;s your support overview.</p>
         </div>
         <div className="flex items-center gap-3">
-          <select className="rounded-xl border border-gray-200 px-3 py-2.5 text-sm bg-white focus:border-blue-500 focus:outline-none">
+          <select className="rounded-xl border border-gray-200 px-3 py-2.5 text-sm bg-white focus:border-blue-500 focus:outline-none font-medium">
             <option>Last 7 days</option>
             <option>Last 30 days</option>
             <option>Last 90 days</option>
@@ -102,13 +102,13 @@ export default function DashboardPage() {
       {/* Stats Grid */}
       <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4">
         {stats.map((s) => (
-          <div key={s.label} className="rounded-2xl border border-gray-200 bg-white p-5 card-hover cursor-pointer">
+          <div key={s.label} className="rounded-2xl border border-gray-200 bg-white p-5 card-glow cursor-pointer group">
             <div className="flex items-center justify-between mb-3">
-              <div className={`h-10 w-10 rounded-xl ${s.bgLight} flex items-center justify-center text-lg`}>{s.icon}</div>
-              <span className={`text-xs font-semibold ${s.up ? "text-green-600" : "text-red-500"}`}>{s.change}</span>
+              <div className={`h-11 w-11 rounded-xl ${s.bgLight} flex items-center justify-center text-xl group-hover:scale-110 transition-transform duration-300`}>{s.icon}</div>
+              <span className={`text-xs font-semibold px-2 py-0.5 rounded-full ${s.up ? "bg-green-50 text-green-600" : "bg-red-50 text-red-500"}`}>{s.change}</span>
             </div>
-            <div className="text-2xl font-bold text-gray-900 mb-0.5">{s.value}</div>
-            <div className="text-xs text-gray-500">{s.label}</div>
+            <div className="text-2xl font-bold text-gray-900 mb-0.5 tracking-tight">{s.value}</div>
+            <div className="text-xs text-gray-500 font-medium">{s.label}</div>
           </div>
         ))}
       </div>
@@ -125,7 +125,7 @@ export default function DashboardPage() {
             <div className="flex items-center gap-4 text-xs">
               <span className="flex items-center gap-1.5"><span className="h-2.5 w-2.5 rounded-full bg-blue-500" />Open</span>
               <span className="flex items-center gap-1.5"><span className="h-2.5 w-2.5 rounded-full bg-green-500" />Resolved</span>
-              <span className="flex items-center gap-1.5"><span className="h-2.5 w-2.5 rounded-full bg-red-500" />Escalated</span>
+              <span className="flex items-center gap-1.5"><span className="h-2.5 w-2.5 rounded-full bg-red-400" />Escalated</span>
             </div>
           </div>
           <div className="flex items-end gap-3 h-52">
@@ -133,15 +133,15 @@ export default function DashboardPage() {
               const total = d.open + d.resolved + d.escalated;
               const scale = 100 / topBar;
               return (
-                <div key={d.day} className="flex-1 flex flex-col items-center gap-2">
+                <div key={d.day} className="flex-1 flex flex-col items-center gap-2 group">
                   <div className="w-full flex flex-col items-center" style={{ height: "180px" }}>
-                    <div className="w-full flex flex-col justify-end" style={{ height: `${total * scale}%` }}>
-                      <div className="w-full bg-red-400 rounded-t-lg" style={{ height: `${(d.escalated / total) * 100}%`, minHeight: d.escalated > 0 ? "6px" : 0 }} />
+                    <div className="w-full flex flex-col justify-end rounded-t-lg overflow-hidden group-hover:opacity-90 transition-opacity" style={{ height: `${total * scale}%` }}>
+                      <div className="w-full bg-red-400" style={{ height: `${(d.escalated / total) * 100}%`, minHeight: d.escalated > 0 ? "6px" : 0 }} />
                       <div className="w-full bg-green-500" style={{ height: `${(d.resolved / total) * 100}%`, minHeight: "6px" }} />
-                      <div className="w-full bg-blue-500 rounded-b-lg" style={{ height: `${(d.open / total) * 100}%`, minHeight: "6px" }} />
+                      <div className="w-full bg-blue-500" style={{ height: `${(d.open / total) * 100}%`, minHeight: "6px" }} />
                     </div>
                   </div>
-                  <span className="text-xs font-medium text-gray-500">{d.day}</span>
+                  <span className="text-xs font-medium text-gray-500 group-hover:text-gray-900 transition">{d.day}</span>
                 </div>
               );
             })}
