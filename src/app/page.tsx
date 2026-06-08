@@ -146,6 +146,107 @@ export default function Home() {
             <div className="flex items-center gap-2"><span className="h-1.5 w-1.5 rounded-full bg-green-500" /> GDPR Ready</div>
             <div className="flex items-center gap-2"><span className="h-1.5 w-1.5 rounded-full bg-green-500" /> 99.99% Uptime</div>
           </div>
+
+          {/* Hero Illustration - Dashboard Mockup */}
+          <div className="mt-16 mx-auto max-w-5xl">
+            <div className="rounded-2xl border border-gray-200 bg-white shadow-2xl shadow-blue-600/10 overflow-hidden">
+              {/* Browser chrome */}
+              <div className="flex items-center gap-2 border-b border-gray-100 px-4 py-3">
+                <div className="flex gap-1.5">
+                  <div className="h-3 w-3 rounded-full bg-red-400" />
+                  <div className="h-3 w-3 rounded-full bg-amber-400" />
+                  <div className="h-3 w-3 rounded-full bg-green-400" />
+                </div>
+                <div className="ml-4 flex-1 flex items-center gap-2 bg-gray-50 rounded-lg px-3 py-1.5 max-w-lg">
+                  <svg className="w-3.5 h-3.5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" /></svg>
+                  <span className="text-xs text-gray-500">app.supportflow.ai/dashboard</span>
+                </div>
+              </div>
+              {/* Dashboard content mockup */}
+              <div className="flex h-[340px]">
+                {/* Sidebar mock */}
+                <div className="hidden md:flex w-48 border-r border-gray-100 p-3 flex-col gap-1.5">
+                  <div className="flex items-center gap-2 px-2 py-1.5 rounded-lg bg-blue-50">
+                    <div className="h-4 w-4 rounded bg-blue-600" />
+                    <span className="text-[10px] font-medium text-blue-700">Dashboard</span>
+                  </div>
+                  {["Inbox", "Tickets", "Customers", "Knowledge", "Analytics", "Settings"].map((item) => (
+                    <div key={item} className="flex items-center gap-2 px-2 py-1.5 rounded-lg">
+                      <div className="h-3.5 w-3.5 rounded bg-gray-200" />
+                      <span className="text-[10px] text-gray-500">{item}</span>
+                    </div>
+                  ))}
+                </div>
+                {/* Main content mock */}
+                <div className="flex-1 p-4">
+                  {/* Stats row */}
+                  <div className="grid grid-cols-4 gap-3 mb-4">
+                    {[
+                      { label: "Open Tickets", value: "24", change: "+3", color: "bg-blue-50 border-blue-100 text-blue-700" },
+                      { label: "AI Resolved", value: "67%", change: "+5%", color: "bg-green-50 border-green-100 text-green-700" },
+                      { label: "Avg Response", value: "1.2m", change: "-18%", color: "bg-purple-50 border-purple-100 text-purple-700" },
+                      { label: "CSAT", value: "4.8", change: "+0.2", color: "bg-amber-50 border-amber-100 text-amber-700" },
+                    ].map((stat) => (
+                      <div key={stat.label} className={`rounded-lg border p-3 ${stat.color.split(" ").slice(0, 2).join(" ")}`}>
+                        <div className="text-[9px] text-gray-500 mb-1">{stat.label}</div>
+                        <div className="flex items-end justify-between">
+                          <span className={`text-lg font-bold ${stat.color.split(" ")[2]}`}>{stat.value}</span>
+                          <span className="text-[9px] text-green-600 font-medium">{stat.change}</span>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                  {/* Chart mock */}
+                  <div className="rounded-lg border border-gray-100 p-3">
+                    <div className="flex items-center justify-between mb-3">
+                      <span className="text-[10px] font-semibold text-gray-700">Ticket Volume</span>
+                      <div className="flex gap-1">
+                        <span className="h-1.5 w-6 rounded-full bg-blue-500" />
+                        <span className="h-1.5 w-6 rounded-full bg-green-500" />
+                      </div>
+                    </div>
+                    <div className="flex items-end gap-1 h-20">
+                      {[40, 55, 35, 65, 50, 70, 45, 80, 60, 75, 55, 65].map((h, i) => (
+                        <div key={i} className="flex-1 flex flex-col gap-0.5">
+                          <div className="rounded-sm bg-green-400 opacity-60" style={{ height: `${h * 0.4}px` }} />
+                          <div className="rounded-sm bg-blue-500" style={{ height: `${h * 0.6}px` }} />
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+                {/* Right panel mock */}
+                <div className="hidden lg:block w-56 border-l border-gray-100 p-3">
+                  <div className="text-[10px] font-semibold text-gray-700 mb-2">Recent Tickets</div>
+                  <div className="space-y-2">
+                    {[
+                      { name: "Sarah C.", msg: "Can't login", status: "Open", sColor: "bg-amber-100 text-amber-700" },
+                      { name: "TechStart", msg: "API error 500", status: "Escalated", sColor: "bg-red-100 text-red-700" },
+                      { name: "Emily R.", msg: "Integration help", status: "AI Working", sColor: "bg-blue-100 text-blue-700" },
+                      { name: "James P.", msg: "Billing issue", status: "Resolved", sColor: "bg-green-100 text-green-700" },
+                    ].map((ticket) => (
+                      <div key={ticket.name} className="rounded-lg border border-gray-100 p-2">
+                        <div className="flex items-center justify-between mb-1">
+                          <span className="text-[9px] font-medium text-gray-900">{ticket.name}</span>
+                          <span className={`text-[8px] px-1.5 py-0.5 rounded-full font-medium ${ticket.sColor}`}>{ticket.status}</span>
+                        </div>
+                        <div className="text-[9px] text-gray-500">{ticket.msg}</div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            </div>
+            {/* Floating AI badge */}
+            <div className="relative -mt-4 left-1/2 -translate-x-1/2">
+              <div className="inline-flex items-center gap-2 rounded-full bg-white border border-gray-200 shadow-lg px-4 py-2">
+                <span className="h-2 w-2 rounded-full bg-green-500 animate-pulse" />
+                <span className="text-xs font-medium text-gray-700">AI Agents Active</span>
+                <span className="text-xs text-gray-400">·</span>
+                <span className="text-xs text-green-600 font-medium">56% auto-resolved today</span>
+              </div>
+            </div>
+          </div>
         </div>
       </section>
 
