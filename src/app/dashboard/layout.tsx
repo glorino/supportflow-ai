@@ -1,6 +1,7 @@
 "use client";
 
 import { Sidebar } from "@/components/sidebar";
+import { ChatWidget } from "@/components/chat-widget";
 
 export default function DashboardLayout({
   children,
@@ -76,6 +77,8 @@ export default function DashboardLayout({
         {/* Main Content */}
         <main className="p-6">{children}</main>
       </div>
+
+      <ChatWidget />
     </div>
   );
 }
