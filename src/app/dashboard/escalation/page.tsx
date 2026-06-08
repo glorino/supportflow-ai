@@ -48,17 +48,17 @@ export default function EscalationPage() {
       </div>
 
       {/* Stats */}
-      <div className="grid grid-cols-4 gap-4 mb-6">
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
         {[
-          { label: "Pending", value: "2", icon: "⏳", color: "bg-amber-50" },
-          { label: "In Progress", value: "2", icon: "🔄", color: "bg-blue-50" },
-          { label: "Resolved Today", value: "1", icon: "✅", color: "bg-green-50" },
-          { label: "Avg Handle Time", value: "3.2m", icon: "⏱️", color: "bg-purple-50" },
+          { label: "Pending", value: "2", icon: "⏳", gradient: "from-amber-400 to-orange-500", cardBg: "card-gradient-amber" },
+          { label: "In Progress", value: "2", icon: "🔄", gradient: "from-blue-500 to-indigo-600", cardBg: "card-gradient-blue" },
+          { label: "Resolved Today", value: "1", icon: "✅", gradient: "from-green-500 to-emerald-600", cardBg: "card-gradient-green" },
+          { label: "Avg Handle Time", value: "3.2m", icon: "⏱️", gradient: "from-purple-500 to-violet-600", cardBg: "card-gradient-purple" },
         ].map((s) => (
-          <div key={s.label} className="rounded-2xl border border-gray-200 bg-white p-5">
+          <div key={s.label} className={`rounded-2xl border border-gray-200 p-5 card-glow group ${s.cardBg}`}>
             <div className="flex items-center gap-2 mb-2">
-              <span className="text-lg">{s.icon}</span>
-              <span className="text-xs text-gray-500">{s.label}</span>
+              <div className={`h-9 w-9 rounded-lg bg-gradient-to-br ${s.gradient} flex items-center justify-center text-sm text-white shadow-md group-hover:scale-110 transition-transform`}>{s.icon}</div>
+              <span className="text-xs text-gray-600 font-medium">{s.label}</span>
             </div>
             <div className="text-2xl font-bold text-gray-900">{s.value}</div>
           </div>
@@ -66,9 +66,9 @@ export default function EscalationPage() {
       </div>
 
       {/* Routing Rules */}
-      <div className="rounded-2xl border border-gray-200 bg-white p-6 mb-6">
+      <div className="rounded-2xl border border-gray-200 p-6 mb-6 card-gradient-cyan">
         <h3 className="text-base font-semibold text-gray-900 mb-4">AI Routing Rules</h3>
-        <div className="grid grid-cols-3 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           {[
             { trigger: "Sentiment < -0.5", action: "Route to senior agent", priority: "High", active: true },
             { trigger: "Billing dispute detected", action: "Route to Billing team", priority: "High", active: true },
@@ -77,8 +77,8 @@ export default function EscalationPage() {
             { trigger: "AI confidence < 60%", action: "Route to human", priority: "Medium", active: true },
             { trigger: "Legal/compliance keywords", action: "Route to Legal team", priority: "Critical", active: false },
           ].map((r, i) => (
-            <div key={i} className="flex items-start gap-3 p-4 rounded-xl bg-gray-50 border border-gray-100">
-              <div className={`h-2 w-2 rounded-full mt-1.5 shrink-0 ${r.active ? "bg-green-500" : "bg-gray-300"}`} />
+            <div key={i} className="flex items-start gap-3 p-4 rounded-xl bg-white/70 backdrop-blur-sm border border-cyan-100 hover:shadow-md transition-all">
+              <div className={`h-2 w-2 rounded-full mt-1.5 shrink-0 ${r.active ? "bg-green-500 animate-pulse" : "bg-gray-300"}`} />
               <div className="flex-1">
                 <div className="text-sm font-medium text-gray-900 mb-0.5">{r.trigger}</div>
                 <div className="text-xs text-gray-500 mb-2">{r.action}</div>
@@ -90,7 +90,7 @@ export default function EscalationPage() {
       </div>
 
       {/* Escalation Queue */}
-      <div className="rounded-2xl border border-gray-200 bg-white overflow-hidden">
+      <div className="rounded-2xl border border-gray-200 overflow-hidden card-gradient-red">
         <div className="px-6 py-4 border-b border-gray-100">
           <h3 className="text-base font-semibold text-gray-900">Escalation Queue</h3>
         </div>

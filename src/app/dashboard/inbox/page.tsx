@@ -67,13 +67,13 @@ export default function InboxPage() {
   return (
     <div className="flex h-[calc(100vh-4rem)] -m-8 overflow-hidden">
       {/* Left Panel - Channel List */}
-      <div className="w-16 border-r border-gray-200 bg-gray-50 flex flex-col items-center py-4 gap-2">
+      <div className="w-16 border-r border-gray-200 bg-gradient-to-b from-gray-50 to-white flex flex-col items-center py-4 gap-2">
         {channels.map((ch) => (
           <button
             key={ch.id}
             onClick={() => setSelectedChannel(ch.id)}
-            className={`relative w-10 h-10 rounded-xl flex items-center justify-center text-lg transition-all ${
-              selectedChannel === ch.id ? "bg-blue-100 shadow-sm" : "hover:bg-gray-100"
+            className={`relative w-10 h-10 rounded-xl flex items-center justify-center text-lg transition-all duration-200 ${
+              selectedChannel === ch.id ? "bg-gradient-to-br from-blue-500 to-indigo-600 text-white shadow-lg scale-110" : "hover:bg-gray-100 text-gray-500"
             }`}
             title={ch.name}
           >
@@ -116,7 +116,7 @@ export default function InboxPage() {
               key={c.id}
               onClick={() => setSelectedConversation(c)}
               className={`flex items-start gap-3 px-4 py-3.5 cursor-pointer border-b border-gray-50 transition-all ${
-                selectedConversation.id === c.id ? "bg-blue-50 border-l-2 border-l-blue-600" : "hover:bg-gray-50 border-l-2 border-l-transparent"
+                selectedConversation.id === c.id ? "bg-gradient-to-r from-blue-50 to-indigo-50 border-l-3 border-l-blue-600 shadow-sm" : "hover:bg-gray-50 border-l-2 border-l-transparent"
               }`}
             >
               <div className="relative shrink-0">

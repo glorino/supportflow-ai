@@ -87,14 +87,16 @@ export default function AnalyticsPage() {
 
       {/* KPIs with Sparklines */}
       <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4">
-        {kpis.map((s) => (
-          <div key={s.label} className="rounded-2xl border border-gray-200 bg-white p-5 card-hover">
-            <div className="flex items-center justify-between mb-3">
-              <span className="text-lg">{s.icon}</span>
-              <span className={`text-xs font-semibold ${s.up ? "text-green-600" : "text-red-500"}`}>{s.change}</span>
-            </div>
-            <div className="text-2xl font-bold text-gray-900 mb-1">{s.value}</div>
-            <div className="text-xs text-gray-500 mb-3">{s.label}</div>
+        {kpis.map((s, i) => {
+          const colors = ["card-gradient-blue", "card-gradient-green", "card-gradient-purple", "card-gradient-amber", "card-gradient-red", "card-gradient-cyan"];
+          return (
+            <div key={s.label} className={`rounded-2xl border border-gray-200 p-5 card-glow group ${colors[i % colors.length]}`}>
+              <div className="flex items-center justify-between mb-3">
+                <span className="text-lg group-hover:scale-110 transition-transform">{s.icon}</span>
+                <span className={`text-xs font-semibold ${s.up ? "text-green-600" : "text-red-500"}`}>{s.change}</span>
+              </div>
+              <div className="text-2xl font-bold text-gray-900 mb-1">{s.value}</div>
+              <div className="text-xs text-gray-500 mb-3">{s.label}</div>
             <div className="flex items-end gap-0.5 h-8">
               {s.sparkline.map((v, i) => {
                 const max = Math.max(...s.sparkline);
@@ -108,11 +110,12 @@ export default function AnalyticsPage() {
               })}
             </div>
           </div>
-        ))}
+        );
+        })}
       </div>
 
       {/* Monthly Trend */}
-      <div className="rounded-2xl border border-gray-200 bg-white p-6">
+      <div className="rounded-2xl border border-gray-200 p-6 card-gradient-blue">
         <div className="flex items-center justify-between mb-6">
           <div>
             <h3 className="text-base font-semibold text-gray-900">Monthly Ticket Volume</h3>
@@ -143,7 +146,7 @@ export default function AnalyticsPage() {
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* CSAT Distribution */}
-        <div className="rounded-2xl border border-gray-200 bg-white p-6">
+        <div className="rounded-2xl border border-gray-200 p-6 card-gradient-amber">
           <h3 className="text-base font-semibold text-gray-900 mb-1">Customer Satisfaction</h3>
           <p className="text-xs text-gray-500 mb-5">Based on 1,247 ratings</p>
           <div className="space-y-3">
@@ -176,7 +179,7 @@ export default function AnalyticsPage() {
         </div>
 
         {/* Top Categories */}
-        <div className="rounded-2xl border border-gray-200 bg-white p-6">
+        <div className="rounded-2xl border border-gray-200 p-6 card-gradient-purple">
           <h3 className="text-base font-semibold text-gray-900 mb-1">Top Categories</h3>
           <p className="text-xs text-gray-500 mb-5">By ticket volume</p>
           <div className="space-y-3">
@@ -205,7 +208,7 @@ export default function AnalyticsPage() {
       {/* Forecasts & AI Insights */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Forecasts */}
-        <div className="rounded-2xl border border-gray-200 bg-white p-6">
+        <div className="rounded-2xl border border-gray-200 p-6 card-gradient-cyan">
           <div className="flex items-center gap-2 mb-1">
             <span className="text-lg">🔮</span>
             <h3 className="text-base font-semibold text-gray-900">AI Forecasts</h3>
@@ -231,7 +234,7 @@ export default function AnalyticsPage() {
         </div>
 
         {/* AI Insights */}
-        <div className="rounded-2xl border border-gray-200 bg-white p-6">
+        <div className="rounded-2xl border border-gray-200 p-6 card-gradient-green">
           <div className="flex items-center gap-2 mb-1">
             <span className="text-lg">🤖</span>
             <h3 className="text-base font-semibold text-gray-900">AI Insights</h3>
@@ -260,7 +263,7 @@ export default function AnalyticsPage() {
 
       {/* Channel & AI Performance */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <div className="rounded-2xl border border-gray-200 bg-white p-6">
+        <div className="rounded-2xl border border-gray-200 p-6 card-gradient-pink">
           <h3 className="text-base font-semibold text-gray-900 mb-1">Channel Performance</h3>
           <p className="text-xs text-gray-500 mb-5">Tickets by channel</p>
           <div className="space-y-3">
@@ -288,7 +291,7 @@ export default function AnalyticsPage() {
           </div>
         </div>
 
-        <div className="rounded-2xl border border-gray-200 bg-white p-6">
+        <div className="rounded-2xl border border-gray-200 p-6 card-gradient-green">
           <h3 className="text-base font-semibold text-gray-900 mb-1">AI Performance</h3>
           <p className="text-xs text-gray-500 mb-5">Agent metrics</p>
           <div className="space-y-4">
