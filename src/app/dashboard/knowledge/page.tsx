@@ -61,9 +61,9 @@ export default function KnowledgePage() {
       </div>
 
       {/* AI Search */}
-      <div className="rounded-2xl border border-gray-200 bg-white p-6 mb-6">
+      <div className="rounded-2xl border border-gray-200 p-6 mb-6 card-gradient-blue">
         <div className="flex items-center gap-3 mb-4">
-          <div className="h-10 w-10 rounded-xl bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center text-white shadow-sm">
+          <div className="h-10 w-10 rounded-xl bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center text-white shadow-lg">
             <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg>
           </div>
           <div>
@@ -93,20 +93,20 @@ export default function KnowledgePage() {
       </div>
 
       {/* Stats */}
-      <div className="grid grid-cols-4 gap-4 mb-6">
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
         {[
-          { label: "Total Articles", value: "157", icon: "📚", change: "+8 this week" },
-          { label: "AI Resolution", value: "89%", icon: "🤖", change: "+3% this month" },
-          { label: "Total Views", value: "24.5K", icon: "👁️", change: "+12% this week" },
-          { label: "Helpful Rating", value: "92%", icon: "👍", change: "+1% this week" },
+          { label: "Total Articles", value: "157", icon: "📚", change: "+8 this week", gradient: "from-blue-500 via-blue-600 to-indigo-600", cardBg: "card-gradient-blue" },
+          { label: "AI Resolution", value: "89%", icon: "🤖", change: "+3% this month", gradient: "from-green-500 via-emerald-500 to-teal-600", cardBg: "card-gradient-green" },
+          { label: "Total Views", value: "24.5K", icon: "👁️", change: "+12% this week", gradient: "from-purple-500 via-violet-500 to-indigo-600", cardBg: "card-gradient-purple" },
+          { label: "Helpful Rating", value: "92%", icon: "👍", change: "+1% this week", gradient: "from-amber-400 via-orange-500 to-red-500", cardBg: "card-gradient-amber" },
         ].map((s) => (
-          <div key={s.label} className="rounded-2xl border border-gray-200 bg-white p-5">
+          <div key={s.label} className={`rounded-2xl border border-gray-200 p-5 card-glow group ${s.cardBg}`}>
             <div className="flex items-center gap-2 mb-2">
-              <span className="text-lg">{s.icon}</span>
-              <span className="text-xs text-gray-500">{s.label}</span>
+              <div className={`h-8 w-8 rounded-lg bg-gradient-to-br ${s.gradient} flex items-center justify-center text-sm text-white shadow-md group-hover:scale-110 transition-transform`}>{s.icon}</div>
+              <span className="text-xs text-gray-600 font-medium">{s.label}</span>
             </div>
             <div className="text-2xl font-bold text-gray-900">{s.value}</div>
-            <div className="text-xs text-green-600 mt-1">{s.change}</div>
+            <div className="text-xs text-green-600 mt-1 font-medium">{s.change}</div>
           </div>
         ))}
       </div>
