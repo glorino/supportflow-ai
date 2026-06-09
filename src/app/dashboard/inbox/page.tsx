@@ -1,6 +1,7 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useCallback } from "react";
+import { useRealtimeInbox } from "@/hooks/use-pusher";
 
 const channels = [
   { id: "all", name: "All Channels", icon: "📥", count: 24 },
@@ -57,6 +58,19 @@ export default function InboxPage() {
   const [selectedChannel, setSelectedChannel] = useState("all");
   const [selectedConversation, setSelectedConversation] = useState(conversations[0]);
   const [searchQuery, setSearchQuery] = useState("");
+  const realtimeUpdates = useRealtimeInbox();
+
+  const handleRealtimeMessage = useCallback((data: { conversationId?: string; sender?: string; message?: string }) => {
+    if (data.conversationId) {
+      const conv = conversations.find((c) => c.id.toString() === data.conversationId);
+      if (conv) {
+        conv.unread += 1;
+        conv.lastMsg = data.message || conv.lastMsg;
+      }
+    }
+  }, []);
+
+  realtimeUpdates.forEach(handleRealtimeMessage);
 
   const filteredConversations = conversations.filter((c) => {
     if (selectedChannel !== "all" && c.channel !== selectedChannel) return false;

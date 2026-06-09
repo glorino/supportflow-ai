@@ -42,8 +42,8 @@ export default function KnowledgePage() {
   });
 
   return (
-    <div>
-      <div className="flex items-center justify-between mb-6">
+    <div className="space-y-6">
+      <div className="flex items-center justify-between">
         <div>
           <h1 className="text-2xl font-bold text-gray-900">Knowledge Base</h1>
           <p className="text-sm text-gray-500 mt-1">Manage articles, FAQs, and documentation for AI-powered self-service</p>
@@ -61,7 +61,7 @@ export default function KnowledgePage() {
       </div>
 
       {/* AI Search */}
-      <div className="rounded-2xl border border-gray-200 p-6 mb-6 card-gradient-blue">
+      <div className="rounded-2xl border border-gray-200 p-6 card-gradient-blue">
         <div className="flex items-center gap-3 mb-4">
           <div className="h-10 w-10 rounded-xl bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center text-white shadow-lg">
             <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg>
@@ -81,28 +81,28 @@ export default function KnowledgePage() {
             className="w-full rounded-xl border border-gray-200 bg-gray-50 pl-12 pr-4 py-3.5 text-sm placeholder-gray-400 focus:border-blue-500 focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500/20 transition-all"
           />
           <div className="absolute right-3 top-1/2 -translate-y-1/2 flex items-center gap-2">
-            <kbd className="rounded-md border border-gray-200 bg-white px-2 py-1 text-[10px] font-medium text-gray-400">⌘K</kbd>
+            <kbd className="rounded-md border border-gray-200 bg-white px-2 py-1 text-[10px] font-medium text-gray-400 shadow-sm">⌘K</kbd>
           </div>
         </div>
         <div className="flex items-center gap-3 mt-3">
           <span className="text-xs text-gray-400">Quick searches:</span>
           {["password reset", "billing", "API setup", "integration"].map((q) => (
-            <button key={q} className="text-xs px-2.5 py-1 rounded-lg bg-gray-100 text-gray-600 hover:bg-gray-200 transition">{q}</button>
+            <button key={q} className="text-xs px-2.5 py-1 rounded-lg bg-white/80 text-gray-600 hover:bg-gray-200 border border-gray-100 transition-all duration-200">{q}</button>
           ))}
         </div>
       </div>
 
       {/* Stats */}
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
         {[
           { label: "Total Articles", value: "157", icon: "📚", change: "+8 this week", gradient: "from-blue-500 via-blue-600 to-indigo-600", cardBg: "card-gradient-blue" },
           { label: "AI Resolution", value: "89%", icon: "🤖", change: "+3% this month", gradient: "from-green-500 via-emerald-500 to-teal-600", cardBg: "card-gradient-green" },
           { label: "Total Views", value: "24.5K", icon: "👁️", change: "+12% this week", gradient: "from-purple-500 via-violet-500 to-indigo-600", cardBg: "card-gradient-purple" },
           { label: "Helpful Rating", value: "92%", icon: "👍", change: "+1% this week", gradient: "from-amber-400 via-orange-500 to-red-500", cardBg: "card-gradient-amber" },
         ].map((s) => (
-          <div key={s.label} className={`rounded-2xl border border-gray-200 p-5 card-glow group ${s.cardBg}`}>
+          <div key={s.label} className={`rounded-2xl border border-gray-200 p-5 group ${s.cardBg} hover:-translate-y-0.5 hover:shadow-lg transition-all duration-300`}>
             <div className="flex items-center gap-2 mb-2">
-              <div className={`h-8 w-8 rounded-lg bg-gradient-to-br ${s.gradient} flex items-center justify-center text-sm text-white shadow-md group-hover:scale-110 transition-transform`}>{s.icon}</div>
+              <div className={`h-8 w-8 rounded-lg bg-gradient-to-br ${s.gradient} flex items-center justify-center text-sm text-white shadow-md group-hover:scale-110 transition-transform duration-300`}>{s.icon}</div>
               <span className="text-xs text-gray-600 font-medium">{s.label}</span>
             </div>
             <div className="text-2xl font-bold text-gray-900">{s.value}</div>
@@ -112,21 +112,23 @@ export default function KnowledgePage() {
       </div>
 
       {/* Collections */}
-      <div className="mb-6">
+      <div>
         <div className="flex items-center justify-between mb-4">
           <h2 className="text-base font-semibold text-gray-900">Collections</h2>
-          <button className="text-sm text-blue-600 hover:text-blue-700 font-medium">View all →</button>
+          <button className="text-sm text-blue-600 hover:text-blue-700 font-medium transition">View all →</button>
         </div>
         <div className="grid grid-cols-3 lg:grid-cols-6 gap-4">
           {collections.map((c) => (
             <button
               key={c.id}
               onClick={() => setSelectedCollection(selectedCollection === c.id ? null : c.id)}
-              className={`rounded-2xl border p-5 text-left transition-all ${
-                selectedCollection === c.id ? "border-blue-300 bg-blue-50 shadow-sm ring-2 ring-blue-500/20" : "border-gray-200 bg-white hover:border-gray-300 hover:shadow-sm"
+              className={`rounded-2xl border p-5 text-left transition-all duration-300 hover:-translate-y-0.5 ${
+                selectedCollection === c.id
+                  ? "border-blue-300 bg-blue-50 shadow-md ring-2 ring-blue-500/20 scale-[1.02]"
+                  : "border-gray-200 bg-white hover:border-gray-300 hover:shadow-md"
               }`}
             >
-              <div className={`h-12 w-12 rounded-xl ${c.bgLight} flex items-center justify-center text-2xl mb-3`}>{c.icon}</div>
+              <div className={`h-12 w-12 rounded-xl ${c.bgLight} flex items-center justify-center text-2xl mb-3 group-hover:scale-110 transition-transform`}>{c.icon}</div>
               <div className="text-sm font-semibold text-gray-900 mb-0.5">{c.name}</div>
               <div className="text-xs text-gray-500">{c.articles} articles</div>
             </button>
@@ -135,22 +137,22 @@ export default function KnowledgePage() {
       </div>
 
       {/* Articles Table */}
-      <div className="rounded-2xl border border-gray-200 bg-white overflow-hidden">
+      <div className="rounded-2xl border border-gray-200 bg-white overflow-hidden shadow-sm">
         <div className="flex items-center justify-between px-6 py-4 border-b border-gray-100">
           <div className="flex items-center gap-3">
             <h3 className="text-base font-semibold text-gray-900">Articles</h3>
             {selectedCollection && (
-              <button onClick={() => setSelectedCollection(null)} className="flex items-center gap-1 text-xs px-2.5 py-1 rounded-lg bg-blue-100 text-blue-700">
+              <button onClick={() => setSelectedCollection(null)} className="flex items-center gap-1 text-xs px-2.5 py-1 rounded-lg bg-blue-100 text-blue-700 hover:bg-blue-200 transition">
                 {collections.find((c) => c.id === selectedCollection)?.name}
                 <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /></svg>
               </button>
             )}
           </div>
           <div className="flex items-center gap-2">
-            <button onClick={() => setView("grid")} className={`h-8 w-8 rounded-lg flex items-center justify-center ${view === "grid" ? "bg-gray-100 text-gray-900" : "text-gray-400 hover:bg-gray-50"}`}>
+            <button onClick={() => setView("grid")} className={`h-8 w-8 rounded-lg flex items-center justify-center transition ${view === "grid" ? "bg-gray-100 text-gray-900" : "text-gray-400 hover:bg-gray-50"}`}>
               <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" /></svg>
             </button>
-            <button onClick={() => setView("list")} className={`h-8 w-8 rounded-lg flex items-center justify-center ${view === "list" ? "bg-gray-100 text-gray-900" : "text-gray-400 hover:bg-gray-50"}`}>
+            <button onClick={() => setView("list")} className={`h-8 w-8 rounded-lg flex items-center justify-center transition ${view === "list" ? "bg-gray-100 text-gray-900" : "text-gray-400 hover:bg-gray-50"}`}>
               <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 10h16M4 14h16M4 18h16" /></svg>
             </button>
           </div>
@@ -193,7 +195,7 @@ export default function KnowledgePage() {
         ) : (
           <div className="p-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             {filteredArticles.map((a) => (
-              <div key={a.id} className="rounded-xl border border-gray-200 p-5 hover:border-gray-300 hover:shadow-md transition-all cursor-pointer group">
+              <div key={a.id} className="rounded-xl border border-gray-200 p-5 hover:border-blue-200 hover:shadow-md transition-all duration-300 cursor-pointer group">
                 <div className="flex items-center justify-between mb-3">
                   <span className={`inline-flex items-center rounded-full px-2.5 py-1 text-xs font-medium ${statusColor[a.status]}`}>{a.status}</span>
                   <span className="text-xs text-gray-400">{a.lastUpdated}</span>

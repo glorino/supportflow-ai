@@ -1,7 +1,8 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useCallback } from "react";
 import Link from "next/link";
+import { useRealtimeTickets } from "@/hooks/use-pusher";
 
 const tickets = [
   { id: "SF-1234", subject: "Can't access my account after password reset", customer: "Sarah Chen", company: "Acme Corp", status: "open", priority: "high", channel: "WhatsApp", channelIcon: "📱", assignee: "AI Agent", sla: "23m left", slaStatus: "ok", createdAt: "2 min ago", lastReply: "1 min ago", sentiment: "negative", tags: ["account", "urgent"], aiConfidence: 94 },
@@ -45,9 +46,30 @@ const sentimentIcon: Record<string, string> = {
   frustrated: "😤",
 };
 
+const sentimentBg: Record<string, string> = {
+  positive: "from-green-50 to-emerald-50 border-green-200",
+  neutral: "from-gray-50 to-slate-50 border-gray-200",
+  negative: "from-amber-50 to-orange-50 border-amber-200",
+  angry: "from-red-50 to-rose-50 border-red-200",
+  frustrated: "from-orange-50 to-amber-50 border-orange-200",
+};
+
 export default function TicketsPage() {
   const [statusFilter, setStatusFilter] = useState("all");
   const [selectedTickets, setSelectedTickets] = useState<string[]>([]);
+  const realtimeUpdates = useRealtimeTickets();
+
+  const handleRealtimeUpdate = useCallback((data: { ticketId?: string; type?: string }) => {
+    if (data.ticketId) {
+      const idx = tickets.findIndex((t) => t.id === data.ticketId);
+      if (idx !== -1) {
+        if (data.type === "sla_warning") tickets[idx].slaStatus = "warning";
+        if (data.type === "sla_breached") tickets[idx].slaStatus = "breached";
+      }
+    }
+  }, []);
+
+  realtimeUpdates.forEach(handleRealtimeUpdate);
 
   const filteredTickets = tickets.filter((t) => {
     if (statusFilter === "all") return true;
@@ -61,8 +83,8 @@ export default function TicketsPage() {
   };
 
   return (
-    <div>
-      <div className="flex items-center justify-between mb-6">
+    <div className="space-y-6">
+      <div className="flex items-center justify-between">
         <div>
           <h1 className="text-2xl font-bold text-gray-900">Tickets</h1>
           <p className="text-sm text-gray-500 mt-1">Manage and track all customer conversations</p>
@@ -80,7 +102,7 @@ export default function TicketsPage() {
       </div>
 
       {/* Stats */}
-      <div className="grid grid-cols-2 sm:grid-cols-5 gap-4 mb-6">
+      <div className="grid grid-cols-2 sm:grid-cols-5 gap-4">
         {[
           { label: "Open", count: 6, gradient: "from-blue-500 to-indigo-600", cardBg: "card-gradient-blue", icon: "📂" },
           { label: "Pending", count: 1, gradient: "from-amber-400 to-orange-500", cardBg: "card-gradient-amber", icon: "⏳" },
@@ -91,8 +113,10 @@ export default function TicketsPage() {
           <button
             key={s.label}
             onClick={() => setStatusFilter(s.label.toLowerCase().split(" ")[0])}
-            className={`rounded-2xl border p-4 text-left transition-all card-glow ${
-              statusFilter === s.label.toLowerCase().split(" ")[0] ? `${s.cardBg} border-transparent shadow-lg scale-[1.02]` : "border-gray-200 bg-white hover:bg-gray-50"
+            className={`rounded-2xl border p-4 text-left transition-all duration-300 hover:-translate-y-0.5 ${
+              statusFilter === s.label.toLowerCase().split(" ")[0]
+                ? `${s.cardBg} border-transparent shadow-lg scale-[1.02]`
+                : "border-gray-200 bg-white hover:bg-gray-50 hover:shadow-md"
             }`}
           >
             <div className="flex items-center gap-2 mb-1">
@@ -105,12 +129,12 @@ export default function TicketsPage() {
       </div>
 
       {/* Filters */}
-      <div className="flex items-center gap-3 mb-4">
+      <div className="flex items-center gap-3">
         <div className="flex-1 relative">
           <svg className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg>
           <input type="text" placeholder="Search tickets by ID, subject, customer..." className="input-search" />
         </div>
-        <select className="rounded-xl border border-gray-200 px-3 py-2.5 text-sm bg-white focus:border-blue-500 focus:outline-none">
+        <select className="rounded-xl border border-gray-200 px-3 py-2.5 text-sm bg-white focus:border-blue-500 focus:outline-none transition-colors">
           <option>All Channels</option>
           <option>WhatsApp</option>
           <option>Email</option>
@@ -119,14 +143,14 @@ export default function TicketsPage() {
           <option>Messenger</option>
           <option>Instagram</option>
         </select>
-        <select className="rounded-xl border border-gray-200 px-3 py-2.5 text-sm bg-white focus:border-blue-500 focus:outline-none">
+        <select className="rounded-xl border border-gray-200 px-3 py-2.5 text-sm bg-white focus:border-blue-500 focus:outline-none transition-colors">
           <option>All Priority</option>
           <option>Urgent</option>
           <option>High</option>
           <option>Medium</option>
           <option>Low</option>
         </select>
-        <select className="rounded-xl border border-gray-200 px-3 py-2.5 text-sm bg-white focus:border-blue-500 focus:outline-none">
+        <select className="rounded-xl border border-gray-200 px-3 py-2.5 text-sm bg-white focus:border-blue-500 focus:outline-none transition-colors">
           <option>All Assignees</option>
           <option>AI Agent</option>
           <option>Marcus J.</option>
@@ -137,7 +161,7 @@ export default function TicketsPage() {
 
       {/* Bulk Actions */}
       {selectedTickets.length > 0 && (
-        <div className="flex items-center gap-3 mb-4 p-3 bg-blue-50 rounded-xl border border-blue-200">
+        <div className="flex items-center gap-3 p-3 bg-blue-50 rounded-xl border border-blue-200 animate-[slide-up_0.2s_ease]">
           <span className="text-sm text-blue-700 font-medium">{selectedTickets.length} selected</span>
           <button className="btn-ghost text-xs">Assign to...</button>
           <button className="btn-ghost text-xs">Change status</button>
@@ -147,7 +171,7 @@ export default function TicketsPage() {
       )}
 
       {/* Ticket Table */}
-      <div className="rounded-xl border border-gray-200 bg-white overflow-hidden">
+      <div className="rounded-2xl border border-gray-200 bg-white overflow-hidden shadow-sm">
         <table className="w-full">
           <thead>
             <tr className="border-b border-gray-100 bg-gray-50/50">
@@ -191,7 +215,7 @@ export default function TicketsPage() {
                 </td>
                 <td className="px-4 py-3">
                   <div className="flex items-center gap-2">
-                    <div className="h-7 w-7 rounded-full bg-gray-100 flex items-center justify-center text-[10px] font-semibold text-gray-600">
+                    <div className="h-7 w-7 rounded-full bg-gradient-to-br from-gray-100 to-gray-200 flex items-center justify-center text-[10px] font-semibold text-gray-600">
                       {t.customer.split(" ").map((n) => n[0]).join("")}
                     </div>
                     <div>
@@ -222,13 +246,13 @@ export default function TicketsPage() {
                 </td>
                 <td className="px-4 py-3 text-right">
                   <div className="flex items-center gap-1 justify-end opacity-0 group-hover:opacity-100 transition">
-                    <button className="h-7 w-7 rounded-lg hover:bg-gray-100 flex items-center justify-center text-gray-400 hover:text-gray-600">
+                    <button className="h-7 w-7 rounded-lg hover:bg-blue-50 flex items-center justify-center text-gray-400 hover:text-blue-600 transition">
                       <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" /></svg>
                     </button>
-                    <button className="h-7 w-7 rounded-lg hover:bg-gray-100 flex items-center justify-center text-gray-400 hover:text-gray-600">
+                    <button className="h-7 w-7 rounded-lg hover:bg-amber-50 flex items-center justify-center text-gray-400 hover:text-amber-600 transition">
                       <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z" /></svg>
                     </button>
-                    <button className="h-7 w-7 rounded-lg hover:bg-gray-100 flex items-center justify-center text-gray-400 hover:text-gray-600">
+                    <button className="h-7 w-7 rounded-lg hover:bg-gray-100 flex items-center justify-center text-gray-400 hover:text-gray-600 transition">
                       <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 5v.01M12 12v.01M12 19v.01M12 6a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2z" /></svg>
                     </button>
                   </div>
@@ -241,8 +265,8 @@ export default function TicketsPage() {
           <span className="text-sm text-gray-500">Showing {filteredTickets.length} of {tickets.length} tickets</span>
           <div className="flex items-center gap-2">
             <button className="btn-ghost text-xs" disabled>Previous</button>
-            <button className="h-8 w-8 rounded-lg bg-blue-600 text-white text-xs font-medium">1</button>
-            <button className="h-8 w-8 rounded-lg hover:bg-gray-100 text-xs font-medium text-gray-600">2</button>
+            <button className="h-8 w-8 rounded-lg bg-blue-600 text-white text-xs font-medium shadow-sm">1</button>
+            <button className="h-8 w-8 rounded-lg hover:bg-gray-100 text-xs font-medium text-gray-600 transition">2</button>
             <button className="btn-ghost text-xs">Next</button>
           </div>
         </div>

@@ -92,12 +92,13 @@ export async function initializePayment({
   const client = getFlutterwave();
   const txRef = `SF-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
 
+  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "https://supportflow-ai-six.vercel.app";
   const payload = {
     tx_ref: txRef,
     amount: amount.toString(),
     currency: "USD",
     email,
-    redirect_url: `${process.env.NEXT_PUBLIC_BASE_URL || "https://supportflow-ai-six.vercel.app"}/api/payments/verify`,
+    redirect_url: `${baseUrl}/payment/success`,
     meta: {
       plan_id: planId,
       user_id: userId,

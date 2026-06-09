@@ -73,7 +73,7 @@ export default function AnalyticsPage() {
           <p className="text-sm text-gray-500 mt-1">AI-powered insights and performance metrics</p>
         </div>
         <div className="flex items-center gap-3">
-          <select className="rounded-xl border border-gray-200 px-3 py-2.5 text-sm bg-white focus:border-blue-500 focus:outline-none">
+          <select className="rounded-xl border border-gray-200 px-3 py-2.5 text-sm bg-white focus:border-blue-500 focus:outline-none transition-colors">
             <option>Last 30 days</option>
             <option>Last 90 days</option>
             <option>This Year</option>
@@ -90,27 +90,27 @@ export default function AnalyticsPage() {
         {kpis.map((s, i) => {
           const colors = ["card-gradient-blue", "card-gradient-green", "card-gradient-purple", "card-gradient-amber", "card-gradient-red", "card-gradient-cyan"];
           return (
-            <div key={s.label} className={`rounded-2xl border border-gray-200 p-5 card-glow group ${colors[i % colors.length]}`}>
+            <div key={s.label} className={`rounded-2xl border border-gray-200 p-5 group ${colors[i % colors.length]} hover:-translate-y-0.5 hover:shadow-lg transition-all duration-300 cursor-default`}>
               <div className="flex items-center justify-between mb-3">
-                <span className="text-lg group-hover:scale-110 transition-transform">{s.icon}</span>
+                <span className="text-lg group-hover:scale-125 transition-transform duration-300">{s.icon}</span>
                 <span className={`text-xs font-semibold ${s.up ? "text-green-600" : "text-red-500"}`}>{s.change}</span>
               </div>
               <div className="text-2xl font-bold text-gray-900 mb-1">{s.value}</div>
               <div className="text-xs text-gray-500 mb-3">{s.label}</div>
-            <div className="flex items-end gap-0.5 h-8">
-              {s.sparkline.map((v, i) => {
-                const max = Math.max(...s.sparkline);
-                const min = Math.min(...s.sparkline);
-                const height = ((v - min) / (max - min || 1)) * 100;
-                return (
-                  <div key={i} className="flex-1 bg-blue-100 rounded-sm" style={{ height: `${Math.max(height, 10)}%` }}>
-                    <div className="w-full bg-blue-500 rounded-sm" style={{ height: `${(v / max) * 100}%` }} />
-                  </div>
-                );
-              })}
+              <div className="flex items-end gap-0.5 h-8">
+                {s.sparkline.map((v, j) => {
+                  const max = Math.max(...s.sparkline);
+                  const min = Math.min(...s.sparkline);
+                  const height = ((v - min) / (max - min || 1)) * 100;
+                  return (
+                    <div key={j} className="flex-1 bg-blue-100 rounded-sm" style={{ height: `${Math.max(height, 10)}%` }}>
+                      <div className="w-full bg-blue-500 rounded-sm transition-all duration-500" style={{ height: `${(v / max) * 100}%` }} />
+                    </div>
+                  );
+                })}
+              </div>
             </div>
-          </div>
-        );
+          );
         })}
       </div>
 
@@ -129,15 +129,15 @@ export default function AnalyticsPage() {
         </div>
         <div className="grid grid-cols-6 gap-4">
           {monthlyData.map((m) => (
-            <div key={m.month} className="flex flex-col items-center">
+            <div key={m.month} className="flex flex-col items-center group">
               <div className="w-full flex flex-col justify-end" style={{ height: "200px" }}>
-                <div className="w-full flex flex-col gap-0.5">
-                  <div className="w-full bg-red-400 rounded-t-lg" style={{ height: `${(m.escalated / maxMonthly) * 200}px` }} />
-                  <div className="w-full bg-green-500" style={{ height: `${(m.resolved / maxMonthly) * 200}px` }} />
-                  <div className="w-full bg-blue-500 rounded-b-lg" style={{ height: `${((m.created - m.resolved) / maxMonthly) * 200}px` }} />
+                <div className="w-full flex flex-col gap-0.5 group-hover:scale-x-110 transition-transform duration-300 origin-bottom">
+                  <div className="w-full bg-red-400 rounded-t-lg group-hover:bg-red-500 transition-colors" style={{ height: `${(m.escalated / maxMonthly) * 200}px` }} />
+                  <div className="w-full bg-green-500 group-hover:bg-green-600 transition-colors" style={{ height: `${(m.resolved / maxMonthly) * 200}px` }} />
+                  <div className="w-full bg-blue-500 rounded-b-lg group-hover:bg-blue-600 transition-colors" style={{ height: `${((m.created - m.resolved) / maxMonthly) * 200}px` }} />
                 </div>
               </div>
-              <div className="mt-3 text-sm font-bold text-gray-900">{m.created.toLocaleString()}</div>
+              <div className="mt-3 text-sm font-bold text-gray-900 group-hover:text-blue-600 transition">{m.created.toLocaleString()}</div>
               <div className="text-xs text-gray-400">{m.month}</div>
             </div>
           ))}
@@ -154,7 +154,7 @@ export default function AnalyticsPage() {
               <div key={c.stars} className="flex items-center gap-3">
                 <span className="w-8 text-sm font-medium text-gray-600">{c.stars}</span>
                 <div className="flex-1 h-8 bg-gray-100 rounded-full overflow-hidden">
-                  <div className="h-full bg-amber-400 rounded-full flex items-center pl-3 transition-all duration-500" style={{ width: `${Math.max(c.pct * 2.2, 8)}%` }}>
+                  <div className="h-full bg-amber-400 rounded-full flex items-center pl-3 transition-all duration-700 hover:bg-amber-500" style={{ width: `${Math.max(c.pct * 2.2, 8)}%` }}>
                     <span className="text-xs font-semibold text-white">{c.count}</span>
                   </div>
                 </div>
@@ -163,15 +163,15 @@ export default function AnalyticsPage() {
             ))}
           </div>
           <div className="mt-6 grid grid-cols-3 gap-4 pt-4 border-t border-gray-100 text-center">
-            <div className="bg-gray-50 rounded-xl p-3">
+            <div className="bg-gray-50 rounded-xl p-3 hover:bg-gray-100 transition">
               <div className="text-xl font-bold text-gray-900">4.7</div>
               <div className="text-[11px] text-gray-500">Avg Rating</div>
             </div>
-            <div className="bg-green-50 rounded-xl p-3">
+            <div className="bg-green-50 rounded-xl p-3 hover:bg-green-100 transition">
               <div className="text-xl font-bold text-green-600">74%</div>
               <div className="text-[11px] text-gray-500">4-5 Stars</div>
             </div>
-            <div className="bg-red-50 rounded-xl p-3">
+            <div className="bg-red-50 rounded-xl p-3 hover:bg-red-100 transition">
               <div className="text-xl font-bold text-red-500">3%</div>
               <div className="text-[11px] text-gray-500">1 Star</div>
             </div>
@@ -184,11 +184,11 @@ export default function AnalyticsPage() {
           <p className="text-xs text-gray-500 mb-5">By ticket volume</p>
           <div className="space-y-3">
             {topCategories.map((c, i) => (
-              <div key={c.cat} className="flex items-center gap-3">
+              <div key={c.cat} className="flex items-center gap-3 group">
                 <span className="text-xs text-gray-400 w-5 text-center font-medium">{i + 1}</span>
                 <div className="flex-1">
                   <div className="flex items-center justify-between mb-1">
-                    <span className="text-sm font-medium text-gray-900">{c.cat}</span>
+                    <span className="text-sm font-medium text-gray-900 group-hover:text-purple-600 transition">{c.cat}</span>
                     <div className="flex items-center gap-3 text-xs text-gray-500">
                       <span>{c.count} tickets</span>
                       <span className="text-gray-400">·</span>
@@ -196,7 +196,7 @@ export default function AnalyticsPage() {
                     </div>
                   </div>
                   <div className="h-2 rounded-full bg-gray-100 overflow-hidden">
-                    <div className="h-full bg-blue-500 rounded-full transition-all duration-500" style={{ width: `${c.pct * 4}%` }} />
+                    <div className="h-full bg-gradient-to-r from-purple-500 to-indigo-500 rounded-full transition-all duration-700 group-hover:from-purple-600 group-hover:to-indigo-600" style={{ width: `${c.pct * 4}%` }} />
                   </div>
                 </div>
               </div>
@@ -216,7 +216,7 @@ export default function AnalyticsPage() {
           <p className="text-xs text-gray-500 mb-5">Predicted ticket volumes</p>
           <div className="space-y-4">
             {forecasts.map((f) => (
-              <div key={f.period} className="p-4 rounded-xl bg-gradient-to-r from-blue-50 to-indigo-50 border border-blue-100">
+              <div key={f.period} className="p-4 rounded-xl bg-gradient-to-r from-blue-50 to-indigo-50 border border-blue-100 hover:shadow-md hover:border-blue-200 transition-all duration-300 cursor-default">
                 <div className="flex items-center justify-between mb-2">
                   <span className="text-sm font-semibold text-gray-900">{f.period}</span>
                   <span className="text-xl font-bold text-blue-700">{f.predicted.toLocaleString()}</span>
@@ -226,7 +226,7 @@ export default function AnalyticsPage() {
                   <span className="text-gray-500">Factor: <span className="font-medium text-gray-700">{f.factor}</span></span>
                 </div>
                 <div className="mt-2 h-1.5 rounded-full bg-blue-100 overflow-hidden">
-                  <div className="h-full bg-blue-500 rounded-full" style={{ width: `${f.confidence}%` }} />
+                  <div className="h-full bg-blue-500 rounded-full transition-all duration-700" style={{ width: `${f.confidence}%` }} />
                 </div>
               </div>
             ))}
@@ -242,11 +242,11 @@ export default function AnalyticsPage() {
           <p className="text-xs text-gray-500 mb-5">Automated recommendations</p>
           <div className="space-y-3">
             {aiInsights.map((insight, i) => (
-              <div key={i} className="p-4 rounded-xl border border-gray-200 hover:border-gray-300 transition-all cursor-pointer">
+              <div key={i} className="p-4 rounded-xl border border-gray-200 hover:border-green-200 hover:shadow-md transition-all duration-300 cursor-pointer group">
                 <div className="flex items-start gap-3">
-                  <span className="text-lg">{categoryIcon[insight.category]}</span>
+                  <span className="text-lg group-hover:scale-125 transition-transform duration-200">{categoryIcon[insight.category]}</span>
                   <div className="flex-1">
-                    <div className="text-sm text-gray-900 mb-2">{insight.insight}</div>
+                    <div className="text-sm text-gray-900 mb-2 group-hover:text-green-700 transition">{insight.insight}</div>
                     <div className="flex items-center gap-2">
                       <span className={`text-[10px] px-2 py-0.5 rounded-full font-medium ${impactColor[insight.impact]}`}>
                         {insight.impact} impact
@@ -275,13 +275,13 @@ export default function AnalyticsPage() {
               { channel: "Messenger", count: 872, pct: 12, color: "bg-blue-400", icon: "💬" },
               { channel: "Instagram", count: 650, pct: 9, color: "bg-pink-500", icon: "📸" },
             ].map((ch) => (
-              <div key={ch.channel} className="flex items-center gap-3">
+              <div key={ch.channel} className="flex items-center gap-3 group">
                 <div className="w-28 flex items-center gap-2 shrink-0">
-                  <span>{ch.icon}</span>
+                  <span className="group-hover:scale-125 transition-transform">{ch.icon}</span>
                   <span className="text-sm text-gray-600">{ch.channel}</span>
                 </div>
                 <div className="flex-1 h-8 bg-gray-100 rounded-full overflow-hidden">
-                  <div className={`h-full ${ch.color} rounded-full flex items-center pl-3 transition-all duration-500`} style={{ width: `${Math.max(ch.pct * 3.5, 8)}%` }}>
+                  <div className={`h-full ${ch.color} rounded-full flex items-center pl-3 transition-all duration-700 hover:brightness-110`} style={{ width: `${Math.max(ch.pct * 3.5, 8)}%` }}>
                     <span className="text-xs font-semibold text-white">{ch.count.toLocaleString()}</span>
                   </div>
                 </div>
@@ -302,13 +302,13 @@ export default function AnalyticsPage() {
               { label: "Knowledge Accuracy", value: "96%", detail: "Correct article retrieval rate", color: "bg-teal-500", width: "96%" },
               { label: "Escalation Accuracy", value: "89%", detail: "Correctly routed to right team", color: "bg-amber-500", width: "89%" },
             ].map((m) => (
-              <div key={m.label}>
+              <div key={m.label} className="group">
                 <div className="flex justify-between text-sm mb-1.5">
-                  <span className="text-gray-600">{m.label}</span>
+                  <span className="text-gray-600 group-hover:text-gray-900 transition">{m.label}</span>
                   <span className="font-bold text-gray-900">{m.value}</span>
                 </div>
                 <div className="h-2.5 rounded-full bg-gray-100 overflow-hidden mb-1">
-                  <div className={`h-full ${m.color} rounded-full transition-all duration-500`} style={{ width: m.width }} />
+                  <div className={`h-full ${m.color} rounded-full transition-all duration-700 group-hover:brightness-110`} style={{ width: m.width }} />
                 </div>
                 <div className="text-xs text-gray-400">{m.detail}</div>
               </div>
