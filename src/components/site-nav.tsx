@@ -18,12 +18,12 @@ export function SiteNav() {
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="flex h-16 items-center justify-between">
           <div className="flex items-center gap-2.5">
-            <Link href="/" className="flex items-center gap-2.5">
-              <div className="h-9 w-9 rounded-xl gradient-primary flex items-center justify-center shadow-lg shadow-blue-600/20">
+            <Link href="/" className="flex items-center gap-2.5 group">
+              <div className="h-9 w-9 rounded-xl gradient-primary flex items-center justify-center shadow-lg shadow-blue-600/20 group-hover:shadow-xl group-hover:shadow-blue-600/30 transition-shadow">
                 <span className="text-white font-bold text-sm">SF</span>
               </div>
               <span className="text-xl font-bold text-gray-900 tracking-tight">
-                SupportFlow<span className="text-gradient"> AI</span>
+                SupportFlow<span className="bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent ml-0.5"> AI</span>
               </span>
             </Link>
           </div>
@@ -34,7 +34,7 @@ export function SiteNav() {
                 href={link.href}
                 className={`px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 ${
                   pathname === link.href
-                    ? "bg-blue-50 text-blue-700"
+                    ? "bg-gradient-to-r from-blue-50 to-indigo-50 text-blue-700 border border-blue-100 shadow-sm"
                     : "text-gray-600 hover:text-gray-900 hover:bg-gray-50"
                 }`}
               >
@@ -43,7 +43,7 @@ export function SiteNav() {
             ))}
           </div>
           <div className="flex items-center gap-3">
-            <Link href="/login" className="btn-primary px-6 py-2.5 text-sm">
+            <Link href="/login" className="inline-flex items-center justify-center rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 px-6 py-2.5 text-sm font-semibold text-white shadow-lg shadow-blue-600/25 hover:shadow-xl hover:from-blue-700 hover:to-indigo-700 transition-all duration-200">
               Sign In
             </Link>
           </div>
