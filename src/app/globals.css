@@ -138,6 +138,30 @@
   .card-gradient-pink {
     @apply bg-gradient-to-br from-pink-50 via-white to-fuchsia-50 border-pink-200;
   }
+
+  /* Premium Card Effects */
+  .card-premium-blue {
+    @apply bg-gradient-to-br from-blue-50 via-blue-50/80 to-indigo-100/50 border border-blue-200/60 shadow-lg shadow-blue-500/5;
+  }
+  .card-premium-green {
+    @apply bg-gradient-to-br from-green-50 via-green-50/80 to-emerald-100/50 border border-green-200/60 shadow-lg shadow-green-500/5;
+  }
+  .card-premium-purple {
+    @apply bg-gradient-to-br from-purple-50 via-purple-50/80 to-violet-100/50 border border-purple-200/60 shadow-lg shadow-purple-500/5;
+  }
+  .card-premium-amber {
+    @apply bg-gradient-to-br from-amber-50 via-amber-50/80 to-orange-100/50 border border-amber-200/60 shadow-lg shadow-amber-500/5;
+  }
+  .card-premium-red {
+    @apply bg-gradient-to-br from-red-50 via-red-50/80 to-rose-100/50 border border-red-200/60 shadow-lg shadow-red-500/5;
+  }
+  .card-premium-cyan {
+    @apply bg-gradient-to-br from-cyan-50 via-cyan-50/80 to-blue-100/50 border border-cyan-200/60 shadow-lg shadow-cyan-500/5;
+  }
+  .card-premium-pink {
+    @apply bg-gradient-to-br from-pink-50 via-pink-50/80 to-fuchsia-100/50 border border-pink-200/60 shadow-lg shadow-pink-500/5;
+  }
+
   .badge {
     @apply inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium;
   }
@@ -160,10 +184,10 @@
     @apply w-full rounded-xl border border-gray-200 bg-gray-50 px-4 py-2.5 pl-10 text-sm placeholder-gray-400 focus:border-blue-500 focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500/20 transition-all;
   }
   .btn-primary {
-    @apply inline-flex items-center justify-center rounded-xl bg-blue-600 px-5 py-2.5 text-sm font-semibold text-white shadow-sm shadow-blue-600/20 hover:bg-blue-700 hover:shadow-md hover:shadow-blue-600/20 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed;
+    @apply inline-flex items-center justify-center rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 px-5 py-2.5 text-sm font-semibold text-white shadow-lg shadow-blue-600/25 hover:shadow-xl hover:shadow-blue-600/30 hover:from-blue-700 hover:to-indigo-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed;
   }
   .btn-secondary {
-    @apply inline-flex items-center justify-center rounded-xl border border-gray-200 bg-white px-5 py-2.5 text-sm font-semibold text-gray-700 shadow-sm hover:bg-gray-50 hover:border-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 transition-all duration-200;
+    @apply inline-flex items-center justify-center rounded-xl border border-gray-200 bg-white px-5 py-2.5 text-sm font-semibold text-gray-700 shadow-sm hover:bg-gray-50 hover:border-gray-300 hover:shadow-md focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 transition-all duration-200;
   }
   .btn-ghost {
     @apply inline-flex items-center justify-center rounded-xl px-3 py-2 text-sm font-medium text-gray-600 hover:bg-gray-100 hover:text-gray-900 transition-all;
@@ -172,10 +196,10 @@
     @apply flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition-all duration-200;
   }
   .sidebar-item-active {
-    @apply sidebar-item bg-blue-50 text-blue-700 shadow-sm shadow-blue-600/5;
+    @apply sidebar-item bg-gradient-to-r from-blue-50 to-indigo-50 text-blue-700 shadow-sm shadow-blue-600/5 border border-blue-100;
   }
   .sidebar-item-inactive {
-    @apply sidebar-item text-gray-600 hover:bg-gray-100 hover:text-gray-900;
+    @apply sidebar-item text-gray-600 hover:bg-gray-50 hover:text-gray-900;
   }
   .shimmer {
     background: linear-gradient(110deg, transparent 33%, rgba(255,255,255,0.4) 50%, transparent 67%);
@@ -184,6 +208,35 @@
   }
   .text-gradient {
     @apply bg-gradient-to-r from-blue-600 via-purple-600 to-indigo-600 bg-clip-text text-transparent;
+  }
+
+  /* Floating particles effect */
+  .particles {
+    position: relative;
+    overflow: hidden;
+  }
+  .particles::before,
+  .particles::after {
+    content: '';
+    position: absolute;
+    border-radius: 50%;
+    pointer-events: none;
+  }
+  .particles::before {
+    width: 300px;
+    height: 300px;
+    background: radial-gradient(circle, rgba(59, 130, 246, 0.08) 0%, transparent 70%);
+    top: -100px;
+    right: -100px;
+    animation: float 8s ease-in-out infinite;
+  }
+  .particles::after {
+    width: 200px;
+    height: 200px;
+    background: radial-gradient(circle, rgba(139, 92, 246, 0.06) 0%, transparent 70%);
+    bottom: -50px;
+    left: -50px;
+    animation: float 10s ease-in-out infinite reverse;
   }
 }
 
@@ -250,4 +303,16 @@
 @keyframes gradient-shift {
   0%, 100% { background-position: 0% 50%; }
   50% { background-position: 100% 50%; }
+}
+
+@keyframes scale-in {
+  from { opacity: 0; transform: scale(0.95); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+@keyframes bounce-in {
+  0% { opacity: 0; transform: scale(0.3); }
+  50% { transform: scale(1.05); }
+  70% { transform: scale(0.9); }
+  100% { opacity: 1; transform: scale(1); }
 }
