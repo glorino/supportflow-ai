@@ -2,13 +2,13 @@
 
 const settingsSections = [
   {
-    title: "Organization",
+    title: "Company",
     icon: "🏢",
     items: [
-      { label: "Organization Profile", desc: "Company name, logo, and branding", current: "Acme Corp" },
-      { label: "Billing & Subscription", desc: "Plan details and payment method", current: "Growth Plan" },
+      { label: "Company Profile", desc: "Company name, logo, and branding", current: "SSV" },
       { label: "Working Hours", desc: "Business hours and holidays", current: "Mon-Fri, 9AM-6PM EST" },
       { label: "Timezone", desc: "Default timezone for the organization", current: "America/New_York" },
+      { label: "Contact Information", desc: "Phone, email, and address", current: "Edit" },
     ],
   },
   {
@@ -47,42 +47,40 @@ const settingsSections = [
 
 export default function SettingsPage() {
   return (
-    <div>
-      <div className="flex items-center justify-between mb-6">
+    <div className="space-y-6">
+      <div className="flex items-center justify-between">
         <div>
           <h1 className="text-2xl font-bold text-gray-900">Settings</h1>
-          <p className="text-sm text-gray-500 mt-1">Configure your organization, AI, and integrations</p>
+          <p className="text-sm text-gray-500 mt-1">Configure your company, AI, and integrations</p>
         </div>
       </div>
 
-      <div className="space-y-6">
-        {settingsSections.map((section, i) => {
-          const colors = ["card-gradient-blue", "card-gradient-green", "card-gradient-purple", "card-gradient-amber"];
-          const gradients = ["from-blue-500 to-indigo-600", "from-green-500 to-emerald-600", "from-purple-500 to-violet-600", "from-amber-400 to-orange-500"];
-          return (
-          <div key={section.title} className="rounded-2xl border border-gray-200 overflow-hidden card-glow">
-            <div className={`flex items-center gap-3 px-6 py-4 bg-gradient-to-r ${gradients[i % gradients.length]} text-white`}>
-              <span className="text-lg">{section.icon}</span>
-              <h3 className="text-base font-semibold">{section.title}</h3>
-            </div>
-            <div className="divide-y divide-gray-50">
-              {section.items.map((item) => (
-                <div key={item.label} className="flex items-center justify-between px-6 py-4 hover:bg-gray-50/50 transition-colors cursor-pointer group">
-                  <div>
-                    <div className="text-sm font-medium text-gray-900 group-hover:text-blue-600 transition">{item.label}</div>
-                    <div className="text-xs text-gray-500 mt-0.5">{item.desc}</div>
-                  </div>
-                  <div className="flex items-center gap-3">
-                    <span className="text-sm text-gray-500">{item.current}</span>
-                    <svg className="w-4 h-4 text-gray-400 group-hover:text-gray-600 transition" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" /></svg>
-                  </div>
-                </div>
-              ))}
-            </div>
+      {settingsSections.map((section, i) => {
+        const colors = ["card-gradient-blue", "card-gradient-green", "card-gradient-purple", "card-gradient-amber"];
+        const gradients = ["from-blue-500 to-indigo-600", "from-green-500 to-emerald-600", "from-purple-500 to-violet-600", "from-amber-400 to-orange-500"];
+        return (
+        <div key={section.title} className={`rounded-2xl border border-gray-200 overflow-hidden ${colors[i % colors.length]}`}>
+          <div className={`flex items-center gap-3 px-6 py-4 bg-gradient-to-r ${gradients[i % gradients.length]} text-white`}>
+            <span className="text-lg">{section.icon}</span>
+            <h3 className="text-base font-semibold">{section.title}</h3>
           </div>
-        );
-        })}
-      </div>
+          <div className="divide-y divide-gray-50 bg-white/80">
+            {section.items.map((item) => (
+              <div key={item.label} className="flex items-center justify-between px-6 py-4 hover:bg-gray-50/50 transition-colors cursor-pointer group">
+                <div>
+                  <div className="text-sm font-medium text-gray-900 group-hover:text-blue-600 transition">{item.label}</div>
+                  <div className="text-xs text-gray-500 mt-0.5">{item.desc}</div>
+                </div>
+                <div className="flex items-center gap-3">
+                  <span className="text-sm text-gray-500">{item.current}</span>
+                  <svg className="w-4 h-4 text-gray-400 group-hover:text-gray-600 transition" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" /></svg>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      );
+      })}
     </div>
   );
 }

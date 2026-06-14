@@ -19,7 +19,6 @@ const analyticsNav = [
 ];
 
 const settingsNav = [
-  { label: "Billing", href: "/dashboard/billing", icon: "M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z", badge: null, roles: ["super_admin", "admin"] },
   { label: "Settings", href: "/dashboard/settings", icon: "M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z M15 12a3 3 0 11-6 0 3 3 0 016 0z", badge: null, roles: ["super_admin", "admin"] },
 ];
 
@@ -48,13 +47,13 @@ export function Sidebar() {
     <aside className="fixed inset-y-0 left-0 z-40 w-[260px] border-r border-gray-200 bg-white hidden lg:flex flex-col">
       {/* Logo */}
       <div className="flex h-16 items-center gap-3 border-b border-gray-100 px-5">
-        <Link href="/" className="flex items-center gap-2.5">
-          <div className="h-9 w-9 rounded-xl gradient-primary flex items-center justify-center shadow-lg shadow-blue-600/20 hover:shadow-xl hover:shadow-blue-600/30 transition-shadow">
-            <span className="text-white font-bold text-sm">SF</span>
+        <Link href="/dashboard" className="flex items-center gap-2.5">
+          <div className="h-9 w-9 rounded-xl bg-gradient-to-br from-blue-600 to-indigo-700 flex items-center justify-center shadow-lg shadow-blue-600/20 hover:shadow-xl hover:shadow-blue-600/30 transition-shadow">
+            <span className="text-white font-bold text-sm">SSV</span>
           </div>
           <div>
-            <span className="text-lg font-bold text-gray-900 tracking-tight">SupportFlow</span>
-            <span className="text-lg font-bold text-gradient ml-0.5"> AI</span>
+            <span className="text-lg font-bold text-gray-900 tracking-tight">SSV</span>
+            <span className="text-lg font-bold text-blue-600 ml-1">CRM</span>
           </div>
         </Link>
       </div>
@@ -138,22 +137,8 @@ export function Sidebar() {
         </div>
       </nav>
 
-      {/* User Profile & Quick Actions */}
+      {/* User Profile */}
       <div className="p-3 border-t border-gray-100 space-y-2">
-        {/* View Website */}
-        <Link
-          href="/"
-          className="group flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium text-gray-600 hover:bg-gray-50 hover:text-gray-900 transition-all duration-200"
-        >
-          <div className="flex items-center justify-center w-5 h-5 text-gray-400 group-hover:text-gray-600 transition-colors">
-            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9" />
-            </svg>
-          </div>
-          <span className="flex-1">View Website</span>
-        </Link>
-
-        {/* User Card */}
         {user && (
           <div className="rounded-xl bg-gradient-to-r from-gray-50 to-gray-100/50 border border-gray-200 p-3">
             <div className="flex items-center gap-3">

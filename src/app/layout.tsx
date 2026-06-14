@@ -5,9 +5,9 @@ import "./globals.css";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "SupportFlow AI — AI-Powered Customer Support OS",
+  title: "SSV CRM — AI-Powered Customer Support Platform",
   description:
-    "Enterprise-grade AI-powered customer support platform. Unify every channel with 7 intelligent agents that classify, route, respond, and resolve.",
+    "AI-powered customer support platform for SSV. Unify every channel with 7 intelligent agents that classify, route, respond, and resolve.",
 };
 
 export default function RootLayout({
