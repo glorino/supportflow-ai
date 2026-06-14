@@ -120,6 +120,47 @@ export default function DashboardPage() {
         ))}
       </div>
 
+      {/* Channel Status */}
+      <div className="rounded-2xl border border-gray-200 bg-white overflow-hidden">
+        <div className="flex items-center justify-between px-6 py-4 border-b border-gray-100">
+          <div>
+            <h3 className="text-base font-semibold text-gray-900">Channel Status</h3>
+            <p className="text-xs text-gray-500 mt-0.5">Connected support channels and webhook status</p>
+          </div>
+          <div className="flex items-center gap-2">
+            <span className="h-2 w-2 rounded-full bg-green-500 animate-pulse" />
+            <span className="text-xs font-semibold text-green-700">5 Active</span>
+          </div>
+        </div>
+        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 divide-x divide-gray-100">
+          {[
+            { name: "WhatsApp", icon: "📱", status: "connected", webhook: "/api/webhooks/whatsapp", color: "text-green-600", bgColor: "bg-green-50", borderColor: "border-green-200", messages: 34 },
+            { name: "Email", icon: "📧", status: "connected", webhook: "IMAP/SMTP", color: "text-green-600", bgColor: "bg-purple-50", borderColor: "border-purple-200", messages: 28 },
+            { name: "Web Chat", icon: "💬", status: "active", webhook: "Embedded widget", color: "text-green-600", bgColor: "bg-blue-50", borderColor: "border-blue-200", messages: 24 },
+            { name: "SMS", icon: "💬", status: "connected", webhook: "Termii API", color: "text-green-600", bgColor: "bg-amber-50", borderColor: "border-amber-200", messages: 16 },
+            { name: "Messenger", icon: "💬", status: "needs_token", webhook: "/api/webhooks/messenger", color: "text-amber-600", bgColor: "bg-blue-50", borderColor: "border-blue-200", messages: 11 },
+            { name: "Instagram", icon: "📸", status: "connected", webhook: "/api/webhooks/instagram", color: "text-green-600", bgColor: "bg-pink-50", borderColor: "border-pink-200", messages: 9 },
+          ].map((ch) => (
+            <div key={ch.name} className="p-4 hover:bg-gray-50 transition-colors group">
+              <div className="flex items-center gap-2 mb-3">
+                <div className={`h-10 w-10 rounded-xl ${ch.bgColor} flex items-center justify-center text-lg group-hover:scale-110 transition-transform`}>{ch.icon}</div>
+                <div>
+                  <div className="text-sm font-semibold text-gray-900">{ch.name}</div>
+                  <div className="flex items-center gap-1">
+                    <span className={`h-1.5 w-1.5 rounded-full ${ch.status === "connected" || ch.status === "active" ? "bg-green-500" : "bg-amber-500 animate-pulse"}`} />
+                    <span className={`text-[10px] font-medium ${ch.color}`}>
+                      {ch.status === "connected" || ch.status === "active" ? "Active" : "Needs Token"}
+                    </span>
+                  </div>
+                </div>
+              </div>
+              <div className="text-lg font-bold text-gray-900">{ch.messages}</div>
+              <div className="text-[10px] text-gray-400">messages this week</div>
+            </div>
+          ))}
+        </div>
+      </div>
+
       {/* Charts Row */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Ticket Volume */}
@@ -278,7 +319,7 @@ export default function DashboardPage() {
               {recentTickets.map((t) => (
                 <tr key={t.id} className="hover:bg-white/60 transition-colors group">
                   <td className="px-6 py-4">
-                    <Link href={`/dashboard/tickets/${t.id.replace("SF-", "")}`}>
+                    <Link href={`/dashboard/tickets/${t.id.replace("SSV-", "")}`}>
                       <div className="flex items-center gap-2 mb-0.5">
                         <span className="text-xs font-mono text-gray-400">{t.id}</span>
                         <span className="text-xs text-gray-300">·</span>
