@@ -1,12 +1,13 @@
 import { NextResponse } from "next/server";
 import { initDB, sql } from "@/lib/db";
-import { broadcastTicketUpdate } from "@/lib/pusher";
+import { broadcastTicketUpdate } from "@/lib/events";
+
+export const dynamic = "force-dynamic";
 
 export async function GET() {
   try {
     await initDB();
 
-    // Find tickets approaching SLA breach (within 30 min)
     const approachingBreach = await sql`
       SELECT id, ticket_number, subject, priority, sla_due, assignee_id
       FROM tickets
@@ -17,12 +18,9 @@ export async function GET() {
         AND sla_status = 'ok'
     `;
 
-    // Update approaching breach tickets to warning
     for (const ticket of approachingBreach) {
-      await sql`
-        UPDATE tickets SET sla_status = 'warning' WHERE id = ${ticket.id}
-      `;
-      await broadcastTicketUpdate(ticket.id, {
+      await sql`UPDATE tickets SET sla_status = 'warning' WHERE id = ${ticket.id}`;
+      broadcastTicketUpdate(ticket.id, {
         type: "sla_warning",
         ticketNumber: ticket.ticket_number,
         subject: ticket.subject,
@@ -30,7 +28,6 @@ export async function GET() {
       });
     }
 
-    // Find breached tickets
     const breached = await sql`
       SELECT id, ticket_number, subject, priority, assignee_id
       FROM tickets
@@ -40,12 +37,9 @@ export async function GET() {
         AND sla_status != 'breached'
     `;
 
-    // Update breached tickets
     for (const ticket of breached) {
-      await sql`
-        UPDATE tickets SET sla_status = 'breached' WHERE id = ${ticket.id}
-      `;
-      await broadcastTicketUpdate(ticket.id, {
+      await sql`UPDATE tickets SET sla_status = 'breached' WHERE id = ${ticket.id}`;
+      broadcastTicketUpdate(ticket.id, {
         type: "sla_breached",
         ticketNumber: ticket.ticket_number,
         subject: ticket.subject,

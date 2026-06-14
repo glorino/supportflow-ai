@@ -2,7 +2,7 @@
 
 import { useState, useCallback } from "react";
 import Link from "next/link";
-import { useRealtimeTickets } from "@/hooks/use-pusher";
+import { useRealtimeTickets } from "@/hooks/use-sse";
 
 const tickets = [
   { id: "SSV-1234", subject: "Can't access my account after password reset", customer: "Sarah Chen", company: "Acme Corp", status: "open", priority: "high", channel: "WhatsApp", channelIcon: "📱", assignee: "AI Agent", sla: "23m left", slaStatus: "ok", createdAt: "2 min ago", lastReply: "1 min ago", sentiment: "negative", tags: ["account", "urgent"], aiConfidence: 94 },
