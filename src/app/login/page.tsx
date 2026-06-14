@@ -67,9 +67,7 @@ export default function LoginPage() {
         <div className="relative z-10 flex flex-col justify-center px-12 xl:px-16">
           {/* Logo */}
           <div className="flex items-center gap-3 mb-14">
-            <div className="h-12 w-12 rounded-2xl bg-white/20 backdrop-blur-sm flex items-center justify-center border border-white/20">
-              <span className="text-white font-bold text-xl">SSV</span>
-            </div>
+            <img src="/logo.svg" alt="SSV Logo" className="h-12 w-12" />
             <span className="text-2xl font-bold text-white">
               SSV <span className="text-blue-200">CRM</span>
             </span>
@@ -128,9 +126,7 @@ export default function LoginPage() {
           {/* Mobile Logo */}
           <div className="lg:hidden text-center mb-8">
             <Link href="/dashboard" className="inline-flex items-center gap-3">
-              <div className="h-12 w-12 rounded-2xl bg-gradient-to-br from-blue-600 to-indigo-700 flex items-center justify-center shadow-lg shadow-blue-600/25">
-                <span className="text-white font-bold text-xl">SSV</span>
-              </div>
+              <img src="/logo.svg" alt="SSV Logo" className="h-12 w-12" />
               <span className="text-2xl font-bold text-gray-900">
                 SSV <span className="text-blue-600">CRM</span>
               </span>

@@ -1,18 +1,19 @@
 "use client";
 
 import { useState } from "react";
+import Link from "next/link";
 
 const customers = [
-  { id: 1, name: "Sarah Chen", email: "sarah@acme.com", company: "Acme Corp", segment: "Enterprise", ltv: "$24,500", tickets: 12, csat: 4.8, lastActive: "2 min ago", status: "active", avatar: "SC", plan: "Growth" },
-  { id: 2, name: "Marcus Johnson", email: "marcus@techstart.io", company: "TechStart Inc", segment: "Enterprise", ltv: "$18,200", tickets: 8, csat: 4.5, lastActive: "15 min ago", status: "active", avatar: "MJ", plan: "Enterprise" },
-  { id: 3, name: "Emily Rodriguez", email: "emily@design.co", company: "Design Studio", segment: "Pro", ltv: "$8,400", tickets: 5, csat: 4.9, lastActive: "1 hour ago", status: "active", avatar: "ER", plan: "Pro" },
-  { id: 4, name: "James Park", email: "james@retail.com", company: "RetailCo", segment: "Business", ltv: "$12,600", tickets: 15, csat: 4.2, lastActive: "3 hours ago", status: "active", avatar: "JP", plan: "Business" },
-  { id: 5, name: "Lisa Wang", email: "lisa@startup.app", company: "StartupApp", segment: "Starter", ltv: "$3,200", tickets: 3, csat: 4.7, lastActive: "4 hours ago", status: "active", avatar: "LW", plan: "Starter" },
-  { id: 6, name: "Tom Miller", email: "tom@mobile.dev", company: "MobileDev", segment: "Pro", ltv: "$9,800", tickets: 7, csat: 4.3, lastActive: "5 hours ago", status: "active", avatar: "TM", plan: "Pro" },
-  { id: 7, name: "Anna Smith", email: "anna@corp.net", company: "CorpNet", segment: "Business", ltv: "$15,400", tickets: 11, csat: 4.6, lastActive: "6 hours ago", status: "inactive", avatar: "AS", plan: "Business" },
-  { id: 8, name: "Mike Davis", email: "mike@growth.io", company: "GrowthIO", segment: "Enterprise", ltv: "$22,100", tickets: 6, csat: 4.8, lastActive: "7 hours ago", status: "active", avatar: "MD", plan: "Enterprise" },
-  { id: 9, name: "Rachel Green", email: "rachel@coffee.co", company: "Coffee Co", segment: "Starter", ltv: "$2,800", tickets: 2, csat: 4.9, lastActive: "1 day ago", status: "active", avatar: "RG", plan: "Starter" },
-  { id: 10, name: "David Kim", email: "david@fintech.com", company: "FinTech Pro", segment: "Enterprise", ltv: "$31,200", tickets: 18, csat: 4.4, lastActive: "2 hours ago", status: "active", avatar: "DK", plan: "Enterprise" },
+  { id: 1, name: "Sarah Chen", email: "sarah@acme.com", company: "Acme Corp", segment: "Enterprise", ltv: "₦36,750,000", tickets: 12, csat: 4.8, lastActive: "2 min ago", status: "active", avatar: "SC", plan: "Growth" },
+  { id: 2, name: "Marcus Johnson", email: "marcus@techstart.io", company: "TechStart Inc", segment: "Enterprise", ltv: "₦27,300,000", tickets: 8, csat: 4.5, lastActive: "15 min ago", status: "active", avatar: "MJ", plan: "Enterprise" },
+  { id: 3, name: "Emily Rodriguez", email: "emily@design.co", company: "Design Studio", segment: "Pro", ltv: "₦12,600,000", tickets: 5, csat: 4.9, lastActive: "1 hour ago", status: "active", avatar: "ER", plan: "Pro" },
+  { id: 4, name: "James Park", email: "james@retail.com", company: "RetailCo", segment: "Business", ltv: "₦18,900,000", tickets: 15, csat: 4.2, lastActive: "3 hours ago", status: "active", avatar: "JP", plan: "Business" },
+  { id: 5, name: "Lisa Wang", email: "lisa@startup.app", company: "StartupApp", segment: "Starter", ltv: "₦4,800,000", tickets: 3, csat: 4.7, lastActive: "4 hours ago", status: "active", avatar: "LW", plan: "Starter" },
+  { id: 6, name: "Tom Miller", email: "tom@mobile.dev", company: "MobileDev", segment: "Pro", ltv: "₦14,700,000", tickets: 7, csat: 4.3, lastActive: "5 hours ago", status: "active", avatar: "TM", plan: "Pro" },
+  { id: 7, name: "Anna Smith", email: "anna@corp.net", company: "CorpNet", segment: "Business", ltv: "₦23,100,000", tickets: 11, csat: 4.6, lastActive: "6 hours ago", status: "inactive", avatar: "AS", plan: "Business" },
+  { id: 8, name: "Mike Davis", email: "mike@growth.io", company: "GrowthIO", segment: "Enterprise", ltv: "₦33,150,000", tickets: 6, csat: 4.8, lastActive: "7 hours ago", status: "active", avatar: "MD", plan: "Enterprise" },
+  { id: 9, name: "Rachel Green", email: "rachel@coffee.co", company: "Coffee Co", segment: "Starter", ltv: "₦4,200,000", tickets: 2, csat: 4.9, lastActive: "1 day ago", status: "active", avatar: "RG", plan: "Starter" },
+  { id: 10, name: "David Kim", email: "david@fintech.com", company: "FinTech Pro", segment: "Enterprise", ltv: "₦46,800,000", tickets: 18, csat: 4.4, lastActive: "2 hours ago", status: "active", avatar: "DK", plan: "Enterprise" },
 ];
 
 const segmentColor: Record<string, string> = {
@@ -48,10 +49,10 @@ export default function CustomersPage() {
       {/* Segment Cards */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
         {[
-          { label: "Enterprise", count: 4, revenue: "$96,000", icon: "🏢", gradient: "from-purple-500 via-violet-500 to-indigo-600", cardBg: "card-gradient-purple" },
-          { label: "Business", count: 2, revenue: "$28,000", icon: "📈", gradient: "from-blue-500 via-blue-600 to-cyan-600", cardBg: "card-gradient-blue" },
-          { label: "Pro", count: 2, revenue: "$18,200", icon: "⭐", gradient: "from-green-500 via-emerald-500 to-teal-600", cardBg: "card-gradient-green" },
-          { label: "Starter", count: 2, revenue: "$6,000", icon: "🚀", gradient: "from-amber-400 via-orange-500 to-red-500", cardBg: "card-gradient-amber" },
+          { label: "Enterprise", count: 4, revenue: "₦144,000,000", icon: "🏢", gradient: "from-purple-500 via-violet-500 to-indigo-600", cardBg: "card-gradient-purple" },
+          { label: "Business", count: 2, revenue: "₦42,000,000", icon: "📈", gradient: "from-blue-500 via-blue-600 to-cyan-600", cardBg: "card-gradient-blue" },
+          { label: "Pro", count: 2, revenue: "₦27,300,000", icon: "⭐", gradient: "from-green-500 via-emerald-500 to-teal-600", cardBg: "card-gradient-green" },
+          { label: "Starter", count: 2, revenue: "₦9,000,000", icon: "🚀", gradient: "from-amber-400 via-orange-500 to-red-500", cardBg: "card-gradient-amber" },
         ].map((s) => (
           <div key={s.label} className={`rounded-2xl border border-gray-200 p-5 card-glow cursor-pointer group ${s.cardBg}`}>
             <div className="flex items-center gap-3 mb-3">
@@ -111,13 +112,13 @@ export default function CustomersPage() {
             {filtered.map((c) => (
               <tr key={c.id} className="hover:bg-gray-50/50 transition-colors group cursor-pointer">
                 <td className="px-6 py-4">
-                  <div className="flex items-center gap-3">
+                  <Link href={`/dashboard/customers/${c.id}`} className="flex items-center gap-3">
                     <div className="h-10 w-10 rounded-full bg-gradient-to-br from-gray-100 to-gray-200 flex items-center justify-center text-sm font-semibold text-gray-600">{c.avatar}</div>
                     <div>
                       <div className="text-sm font-semibold text-gray-900 group-hover:text-blue-600 transition">{c.name}</div>
                       <div className="text-xs text-gray-500">{c.email}</div>
                     </div>
-                  </div>
+                  </Link>
                 </td>
                 <td className="px-6 py-4"><span className={`inline-flex items-center rounded-full px-2.5 py-1 text-xs font-medium ${segmentColor[c.segment]}`}>{c.segment}</span></td>
                 <td className="px-6 py-4 text-sm text-gray-600">{c.plan}</td>

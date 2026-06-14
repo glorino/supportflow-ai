@@ -6,7 +6,7 @@ const kpis = [
   { label: "Resolution Rate", value: "94.2%", change: "+3.1%", up: true, icon: "✅", sparkline: [88, 89, 91, 92, 93, 93, 94] },
   { label: "CSAT Score", value: "4.7/5", change: "+0.2", up: true, icon: "⭐", sparkline: [4.3, 4.4, 4.5, 4.5, 4.6, 4.6, 4.7] },
   { label: "AI Auto-Resolve", value: "56%", change: "+5%", up: true, icon: "🤖", sparkline: [42, 45, 48, 50, 52, 54, 56] },
-  { label: "Cost / Ticket", value: "$2.40", change: "-22%", up: true, icon: "💰", sparkline: [3.8, 3.5, 3.2, 2.9, 2.7, 2.5, 2.4] },
+  { label: "Cost / Ticket", value: "₦3,600", change: "-22%", up: true, icon: "💰", sparkline: [3.8, 3.5, 3.2, 2.9, 2.7, 2.5, 2.4] },
 ];
 
 const monthlyData = [

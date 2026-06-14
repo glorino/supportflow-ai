@@ -8,6 +8,9 @@ export const metadata: Metadata = {
   title: "SSV CRM — AI-Powered Customer Support Platform",
   description:
     "AI-powered customer support platform for SSV. Unify every channel with 7 intelligent agents that classify, route, respond, and resolve.",
+  icons: {
+    icon: "/logo.svg",
+  },
 };
 
 export default function RootLayout({
