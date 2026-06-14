@@ -1,11 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
-import { broadcastTicketUpdate, broadcastInboxUpdate } from "@/lib/pusher";
+import { broadcastTicketUpdate, broadcastInboxUpdate } from "@/lib/events";
 
-interface BroadcastData {
-  ticketId?: string;
-  conversationId?: string;
-  [key: string]: unknown;
-}
+export const dynamic = "force-dynamic";
 
 export async function POST(req: NextRequest) {
   try {
@@ -16,17 +12,15 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: "Missing channel, event, or data" }, { status: 400 });
     }
 
-    const typedData = data as BroadcastData;
-
     if (channel === "tickets") {
-      await broadcastTicketUpdate(typedData.ticketId || "", typedData);
+      broadcastTicketUpdate(data.ticketId || "", data);
     } else if (channel === "inbox") {
-      await broadcastInboxUpdate(typedData);
+      broadcastInboxUpdate(data);
     }
 
     return NextResponse.json({ success: true });
   } catch (error) {
-    console.error("Pusher broadcast error:", error);
+    console.error("Broadcast error:", error);
     return NextResponse.json({ error: "Failed to broadcast" }, { status: 500 });
   }
 }

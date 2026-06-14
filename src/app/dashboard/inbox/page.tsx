@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useCallback } from "react";
-import { useRealtimeInbox } from "@/hooks/use-pusher";
+import { useRealtimeInbox } from "@/hooks/use-sse";
 
 const channels = [
   { id: "all", name: "All Channels", icon: "📥", count: 24 },
