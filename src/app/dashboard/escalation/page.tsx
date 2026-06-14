@@ -1,11 +1,11 @@
 "use client";
 
 const escalations = [
-  { id: "SF-1232", subject: "API returning 500 errors intermittently", customer: "TechStart Inc", from: "AI Agent", to: "Support Engineering", priority: "urgent", reason: "Technical issue requiring specialized knowledge", time: "30 min ago", status: "pending", sentiment: "angry" },
-  { id: "SF-1228", subject: "App crashes on iOS 17.2", customer: "MobileDev", from: "AI Agent", to: "Support Engineering", priority: "high", reason: "Bug requires developer investigation", time: "2 hours ago", status: "in-progress", sentiment: "frustrated" },
-  { id: "SF-1219", subject: "Disputed charges on invoice #4455", customer: "RetailCo", from: "AI Agent", to: "Billing & Accounts", priority: "high", reason: "Billing dispute requires human review", time: "5 hours ago", status: "pending", sentiment: "negative" },
-  { id: "SF-1215", subject: "Enterprise contract renewal question", customer: "FinTech Pro", from: "AI Agent", to: "Customer Success", priority: "medium", reason: "Sales-related inquiry", time: "1 day ago", status: "resolved", sentiment: "neutral" },
-  { id: "SF-1210", subject: "Data export compliance request", customer: "CorpNet", from: "AI Agent", to: "Support Engineering", priority: "high", reason: "GDPR compliance request", time: "1 day ago", status: "in-progress", sentiment: "neutral" },
+  { id: "SSV-1232", subject: "API returning 500 errors intermittently", customer: "TechStart Inc", from: "AI Agent", to: "Support Engineering", priority: "urgent", reason: "Technical issue requiring specialized knowledge", time: "30 min ago", status: "pending", sentiment: "angry" },
+  { id: "SSV-1228", subject: "App crashes on iOS 17.2", customer: "MobileDev", from: "AI Agent", to: "Support Engineering", priority: "high", reason: "Bug requires developer investigation", time: "2 hours ago", status: "in-progress", sentiment: "frustrated" },
+  { id: "SSV-1219", subject: "Disputed charges on invoice #4455", customer: "RetailCo", from: "AI Agent", to: "Billing & Accounts", priority: "high", reason: "Billing dispute requires human review", time: "5 hours ago", status: "pending", sentiment: "negative" },
+  { id: "SSV-1215", subject: "Enterprise contract renewal question", customer: "FinTech Pro", from: "AI Agent", to: "Customer Success", priority: "medium", reason: "Sales-related inquiry", time: "1 day ago", status: "resolved", sentiment: "neutral" },
+  { id: "SSV-1210", subject: "Data export compliance request", customer: "CorpNet", from: "AI Agent", to: "Support Engineering", priority: "high", reason: "GDPR compliance request", time: "1 day ago", status: "in-progress", sentiment: "neutral" },
 ];
 
 const priorityColor: Record<string, string> = {

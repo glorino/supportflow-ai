@@ -3,16 +3,16 @@ import { initDB, sql } from "@/lib/db";
 import { hashPassword } from "@/lib/auth";
 
 const demoUsers = [
-  { email: "admin@supportflow.ai", password: "admin123", name: "Alex Johnson", role: "super_admin", team: "AI Operations" },
-  { email: "marcus@supportflow.ai", password: "demo123", name: "Marcus Johnson", role: "admin", team: "Support Engineering" },
-  { email: "sarah@supportflow.ai", password: "demo123", name: "Sarah Kim", role: "manager", team: "Billing & Accounts" },
-  { email: "emily@supportflow.ai", password: "demo123", name: "Emily Rodriguez", role: "manager", team: "Customer Success" },
-  { email: "tom@supportflow.ai", password: "demo123", name: "Tom Chen", role: "agent", team: "Support Engineering" },
-  { email: "lisa@supportflow.ai", password: "demo123", name: "Lisa Park", role: "agent", team: "Support Engineering" },
-  { email: "david@supportflow.ai", password: "demo123", name: "David Kim", role: "agent", team: "Billing & Accounts" },
-  { email: "rachel@supportflow.ai", password: "demo123", name: "Rachel Green", role: "agent", team: "Customer Success" },
-  { email: "mike@supportflow.ai", password: "demo123", name: "Mike Davis", role: "agent", team: "Support Engineering" },
-  { email: "viewer@supportflow.ai", password: "demo123", name: "Jordan Lee", role: "viewer", team: null },
+  { email: "admin@ssv.com", password: "admin123", name: "Alex Johnson", role: "super_admin", team: "AI Operations" },
+  { email: "marcus@ssv.com", password: "demo123", name: "Marcus Johnson", role: "admin", team: "Support Engineering" },
+  { email: "sarah@ssv.com", password: "demo123", name: "Sarah Kim", role: "manager", team: "Billing & Accounts" },
+  { email: "emily@ssv.com", password: "demo123", name: "Emily Rodriguez", role: "manager", team: "Customer Success" },
+  { email: "tom@ssv.com", password: "demo123", name: "Tom Chen", role: "agent", team: "Support Engineering" },
+  { email: "lisa@ssv.com", password: "demo123", name: "Lisa Park", role: "agent", team: "Support Engineering" },
+  { email: "david@ssv.com", password: "demo123", name: "David Kim", role: "agent", team: "Billing & Accounts" },
+  { email: "rachel@ssv.com", password: "demo123", name: "Rachel Green", role: "agent", team: "Customer Success" },
+  { email: "mike@ssv.com", password: "demo123", name: "Mike Davis", role: "agent", team: "Support Engineering" },
+  { email: "viewer@ssv.com", password: "demo123", name: "Jordan Lee", role: "viewer", team: null },
 ];
 
 const demoCustomers = [
@@ -45,7 +45,6 @@ export async function POST() {
   try {
     await initDB();
 
-    // Seed users
     for (const user of demoUsers) {
       const hash = await hashPassword(user.password);
       await sql`
@@ -55,7 +54,6 @@ export async function POST() {
       `;
     }
 
-    // Seed customers
     const customerIds: string[] = [];
     for (const c of demoCustomers) {
       const result = await sql`
@@ -67,17 +65,15 @@ export async function POST() {
       customerIds.push(result[0].id);
     }
 
-    // Get user IDs
     const users = await sql`SELECT id, email FROM users`;
     const userIdMap: Record<string, string> = {};
     for (const u of users) userIdMap[u.email] = u.id;
 
-    // Seed tickets
     for (let i = 0; i < demoTickets.length; i++) {
       const t = demoTickets[i];
       const customerId = customerIds[i % customerIds.length];
-      const assigneeId = userIdMap["tom@supportflow.ai"];
-      const ticketNumber = `SF-${1234 - i}`;
+      const assigneeId = userIdMap["tom@ssv.com"];
+      const ticketNumber = `SSV-${1234 - i}`;
       const slaDue = new Date(Date.now() + (t.priority === "urgent" ? 3600000 : t.priority === "high" ? 7200000 : 14400000));
 
       await sql`
@@ -90,10 +86,10 @@ export async function POST() {
     return NextResponse.json({
       message: "Database seeded successfully",
       logins: {
-        admin: "admin@supportflow.ai / admin123",
-        manager: "sarah@supportflow.ai / demo123",
-        agent: "tom@supportflow.ai / demo123",
-        viewer: "viewer@supportflow.ai / demo123",
+        admin: "admin@ssv.com / admin123",
+        manager: "sarah@ssv.com / demo123",
+        agent: "tom@ssv.com / demo123",
+        viewer: "viewer@ssv.com / demo123",
       },
     });
   } catch (error) {

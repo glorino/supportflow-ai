@@ -4,10 +4,10 @@ import Link from "next/link";
 import { useState } from "react";
 
 const demoLogins = [
-  { email: "admin@supportflow.ai", password: "admin123", role: "Super Admin", name: "Alex Johnson", avatar: "AJ", gradient: "from-purple-500 to-indigo-600" },
-  { email: "sarah@supportflow.ai", password: "demo123", role: "Manager", name: "Sarah Kim", avatar: "SK", gradient: "from-green-500 to-emerald-600" },
-  { email: "tom@supportflow.ai", password: "demo123", role: "Agent", name: "Tom Chen", avatar: "TC", gradient: "from-blue-500 to-cyan-600" },
-  { email: "viewer@supportflow.ai", password: "demo123", role: "Viewer", name: "Jordan Lee", avatar: "JL", gradient: "from-gray-500 to-gray-600" },
+  { email: "admin@ssv.com", password: "admin123", role: "Super Admin", name: "Alex Johnson", avatar: "AJ", gradient: "from-purple-500 to-indigo-600" },
+  { email: "sarah@ssv.com", password: "demo123", role: "Manager", name: "Sarah Kim", avatar: "SK", gradient: "from-green-500 to-emerald-600" },
+  { email: "tom@ssv.com", password: "demo123", role: "Agent", name: "Tom Chen", avatar: "TC", gradient: "from-blue-500 to-cyan-600" },
+  { email: "viewer@ssv.com", password: "demo123", role: "Viewer", name: "Jordan Lee", avatar: "JL", gradient: "from-gray-500 to-gray-600" },
 ];
 
 export default function LoginPage() {
@@ -68,10 +68,10 @@ export default function LoginPage() {
           {/* Logo */}
           <div className="flex items-center gap-3 mb-14">
             <div className="h-12 w-12 rounded-2xl bg-white/20 backdrop-blur-sm flex items-center justify-center border border-white/20">
-              <span className="text-white font-bold text-xl">SF</span>
+              <span className="text-white font-bold text-xl">SSV</span>
             </div>
             <span className="text-2xl font-bold text-white">
-              SupportFlow<span className="text-blue-200"> AI</span>
+              SSV <span className="text-blue-200">CRM</span>
             </span>
           </div>
 
@@ -108,13 +108,13 @@ export default function LoginPage() {
           {/* Testimonial */}
           <div className="p-6 rounded-2xl bg-white/10 backdrop-blur-sm border border-white/20">
             <div className="text-sm text-white/90 leading-relaxed mb-4">
-              &quot;SupportFlow AI cut our response time by 73% and our team can focus on complex issues instead of repetitive questions.&quot;
+              &quot;SSV CRM cut our response time by 73% and our team can focus on complex issues instead of repetitive questions.&quot;
             </div>
             <div className="flex items-center gap-3">
               <div className="h-11 w-11 rounded-full bg-white/20 flex items-center justify-center text-white text-sm font-bold border border-white/20">SC</div>
               <div>
                 <div className="text-sm font-semibold text-white">Sarah Chen</div>
-                <div className="text-xs text-blue-200/70">Head of Support, Acme Corp</div>
+                <div className="text-xs text-blue-200/70">Head of Support, SSV</div>
               </div>
             </div>
           </div>
@@ -127,12 +127,12 @@ export default function LoginPage() {
         <div className="w-full max-w-md relative">
           {/* Mobile Logo */}
           <div className="lg:hidden text-center mb-8">
-            <Link href="/" className="inline-flex items-center gap-3">
-              <div className="h-12 w-12 rounded-2xl gradient-primary flex items-center justify-center shadow-lg shadow-blue-600/25">
-                <span className="text-white font-bold text-xl">SF</span>
+            <Link href="/dashboard" className="inline-flex items-center gap-3">
+              <div className="h-12 w-12 rounded-2xl bg-gradient-to-br from-blue-600 to-indigo-700 flex items-center justify-center shadow-lg shadow-blue-600/25">
+                <span className="text-white font-bold text-xl">SSV</span>
               </div>
               <span className="text-2xl font-bold text-gray-900">
-                SupportFlow<span className="text-gradient"> AI</span>
+                SSV <span className="text-blue-600">CRM</span>
               </span>
             </Link>
           </div>
@@ -183,7 +183,7 @@ export default function LoginPage() {
                   type="email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  placeholder="you@company.com"
+                  placeholder="you@ssv.com"
                   required
                   className="w-full rounded-xl border-2 border-gray-100 px-4 py-3 text-sm placeholder-gray-400 focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 focus:outline-none transition-all duration-200"
                 />
@@ -245,10 +245,7 @@ export default function LoginPage() {
           {/* Footer */}
           <div className="mt-8 text-center">
             <p className="text-sm text-gray-500">
-              Don&apos;t have an account?{" "}
-              <Link href="/register" className="text-blue-600 hover:text-blue-700 font-semibold transition">
-                Contact Admin
-              </Link>
+              Contact your administrator for account access
             </p>
           </div>
 

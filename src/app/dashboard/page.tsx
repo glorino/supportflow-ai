@@ -31,11 +31,11 @@ const channelStats = [
 ];
 
 const recentTickets = [
-  { id: "SF-1234", subject: "Cannot access my account after password reset", customer: "Sarah Chen", status: "open", priority: "high", channel: "WhatsApp", sla: "23m left", slaStatus: "ok", ai: 94 },
-  { id: "SF-1233", subject: "Refund request for order #98765", customer: "Marcus Johnson", status: "pending", priority: "medium", channel: "Email", sla: "1h 45m", slaStatus: "ok", ai: 88 },
-  { id: "SF-1232", subject: "API returning 500 errors intermittently", customer: "Dev Team", status: "escalated", priority: "urgent", channel: "Web", sla: "BREACHED", slaStatus: "breached", ai: 72 },
-  { id: "SF-1231", subject: "How to integrate with Salesforce?", customer: "Emily Rodriguez", status: "open", priority: "low", channel: "Messenger", sla: "5h left", slaStatus: "ok", ai: 96 },
-  { id: "SF-1230", subject: "Billing discrepancy on invoice #4521", customer: "James Park", status: "resolved", priority: "medium", channel: "SMS", sla: "Done", slaStatus: "done", ai: 97 },
+  { id: "SSV-1234", subject: "Cannot access my account after password reset", customer: "Sarah Chen", status: "open", priority: "high", channel: "WhatsApp", sla: "23m left", slaStatus: "ok", ai: 94 },
+  { id: "SSV-1233", subject: "Refund request for order #98765", customer: "Marcus Johnson", status: "pending", priority: "medium", channel: "Email", sla: "1h 45m", slaStatus: "ok", ai: 88 },
+  { id: "SSV-1232", subject: "API returning 500 errors intermittently", customer: "Dev Team", status: "escalated", priority: "urgent", channel: "Web", sla: "BREACHED", slaStatus: "breached", ai: 72 },
+  { id: "SSV-1231", subject: "How to integrate with Salesforce?", customer: "Emily Rodriguez", status: "open", priority: "low", channel: "Messenger", sla: "5h left", slaStatus: "ok", ai: 96 },
+  { id: "SSV-1230", subject: "Billing discrepancy on invoice #4521", customer: "James Park", status: "resolved", priority: "medium", channel: "SMS", sla: "Done", slaStatus: "done", ai: 97 },
 ];
 
 const statusColor: Record<string, string> = {
@@ -84,7 +84,7 @@ export default function DashboardPage() {
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
           <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 tracking-tight">Dashboard</h1>
-          <p className="text-sm text-gray-500 mt-1">Welcome back, Alex. Here&apos;s your support overview.</p>
+          <p className="text-sm text-gray-500 mt-1">Welcome back, Alex. Here&apos;s your SSV support overview.</p>
         </div>
         <div className="flex items-center gap-3">
           <select className="rounded-xl border border-gray-200 px-3 py-2.5 text-sm bg-white focus:border-blue-500 focus:outline-none font-medium shadow-sm">
@@ -334,13 +334,13 @@ export default function DashboardPage() {
           <p className="text-xs text-gray-500 mb-5">Real-time agent actions</p>
           <div className="space-y-2.5">
             {[
-              { agent: "Resolution Agent", action: "Auto-resolved ticket SF-1228", time: "2m ago", type: "success", icon: "✅" },
-              { agent: "QA Agent", action: "Approved response for SF-1225", time: "5m ago", type: "success", icon: "👍" },
-              { agent: "Escalation Agent", action: "Escalated SF-1224 to billing team", time: "8m ago", type: "warning", icon: "⚠️" },
+              { agent: "Resolution Agent", action: "Auto-resolved ticket SSV-1228", time: "2m ago", type: "success", icon: "✅" },
+              { agent: "QA Agent", action: "Approved response for SSV-1225", time: "5m ago", type: "success", icon: "👍" },
+              { agent: "Escalation Agent", action: "Escalated SSV-1224 to billing team", time: "8m ago", type: "warning", icon: "⚠️" },
               { agent: "Intake Agent", action: "Classified 14 new tickets", time: "12m ago", type: "info", icon: "📋" },
               { agent: "Sentiment Agent", action: "Flagged negative trend on WhatsApp", time: "15m ago", type: "warning", icon: "🔴" },
               { agent: "Knowledge Agent", action: "Updated article: Password Reset", time: "22m ago", type: "info", icon: "📝" },
-              { agent: "Resolution Agent", action: "Drafted response for SF-1219", time: "28m ago", type: "success", icon: "✍️" },
+              { agent: "Resolution Agent", action: "Drafted response for SSV-1219", time: "28m ago", type: "success", icon: "✍️" },
             ].map((a, i) => (
               <div key={i} className="flex items-start gap-3 text-sm p-3 bg-white/80 rounded-xl hover:bg-white border border-amber-100/50 transition-all duration-200 hover:shadow-sm group">
                 <div className="text-base mt-0.5 group-hover:scale-110 transition-transform">{a.icon}</div>
