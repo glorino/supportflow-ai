@@ -12,6 +12,7 @@
     "@ai-sdk/openai": "^3.0.68",
     "@ai-sdk/react": "^3.0.199",
     "@neondatabase/serverless": "^1.1.0",
+    "@trigger.dev/sdk": "^4.4.6",
     "ai": "^6.0.197",
     "bcryptjs": "^3.0.3",
     "class-variance-authority": "^0.7.0",
