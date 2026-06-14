@@ -256,6 +256,13 @@ export default function LoginPage() {
               SOC 2 Compliant
             </span>
           </div>
+
+          {/* Legal Links */}
+          <div className="mt-6 flex items-center justify-center gap-4 text-xs text-gray-400">
+            <Link href="/privacy" className="hover:text-gray-600 transition">Privacy Policy</Link>
+            <span>·</span>
+            <Link href="/terms" className="hover:text-gray-600 transition">Terms &amp; Conditions</Link>
+          </div>
         </div>
       </div>
     </div>
