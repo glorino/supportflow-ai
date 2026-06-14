@@ -48,9 +48,7 @@ export function Sidebar() {
       {/* Logo */}
       <div className="flex h-16 items-center gap-3 border-b border-gray-100 px-5">
         <Link href="/dashboard" className="flex items-center gap-2.5">
-          <div className="h-9 w-9 rounded-xl bg-gradient-to-br from-blue-600 to-indigo-700 flex items-center justify-center shadow-lg shadow-blue-600/20 hover:shadow-xl hover:shadow-blue-600/30 transition-shadow">
-            <span className="text-white font-bold text-sm">SSV</span>
-          </div>
+          <img src="/logo.svg" alt="SSV Logo" className="h-9 w-9" />
           <div>
             <span className="text-lg font-bold text-gray-900 tracking-tight">SSV</span>
             <span className="text-lg font-bold text-blue-600 ml-1">CRM</span>

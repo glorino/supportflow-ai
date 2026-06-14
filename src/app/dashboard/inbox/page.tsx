@@ -250,7 +250,7 @@ export default function InboxPage() {
           <div className="flex justify-start">
             <div className="max-w-[70%]">
               <div className="bg-gray-100 rounded-2xl rounded-tl-sm px-4 py-3">
-                <div className="text-sm text-gray-900">Thank you! I received the reset link. One more thing - can you also check why my billing shows $49 instead of $29?</div>
+                <div className="text-sm text-gray-900">Thank you! I received the reset link. One more thing - can you also check why my billing shows ₦73,500 instead of ₦43,500?</div>
               </div>
               <div className="flex items-center gap-2 mt-1 px-1">
                 <span className="text-[11px] text-gray-400">10:32 AM</span>
@@ -265,11 +265,11 @@ export default function InboxPage() {
                   <span className="h-1.5 w-1.5 rounded-full bg-blue-300" />
                   AI Resolution Agent
                 </div>
-                <div className="text-sm">I can see the billing discrepancy. It appears your plan was upgraded on March 15th. The $49 reflects the Growth plan. Would you like me to:</div>
+                <div className="text-sm">I can see the billing discrepancy. It appears your plan was upgraded on March 15th. The ₦73,500 reflects the Growth plan. Would you like me to:</div>
                 <div className="mt-2 space-y-1.5">
                   <div className="flex items-center gap-2 text-sm">
                     <span className="h-1.5 w-1.5 rounded-full bg-blue-300" />
-                    <span>Revert to the Starter plan ($29/mo)</span>
+                    <span>Revert to the Starter plan (₦43,500/mo)</span>
                   </div>
                   <div className="flex items-center gap-2 text-sm">
                     <span className="h-1.5 w-1.5 rounded-full bg-blue-300" />
@@ -353,7 +353,7 @@ export default function InboxPage() {
             </div>
             <div className="bg-gray-50 rounded-lg p-2.5">
               <div className="text-gray-400 mb-0.5">Lifetime Value</div>
-              <div className="font-medium text-gray-900">$24,500</div>
+              <div className="font-medium text-gray-900">₦36,750,000</div>
             </div>
             <div className="bg-gray-50 rounded-lg p-2.5">
               <div className="text-gray-400 mb-0.5">Total Tickets</div>
@@ -414,7 +414,7 @@ export default function InboxPage() {
                 <span className="h-8 w-8 rounded-lg bg-purple-100 flex items-center justify-center text-purple-600 group-hover:bg-purple-200 transition">💰</span>
                 <div>
                   <div className="font-medium text-gray-900">Issue billing credit</div>
-                  <div className="text-xs text-gray-400">$20 credit for overcharge</div>
+                  <div className="text-xs text-gray-400">₦30,000 credit for overcharge</div>
                 </div>
               </div>
             </button>

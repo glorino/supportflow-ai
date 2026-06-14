@@ -16,16 +16,16 @@ const demoUsers = [
 ];
 
 const demoCustomers = [
-  { email: "sarah@acme.com", name: "Sarah Chen", company: "Acme Corp", segment: "enterprise", plan: "growth", ltv: 24500, csat: 4.8, total_tickets: 12 },
-  { email: "dev@techstart.io", name: "TechStart Inc", company: "TechStart Inc", segment: "enterprise", plan: "enterprise", ltv: 18200, csat: 4.5, total_tickets: 8 },
-  { email: "emily@design.co", name: "Emily Rodriguez", company: "Design Studio", segment: "pro", plan: "pro", ltv: 8400, csat: 4.9, total_tickets: 5 },
-  { email: "james@retail.com", name: "James Park", company: "RetailCo", segment: "business", plan: "business", ltv: 12600, csat: 4.2, total_tickets: 15 },
-  { email: "lisa@startup.app", name: "Lisa Wang", company: "StartupApp", segment: "starter", plan: "starter", ltv: 3200, csat: 4.7, total_tickets: 3 },
-  { email: "tom@mobile.dev", name: "Tom Miller", company: "MobileDev", segment: "pro", plan: "pro", ltv: 9800, csat: 4.3, total_tickets: 7 },
-  { email: "anna@corp.net", name: "Anna Smith", company: "CorpNet", segment: "business", plan: "business", ltv: 15400, csat: 4.6, total_tickets: 11 },
-  { email: "mike@growth.io", name: "Mike Davis", company: "GrowthIO", segment: "enterprise", plan: "enterprise", ltv: 22100, csat: 4.8, total_tickets: 6 },
-  { email: "rachel@coffee.co", name: "Rachel Green", company: "Coffee Co", segment: "starter", plan: "starter", ltv: 2800, csat: 4.9, total_tickets: 2 },
-  { email: "david@fintech.com", name: "David Kim", company: "FinTech Pro", segment: "enterprise", plan: "enterprise", ltv: 31200, csat: 4.4, total_tickets: 18 },
+  { email: "sarah@acme.com", name: "Sarah Chen", company: "Acme Corp", segment: "enterprise", plan: "growth", ltv: 36750000, csat: 4.8, total_tickets: 12 },
+  { email: "dev@techstart.io", name: "TechStart Inc", company: "TechStart Inc", segment: "enterprise", plan: "enterprise", ltv: 27300000, csat: 4.5, total_tickets: 8 },
+  { email: "emily@design.co", name: "Emily Rodriguez", company: "Design Studio", segment: "pro", plan: "pro", ltv: 12600000, csat: 4.9, total_tickets: 5 },
+  { email: "james@retail.com", name: "James Park", company: "RetailCo", segment: "business", plan: "business", ltv: 18900000, csat: 4.2, total_tickets: 15 },
+  { email: "lisa@startup.app", name: "Lisa Wang", company: "StartupApp", segment: "starter", plan: "starter", ltv: 4800000, csat: 4.7, total_tickets: 3 },
+  { email: "tom@mobile.dev", name: "Tom Miller", company: "MobileDev", segment: "pro", plan: "pro", ltv: 14700000, csat: 4.3, total_tickets: 7 },
+  { email: "anna@corp.net", name: "Anna Smith", company: "CorpNet", segment: "business", plan: "business", ltv: 23100000, csat: 4.6, total_tickets: 11 },
+  { email: "mike@growth.io", name: "Mike Davis", company: "GrowthIO", segment: "enterprise", plan: "enterprise", ltv: 33150000, csat: 4.8, total_tickets: 6 },
+  { email: "rachel@coffee.co", name: "Rachel Green", company: "Coffee Co", segment: "starter", plan: "starter", ltv: 4200000, csat: 4.9, total_tickets: 2 },
+  { email: "david@fintech.com", name: "David Kim", company: "FinTech Pro", segment: "enterprise", plan: "enterprise", ltv: 46800000, csat: 4.4, total_tickets: 18 },
 ];
 
 const demoTickets = [
