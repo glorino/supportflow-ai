@@ -15,7 +15,7 @@ export default function TicketDetailPage({ params }: { params: { id: string } })
         <Link href="/dashboard/tickets" className="text-gray-400 hover:text-gray-600">
           ← Back
         </Link>
-        <h1 className="text-2xl font-bold text-gray-900">Ticket #{params.id}</h1>
+        <h1 className="text-2xl font-bold text-gray-900">Ticket SSV-{params.id}</h1>
         <span className="inline-flex items-center rounded-full bg-blue-100 px-2.5 py-0.5 text-xs font-medium text-blue-700">open</span>
         <span className="text-sm text-orange-600 font-semibold">high</span>
       </div>
