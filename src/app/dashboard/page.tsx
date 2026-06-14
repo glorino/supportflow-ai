@@ -81,13 +81,13 @@ export default function DashboardPage() {
   return (
     <div className="space-y-6 particles">
       {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 animate-fade-in">
         <div>
           <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 tracking-tight">Dashboard</h1>
           <p className="text-sm text-gray-500 mt-1">Welcome back, Alex. Here&apos;s your SSV support overview.</p>
         </div>
         <div className="flex items-center gap-3">
-          <select className="rounded-xl border border-gray-200 px-3 py-2.5 text-sm bg-white focus:border-blue-500 focus:outline-none font-medium shadow-sm">
+          <select className="rounded-xl border border-gray-200 px-3 py-2.5 text-sm bg-white focus:border-blue-500 focus:outline-none font-medium shadow-sm transition-all hover:border-gray-300">
             <option>Last 7 days</option>
             <option>Last 30 days</option>
             <option>Last 90 days</option>
@@ -104,8 +104,7 @@ export default function DashboardPage() {
         {stats.map((s, i) => (
           <div
             key={s.label}
-            className={`rounded-2xl border p-4 sm:p-5 card-glow cursor-pointer group ${s.cardClass} transition-all duration-300 hover:-translate-y-1 hover:shadow-xl`}
-            style={{ animationDelay: `${i * 50}ms` }}
+            className={`rounded-2xl border p-4 sm:p-5 card-glow cursor-pointer group ${s.cardClass} transition-all duration-300 hover:-translate-y-1 hover:shadow-xl animate-scale-in stagger-${i + 1}`}
           >
             <div className="flex items-center justify-between mb-3">
               <div className={`h-11 w-11 rounded-xl bg-gradient-to-br ${s.gradient} flex items-center justify-center text-white shadow-lg group-hover:scale-110 group-hover:rotate-3 transition-all duration-300`}>
