@@ -5,7 +5,6 @@ export const translations = {
     features: { en: "Features", fr: "Fonctionnalités" },
     channels: { en: "Channels", fr: "Canaux" },
     agents: { en: "AI Agents", fr: "Agents IA" },
-    pricing: { en: "Pricing", fr: "Tarifs" },
     about: { en: "About", fr: "À propos" },
     signIn: { en: "Sign in", fr: "Se connecter" },
     getStarted: { en: "Get Started", fr: "Commencer" },
@@ -113,10 +112,6 @@ export const translations = {
   agentsPage: {
     title: { en: "AI Agent Suite", fr: "Suite d'Agents IA" },
     subtitle: { en: "Seven intelligent agents working together to resolve your support tickets.", fr: "Sept agents intelligents travaillant ensemble pour résoudre vos tickets de support." },
-  },
-  pricingPage: {
-    title: { en: "Plans for every team size", fr: "Des formules pour chaque taille d'équipe" },
-    subtitle: { en: "Start with what you need. Scale as your support grows.", fr: "Commencez par ce dont vous avez besoin. Évoluez à mesure que votre support grandit." },
   },
   aboutPage: {
     title: { en: "About SSV", fr: "À propos de SSV" },
