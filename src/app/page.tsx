@@ -304,59 +304,74 @@ export default function HomePage() {
       </section>
 
       {/* ═══════ FEATURES 01-06 ═══════ */}
-      <section id="features" className="relative py-12">
+      <section id="features" className="relative py-20">
         <div className="max-w-[1200px] mx-auto px-6 relative">
-          <RevealSection className="text-center mb-12">
-            <p className="text-sm font-bold text-blue-600 uppercase tracking-[0.2em] mb-4">{t("features.label")}</p>
+          <RevealSection className="text-center mb-16">
+            <p className="text-[11px] font-bold text-blue-500 uppercase tracking-[0.25em] mb-4">{t("features.label")}</p>
             <h2 className="text-[34px] sm:text-[46px] font-extrabold tracking-tight leading-[1.05]">
               {t("features.title")}
             </h2>
             <p className="text-gray-500 text-lg max-w-2xl mx-auto mt-4">{t("features.subtitle")}</p>
           </RevealSection>
 
-          <div className="space-y-6">
-            {features.map((feat, idx) => (
-              <RevealSection key={feat.num} delay={idx * 50}>
-                <div className="grid grid-cols-1 lg:grid-cols-2 rounded-3xl overflow-hidden min-h-[380px]" style={{ background: "linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%)" }}>
-                  <div className={`p-10 lg:p-14 flex flex-col justify-center ${idx % 2 === 1 ? "order-2 lg:order-2" : ""}`}>
-                    <div className="flex items-center gap-3 mb-4">
-                      <span className={`h-10 w-10 rounded-xl bg-gradient-to-br ${feat.gradient} flex items-center justify-center text-white text-sm font-bold shadow-lg`}>{feat.num}</span>
-                      <span className={`text-xs font-bold ${feat.text} uppercase tracking-[0.15em]`}>{feat.title}</span>
-                    </div>
-                    <h3 className="text-[24px] sm:text-[28px] font-extrabold leading-tight mb-4">{feat.title}</h3>
-                    <p className="text-gray-500 leading-relaxed mb-6">{feat.desc}</p>
-                    <div className="flex flex-wrap gap-2">
-                      {feat.bullets.map((b) => (
-                        <span key={b} className={`inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl ${feat.bg} border ${feat.border} text-[13px] font-medium ${feat.text}`}>
-                          <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 13l4 4L19 7" /></svg>
-                          {b}
-                        </span>
-                      ))}
-                    </div>
-                  </div>
-                  <div className={`bg-white p-8 flex flex-col justify-center ${idx % 2 === 1 ? "order-1 lg:order-1" : ""}`}>
-                    <p className="text-[11px] font-semibold text-gray-400 uppercase tracking-wider mb-4">Live Event Feed</p>
-                    <div className="space-y-3">
-                      {feat.feed.map((e, ei) => (
-                        <div key={ei} className="flex items-center gap-3 p-4 rounded-xl border border-gray-100 bg-gray-50/50 hover:bg-gray-50 transition-colors">
-                          <span className={`h-8 w-8 rounded-lg flex items-center justify-center text-sm font-bold ${
-                            e.icon === "✓" ? "bg-emerald-100 text-emerald-600" :
-                            e.icon === "!" ? "bg-amber-100 text-amber-600" :
-                            "bg-red-100 text-red-600"
-                          }`}>
-                            {e.icon}
+          <div className="space-y-8">
+            {features.map((feat, idx) => {
+              const cardColors: Record<string, { gradient: string; topBar: string; bg: string; badgeBg: string; feedBg: string; feedBorder: string; eventIconBg: string; eventIconText: string; alertIconBg: string; alertIconText: string }> = {
+                blue: { gradient: "from-blue-500 to-blue-600", topBar: "linear-gradient(90deg, #3b82f6, #6366f1)", bg: "bg-blue-50/50", badgeBg: "bg-blue-100", feedBg: "bg-blue-50/60", feedBorder: "border-blue-100/60", eventIconBg: "bg-emerald-100", eventIconText: "text-emerald-600", alertIconBg: "bg-amber-100", alertIconText: "text-amber-600" },
+                emerald: { gradient: "from-emerald-500 to-emerald-600", topBar: "linear-gradient(90deg, #10b981, #14b8a6)", bg: "bg-emerald-50/50", badgeBg: "bg-emerald-100", feedBg: "bg-emerald-50/60", feedBorder: "border-emerald-100/60", eventIconBg: "bg-emerald-100", eventIconText: "text-emerald-600", alertIconBg: "bg-amber-100", alertIconText: "text-amber-600" },
+                purple: { gradient: "from-purple-500 to-purple-600", topBar: "linear-gradient(90deg, #8b5cf6, #a855f7)", bg: "bg-purple-50/50", badgeBg: "bg-purple-100", feedBg: "bg-purple-50/60", feedBorder: "border-purple-100/60", eventIconBg: "bg-emerald-100", eventIconText: "text-emerald-600", alertIconBg: "bg-amber-100", alertIconText: "text-amber-600" },
+                amber: { gradient: "from-amber-500 to-amber-600", topBar: "linear-gradient(90deg, #f59e0b, #f97316)", bg: "bg-amber-50/50", badgeBg: "bg-amber-100", feedBg: "bg-amber-50/60", feedBorder: "border-amber-100/60", eventIconBg: "bg-emerald-100", eventIconText: "text-emerald-600", alertIconBg: "bg-red-100", alertIconText: "text-red-600" },
+                cyan: { gradient: "from-cyan-500 to-cyan-600", topBar: "linear-gradient(90deg, #06b6d4, #0891b2)", bg: "bg-cyan-50/50", badgeBg: "bg-cyan-100", feedBg: "bg-cyan-50/60", feedBorder: "border-cyan-100/60", eventIconBg: "bg-emerald-100", eventIconText: "text-emerald-600", alertIconBg: "bg-amber-100", alertIconText: "text-amber-600" },
+                rose: { gradient: "from-rose-500 to-rose-600", topBar: "linear-gradient(90deg, #f43f5e, #e11d48)", bg: "bg-rose-50/50", badgeBg: "bg-rose-100", feedBg: "bg-rose-50/60", feedBorder: "border-rose-100/60", eventIconBg: "bg-emerald-100", eventIconText: "text-emerald-600", alertIconBg: "bg-amber-100", alertIconText: "text-amber-600" },
+              };
+              const c = cardColors[feat.color] || cardColors.blue;
+              return (
+                <RevealSection key={feat.num} delay={idx * 80}>
+                  <div className={`grid grid-cols-1 lg:grid-cols-2 rounded-3xl overflow-hidden min-h-[380px] border border-gray-100/80 hover:shadow-2xl hover:shadow-gray-200/60 transition-all duration-500 hover:-translate-y-1`} style={{ background: "linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%)", position: "relative" }}>
+                    <div style={{ position: "absolute", top: 0, left: 0, right: 0, height: "4px", background: c.topBar }} />
+                    <div className={`p-10 lg:p-14 flex flex-col justify-center ${idx % 2 === 1 ? "order-2 lg:order-2" : ""}`}>
+                      <div className="flex items-center gap-3 mb-5">
+                        <span className={`h-12 w-12 rounded-2xl bg-gradient-to-br ${feat.gradient} flex items-center justify-center text-white text-sm font-extrabold shadow-lg group-hover:scale-110 transition-transform`}>{feat.num}</span>
+                        <span className={`text-[11px] font-bold ${feat.text} uppercase tracking-[0.15em]`}>{feat.title}</span>
+                      </div>
+                      <h3 className="text-[24px] sm:text-[28px] font-extrabold leading-tight mb-4 text-gray-900">{feat.title}</h3>
+                      <p className="text-gray-500 leading-relaxed mb-6 text-[15px]">{feat.desc}</p>
+                      <div className="flex flex-wrap gap-2">
+                        {feat.bullets.map((b) => (
+                          <span key={b} className={`inline-flex items-center gap-1.5 px-4 py-2 rounded-xl ${feat.bg} border ${feat.border} text-[13px] font-semibold ${feat.text} transition-all duration-200 hover:shadow-sm hover:scale-[1.02]`}>
+                            <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 13l4 4L19 7" /></svg>
+                            {b}
                           </span>
-                          <div className="flex-1 min-w-0">
-                            <span className="text-sm font-semibold text-gray-800">{e.text}</span>
-                            <span className="text-xs text-gray-400 ml-2">{e.detail}</span>
+                        ))}
+                      </div>
+                    </div>
+                    <div className={`p-8 flex flex-col justify-center ${idx % 2 === 1 ? "order-1 lg:order-1" : ""} ${c.bg} border-l border-gray-100/60`}>
+                      <div className="flex items-center gap-2 mb-5">
+                        <span className="h-1.5 w-1.5 rounded-full bg-green-500 animate-pulse" />
+                        <p className="text-[11px] font-bold text-gray-400 uppercase tracking-[0.15em]">Live Event Feed</p>
+                      </div>
+                      <div className="space-y-3">
+                        {feat.feed.map((e, ei) => (
+                          <div key={ei} className="flex items-center gap-3 p-4 rounded-2xl border bg-white/80 hover:bg-white transition-all duration-300 hover:shadow-md hover:scale-[1.01]" style={{ borderColor: "rgba(0,0,0,0.04)", animationDelay: `${ei * 200}ms` }}>
+                            <span className={`h-9 w-9 rounded-xl flex items-center justify-center text-sm font-bold shrink-0 ${
+                              e.icon === "✓" ? `${c.eventIconBg} ${c.eventIconText}` :
+                              e.icon === "!" ? `${c.alertIconBg} ${c.alertIconText}` :
+                              "bg-red-100 text-red-600"
+                            }`}>
+                              {e.icon}
+                            </span>
+                            <div className="flex-1 min-w-0">
+                              <span className="text-sm font-semibold text-gray-800">{e.text}</span>
+                              <span className="text-xs text-gray-400 ml-2">{e.detail}</span>
+                            </div>
                           </div>
-                        </div>
-                      ))}
+                        ))}
+                      </div>
                     </div>
                   </div>
-                </div>
-              </RevealSection>
-            ))}
+                </RevealSection>
+              );
+            })}
           </div>
         </div>
       </section>
