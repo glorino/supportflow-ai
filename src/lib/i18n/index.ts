@@ -55,7 +55,7 @@ export const translations = {
   },
   agents: {
     label: { en: "AI Agents", fr: "Agents IA" },
-    title: { en: "7 agents. Zero bottlenecks.", fr: "7 agents. Zéro goulot d'étranglement." },
+    title: { en: "9 agents. Zero bottlenecks.", fr: "9 agents. Zéro goulot d'étranglement." },
     desc: { en: "Each agent handles a specific part of your support pipeline. Together, they resolve 67% of tickets autonomously.", fr: "Chaque agent gère une partie spécifique de votre pipeline de support. Ensemble, ils résolvent 67% des tickets automatiquement." },
   },
   howItWorks: {
@@ -111,7 +111,7 @@ export const translations = {
   },
   agentsPage: {
     title: { en: "AI Agent Suite", fr: "Suite d'Agents IA" },
-    subtitle: { en: "Seven intelligent agents working together to resolve your support tickets.", fr: "Sept agents intelligents travaillant ensemble pour résoudre vos tickets de support." },
+    subtitle: { en: "Nine intelligent agents working together to resolve your support tickets.", fr: "Neuf agents intelligents travaillant ensemble pour résoudre vos tickets de support." },
   },
   aboutPage: {
     title: { en: "About SSV", fr: "À propos de SSV" },
@@ -129,7 +129,7 @@ export const translations = {
     signingIn: { en: "Signing in...", fr: "Connexion en cours..." },
     adminNote: { en: "Contact your administrator for account access", fr: "Contactez votre administrateur pour l'accès au compte" },
     heroTitle: { en: "Your Support Team,\nSupercharged by AI", fr: "Votre Équipe de Support,\nPropulsée par l'IA" },
-    heroDesc: { en: "Unify every support channel into one intelligent workspace. 7 AI agents classify, route, respond, and resolve.", fr: "Unifiez chaque canal de support dans un espace intelligent. 7 agents IA classifient, routent, répondent et résolvent." },
+    heroDesc: { en: "Unify every support channel into one intelligent workspace. 9 AI agents classify, route, respond, and resolve.", fr: "Unifiez chaque canal de support dans un espace intelligent. 9 agents IA classifient, routent, répondent et résolvent." },
   },
   forgotPassword: {
     title: { en: "Forgot your password?", fr: "Mot de passe oublié?" },

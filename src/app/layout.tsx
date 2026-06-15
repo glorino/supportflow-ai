@@ -12,7 +12,7 @@ const dmSans = DM_Sans({
 export const metadata: Metadata = {
   title: "SSV CRM — AI-Powered Customer Support Platform",
   description:
-    "AI-powered customer support platform for SSV. Unify every channel with 7 intelligent agents that classify, route, respond, and resolve.",
+    "AI-powered customer support platform for SSV. Unify every channel with 9 intelligent agents that classify, route, respond, and resolve.",
   icons: {
     icon: "/logo.svg",
   },

@@ -98,7 +98,7 @@ export default function LoginPage() {
           {/* Features */}
           <div className="space-y-5 mb-14 animate-slide-up stagger-2">
             {[
-              { icon: "🤖", title: "7 AI Agents", desc: "Intelligent automation pipeline", color: "from-violet-500/20 to-purple-500/20" },
+              { icon: "🤖", title: "9 AI Agents", desc: "Intelligent automation pipeline", color: "from-violet-500/20 to-purple-500/20" },
               { icon: "📡", title: "6 Channels Unified", desc: "WhatsApp, Email, SMS, Web, Messenger, Instagram", color: "from-blue-500/20 to-cyan-500/20" },
               { icon: "⚡", title: "56% Auto-Resolution", desc: "AI resolves tickets without human intervention", color: "from-amber-500/20 to-orange-500/20" },
               { icon: "🛡️", title: "99.99% Uptime", desc: "Enterprise-grade reliability", color: "from-green-500/20 to-emerald-500/20" },
