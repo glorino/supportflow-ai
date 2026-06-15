@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useState } from "react";
+import { ChatWidget } from "@/components/chat-widget";
 
 const demoLogins = [
   { email: "admin@ssv.com", password: "admin123", role: "Super Admin", name: "Alex Johnson", avatar: "AJ", gradient: "from-violet-500 to-indigo-600" },
@@ -284,6 +285,7 @@ export default function LoginPage() {
           </div>
         </div>
       </div>
+      <ChatWidget />
     </div>
   );
 }
