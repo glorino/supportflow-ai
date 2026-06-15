@@ -1,11 +1,21 @@
 "use client";
 
+import { useRef, useEffect, useState, Component, ReactNode, ErrorInfo } from "react";
 import { useChat } from "@ai-sdk/react";
-import { useRef, useEffect, useState } from "react";
 
-export function ChatWidget() {
-  const [isOpen, setIsOpen] = useState(false);
+class ChatErrorBoundary extends Component<{ children: ReactNode }, { hasError: boolean }> {
+  state = { hasError: false };
+  static getDerivedStateFromError() { return { hasError: true }; }
+  componentDidCatch(error: Error, info: ErrorInfo) { console.error("ChatWidget error:", error, info); }
+  render() {
+    if (this.state.hasError) return null;
+    return this.props.children;
+  }
+}
+
+function ChatWidgetInner() {
   const { messages, sendMessage, status, error } = useChat();
+  const [isOpen, setIsOpen] = useState(false);
   const [input, setInput] = useState("");
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
@@ -221,5 +231,13 @@ export function ChatWidget() {
         }
       `}</style>
     </>
+  );
+}
+
+export function ChatWidget() {
+  return (
+    <ChatErrorBoundary>
+      <ChatWidgetInner />
+    </ChatErrorBoundary>
   );
 }
