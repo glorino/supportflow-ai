@@ -15,7 +15,6 @@ export default function PublicShell({ children }: { children: React.ReactNode })
     { href: "/features", key: "nav.features" },
     { href: "/channels", key: "nav.channels" },
     { href: "/agents", key: "nav.agents" },
-    { href: "/pricing", key: "nav.pricing" },
     { href: "/about", key: "nav.about" },
   ];
 
