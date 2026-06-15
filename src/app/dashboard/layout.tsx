@@ -37,7 +37,6 @@ function DashboardHeader() {
       <MobileMenu isOpen={mobileMenuOpen} onClose={() => setMobileMenuOpen(false)} />
       <header className="sticky top-0 z-30 h-[68px] border-b border-gray-200/50 bg-white/70 backdrop-blur-2xl">
         <div className="flex h-full items-center justify-between px-4 sm:px-6 lg:px-8">
-          {/* Left - Mobile Menu + Search */}
           <div className="flex items-center gap-3 flex-1">
             <button
               onClick={() => setMobileMenuOpen(true)}
@@ -60,9 +59,7 @@ function DashboardHeader() {
             </div>
           </div>
 
-          {/* Right - Actions */}
           <div className="flex items-center gap-2">
-            {/* AI Status */}
             <div className="hidden sm:flex items-center gap-2 px-3.5 py-2 rounded-2xl bg-gradient-to-r from-green-50/80 to-emerald-50/60 border border-green-200/60 mr-2">
               <span className="h-2 w-2 rounded-full bg-green-500 animate-pulse shadow-sm shadow-green-500/50" />
               <span className="text-xs font-semibold text-green-700">AI Active</span>
@@ -70,7 +67,6 @@ function DashboardHeader() {
               <span className="text-[10px] text-green-600 font-medium">67% auto-resolved</span>
             </div>
 
-            {/* Notifications */}
             <button className="h-10 w-10 rounded-xl hover:bg-gray-100/80 flex items-center justify-center text-gray-500 hover:text-gray-700 transition-all duration-200 relative">
               <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
@@ -85,7 +81,6 @@ function DashboardHeader() {
               <span className="absolute -top-0.5 -right-0.5 h-4.5 w-4.5 min-w-[18px] rounded-full bg-gradient-to-br from-blue-500 to-blue-600 text-[9px] font-bold text-white flex items-center justify-center shadow-sm">5</span>
             </button>
 
-            {/* User Menu */}
             <div className="flex items-center gap-2 ml-2 pl-3 border-l border-gray-200/60">
               <button onClick={logout} className="flex items-center gap-2.5 rounded-2xl p-1.5 hover:bg-gray-100/80 transition-all duration-300 group" title="Click to logout">
                 <div className={`relative h-10 w-10 rounded-xl bg-gradient-to-br ${badge.gradient} flex items-center justify-center text-white text-xs font-bold shadow-lg group-hover:shadow-xl transition-shadow duration-300`}>
@@ -118,7 +113,6 @@ export default function DashboardLayout({
   return (
     <AuthProvider>
       <div className="min-h-screen bg-[#f8fafc]">
-        {/* Subtle background pattern */}
         <div className="fixed inset-0 pointer-events-none opacity-30" style={{
           backgroundImage: `radial-gradient(circle at 1px 1px, rgba(0,0,0,0.03) 1px, transparent 0)`,
           backgroundSize: '32px 32px'
