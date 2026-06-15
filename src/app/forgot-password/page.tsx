@@ -2,8 +2,11 @@
 
 import Link from "next/link";
 import { useState } from "react";
+import { LangToggle } from "@/components/lang-toggle";
+import { useLang } from "@/lib/i18n/context";
 
 export default function ForgotPasswordPage() {
+  const { t } = useLang();
   const [email, setEmail] = useState("");
   const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
   const [message, setMessage] = useState("");
@@ -33,14 +36,17 @@ export default function ForgotPasswordPage() {
       <div className="w-full max-w-md">
         {/* Logo */}
         <div className="text-center mb-8">
+          <div className="flex justify-center mb-6">
+            <LangToggle />
+          </div>
           <Link href="/" className="inline-flex items-center gap-3 mb-6">
             <div className="h-12 w-12 rounded-2xl gradient-primary flex items-center justify-center shadow-lg shadow-blue-600/25">
               <span className="text-white font-bold text-xl">SF</span>
             </div>
           </Link>
-          <h1 className="text-2xl font-bold text-gray-900">Forgot your password?</h1>
+          <h1 className="text-2xl font-bold text-gray-900">{t("forgotPassword.title")}</h1>
           <p className="mt-2 text-sm text-gray-500">
-            Enter your email and we&apos;ll send you a reset link.
+            {t("forgotPassword.desc")}
           </p>
         </div>
 
@@ -49,16 +55,16 @@ export default function ForgotPasswordPage() {
           {status === "success" ? (
             <div className="text-center">
               <div className="h-16 w-16 rounded-2xl bg-green-100 flex items-center justify-center text-3xl mx-auto mb-4">✉️</div>
-              <h2 className="text-lg font-semibold text-gray-900 mb-2">Check your email</h2>
+              <h2 className="text-lg font-semibold text-gray-900 mb-2">{t("forgotPassword.checkEmail")}</h2>
               <p className="text-sm text-gray-500 mb-6">{message}</p>
               <Link href="/login" className="inline-flex w-full items-center justify-center rounded-xl bg-blue-600 px-4 py-3 text-sm font-semibold text-white hover:bg-blue-700 transition-colors">
-                Back to Sign In
+                {t("forgotPassword.backToSignIn")}
               </Link>
             </div>
           ) : (
             <form onSubmit={handleSubmit}>
               <div className="mb-6">
-                <label className="block text-sm font-medium text-gray-700 mb-2">Email address</label>
+                <label className="block text-sm font-medium text-gray-700 mb-2">{t("forgotPassword.emailLabel")}</label>
                 <input
                   type="email"
                   value={email}
@@ -78,12 +84,12 @@ export default function ForgotPasswordPage() {
                 disabled={status === "loading"}
                 className="w-full rounded-xl bg-blue-600 px-4 py-3 text-sm font-semibold text-white hover:bg-blue-700 transition-colors disabled:opacity-50"
               >
-                {status === "loading" ? "Sending..." : "Send Reset Link"}
+                {status === "loading" ? t("forgotPassword.sending") : t("forgotPassword.sendReset")}
               </button>
 
               <div className="mt-6 text-center">
                 <Link href="/login" className="text-sm text-blue-600 hover:text-blue-700 font-medium">
-                  ← Back to Sign In
+                  ← {t("forgotPassword.backToSignIn")}
                 </Link>
               </div>
             </form>
@@ -95,9 +101,9 @@ export default function ForgotPasswordPage() {
           <div className="flex items-start gap-3">
             <span className="text-lg">💡</span>
             <div>
-              <div className="text-sm font-semibold text-amber-800 mb-1">Demo Mode</div>
+              <div className="text-sm font-semibold text-amber-800 mb-1">{t("forgotPassword.demoMode")}</div>
               <div className="text-xs text-amber-700">
-                Password reset emails are simulated. In production, use a real email service.
+                {t("forgotPassword.demoDesc")}
               </div>
             </div>
           </div>
