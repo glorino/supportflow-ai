@@ -20,7 +20,7 @@ export default function PublicShell({ children }: { children: React.ReactNode })
   ];
 
   return (
-    <div className="min-h-screen bg-white text-gray-900 overflow-x-hidden font-sans">
+    <div className="min-h-screen bg-white text-gray-900 overflow-x-hidden" style={{ fontFamily: "var(--font-dm-sans), system-ui, sans-serif" }}>
       {/* NAV */}
       <nav className="fixed top-0 w-full z-50 bg-white/80 backdrop-blur-xl border-b border-gray-100/50 transition-all duration-300">
         <div className="max-w-[1200px] mx-auto px-6 h-[72px] flex items-center justify-between">
@@ -131,7 +131,7 @@ export default function PublicShell({ children }: { children: React.ReactNode })
             </div>
             {[
               { title: t("footer.platform"), links: [t("nav.features"), t("nav.channels"), t("nav.agents"), "API Reference", "Documentation"] },
-              { title: "Solutions", links: ["Enterprise", "Startups", "E-commerce", "Fintech", "SaaS"] },
+              { title: "Solutions", links: ["Enterprise Support", "Customer Service", "Technical Support", "Sales Support"] },
               { title: "Resources", links: ["Documentation", "API Reference", "Customer Stories", "Blog", "Status Page"] },
               { title: t("footer.company"), links: [t("nav.about"), "Careers", "Privacy Policy", "Terms & Conditions"] },
             ].map((col) => (
@@ -149,7 +149,7 @@ export default function PublicShell({ children }: { children: React.ReactNode })
           </div>
           <div className="border-t border-gray-100 pt-8 flex flex-col sm:flex-row items-center justify-between gap-4">
             <div className="flex items-center gap-4 text-xs text-gray-400">
-              <span>© 2026 SSV Inc.</span>
+              <span>© 2026 SSV. All rights reserved.</span>
               <Link href="/privacy" className="hover:text-gray-600 transition-colors">Privacy Policy</Link>
               <Link href="/terms" className="hover:text-gray-600 transition-colors">Terms & Conditions</Link>
               <a href="mailto:support@ssv.com" className="hover:text-gray-600 transition-colors">support@ssv.com</a>
