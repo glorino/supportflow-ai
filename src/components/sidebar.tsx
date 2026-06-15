@@ -23,11 +23,11 @@ const settingsNav = [
 ];
 
 const roleConfig: Record<string, { label: string; color: string; gradient: string }> = {
-  super_admin: { label: "Super Admin", color: "bg-purple-100 text-purple-700 border-purple-200", gradient: "from-purple-500 to-indigo-600" },
-  admin: { label: "Admin", color: "bg-blue-100 text-blue-700 border-blue-200", gradient: "from-blue-500 to-indigo-600" },
-  manager: { label: "Manager", color: "bg-green-100 text-green-700 border-green-200", gradient: "from-green-500 to-emerald-600" },
-  agent: { label: "Agent", color: "bg-amber-100 text-amber-700 border-amber-200", gradient: "from-amber-500 to-orange-600" },
-  viewer: { label: "Viewer", color: "bg-gray-100 text-gray-600 border-gray-200", gradient: "from-gray-500 to-gray-600" },
+  super_admin: { label: "Super Admin", color: "bg-purple-100/80 text-purple-700 border-purple-200/60", gradient: "from-violet-500 to-indigo-600" },
+  admin: { label: "Admin", color: "bg-blue-100/80 text-blue-700 border-blue-200/60", gradient: "from-blue-500 to-indigo-600" },
+  manager: { label: "Manager", color: "bg-emerald-100/80 text-emerald-700 border-emerald-200/60", gradient: "from-emerald-500 to-teal-600" },
+  agent: { label: "Agent", color: "bg-amber-100/80 text-amber-700 border-amber-200/60", gradient: "from-amber-500 to-orange-600" },
+  viewer: { label: "Viewer", color: "bg-gray-100/80 text-gray-600 border-gray-200/60", gradient: "from-gray-500 to-slate-600" },
 };
 
 export function Sidebar() {
@@ -44,11 +44,14 @@ export function Sidebar() {
   const filterByRole = (items: typeof mainNav) => items.filter(item => item.roles.includes(userRole));
 
   return (
-    <aside className="fixed inset-y-0 left-0 z-40 w-[260px] border-r border-gray-200 bg-white hidden lg:flex flex-col">
+    <aside className="fixed inset-y-0 left-0 z-40 w-[268px] border-r border-gray-200/60 bg-white/80 backdrop-blur-2xl hidden lg:flex flex-col">
       {/* Logo */}
-      <div className="flex h-16 items-center gap-3 border-b border-gray-100 px-5">
-        <Link href="/dashboard" className="flex items-center gap-2.5">
-          <img src="/logo.svg" alt="SSV Logo" className="h-9 w-9" />
+      <div className="flex h-[68px] items-center gap-3 border-b border-gray-100/80 px-5">
+        <Link href="/dashboard" className="flex items-center gap-2.5 group">
+          <div className="relative">
+            <img src="/logo.svg" alt="SSV Logo" className="h-9 w-9 group-hover:scale-105 transition-transform duration-300" />
+            <div className="absolute inset-0 bg-blue-500/10 rounded-xl blur-lg opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+          </div>
           <div>
             <span className="text-lg font-bold text-gray-900 tracking-tight">SSV</span>
             <span className="text-lg font-bold text-blue-600 ml-1">CRM</span>
@@ -59,19 +62,19 @@ export function Sidebar() {
       {/* Navigation */}
       <nav className="flex-1 p-3 space-y-1 overflow-y-auto scrollbar-thin">
         {/* Main Section */}
-        <div className="mb-4">
-          <div className="px-3 mb-2 text-[10px] font-semibold text-gray-400 uppercase tracking-wider">Main</div>
+        <div className="mb-5">
+          <div className="px-3.5 mb-2.5 text-[10px] font-bold text-gray-400/80 uppercase tracking-[0.15em]">Main</div>
           {filterByRole(mainNav).map((item) => (
             <Link
               key={item.href}
               href={item.href}
-              className={`group flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition-all duration-200 ${
+              className={`group flex items-center gap-3 rounded-2xl px-3.5 py-2.5 text-sm font-medium transition-all duration-300 ${
                 isActive(item.href)
-                  ? "bg-gradient-to-r from-blue-50 to-indigo-50 text-blue-700 shadow-sm shadow-blue-600/5 border border-blue-100"
-                  : "text-gray-600 hover:bg-gray-50 hover:text-gray-900"
+                  ? "bg-gradient-to-r from-blue-50 to-indigo-50/80 text-blue-700 shadow-md shadow-blue-600/5 border border-blue-100/80"
+                  : "text-gray-500 hover:bg-gray-50/80 hover:text-gray-900 hover:shadow-sm"
               }`}
             >
-              <div className={`flex items-center justify-center w-5 h-5 ${isActive(item.href) ? "text-blue-600" : "text-gray-400 group-hover:text-gray-600"} transition-colors`}>
+              <div className={`flex items-center justify-center w-5 h-5 ${isActive(item.href) ? "text-blue-600" : "text-gray-400 group-hover:text-gray-600"} transition-colors duration-300`}>
                 <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d={item.icon} />
                 </svg>
@@ -79,8 +82,8 @@ export function Sidebar() {
               <span className="flex-1">{item.label}</span>
               {item.badge && (
                 <span className={`h-5 min-w-[20px] rounded-full text-[10px] font-bold flex items-center justify-center px-1.5 ${
-                  isActive(item.href) ? "bg-blue-600 text-white" : "bg-blue-100 text-blue-700"
-                } transition-colors`}>
+                  isActive(item.href) ? "bg-blue-600 text-white" : "bg-blue-100/80 text-blue-600"
+                } transition-colors duration-300`}>
                   {item.badge}
                 </span>
               )}
@@ -89,19 +92,19 @@ export function Sidebar() {
         </div>
 
         {/* Analytics Section */}
-        <div className="mb-4">
-          <div className="px-3 mb-2 text-[10px] font-semibold text-gray-400 uppercase tracking-wider">Analytics</div>
+        <div className="mb-5">
+          <div className="px-3.5 mb-2.5 text-[10px] font-bold text-gray-400/80 uppercase tracking-[0.15em]">Analytics</div>
           {filterByRole(analyticsNav).map((item) => (
             <Link
               key={item.href}
               href={item.href}
-              className={`group flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition-all duration-200 ${
+              className={`group flex items-center gap-3 rounded-2xl px-3.5 py-2.5 text-sm font-medium transition-all duration-300 ${
                 isActive(item.href)
-                  ? "bg-gradient-to-r from-purple-50 to-violet-50 text-purple-700 shadow-sm shadow-purple-600/5 border border-purple-100"
-                  : "text-gray-600 hover:bg-gray-50 hover:text-gray-900"
+                  ? "bg-gradient-to-r from-purple-50 to-violet-50/80 text-purple-700 shadow-md shadow-purple-600/5 border border-purple-100/80"
+                  : "text-gray-500 hover:bg-gray-50/80 hover:text-gray-900 hover:shadow-sm"
               }`}
             >
-              <div className={`flex items-center justify-center w-5 h-5 ${isActive(item.href) ? "text-purple-600" : "text-gray-400 group-hover:text-gray-600"} transition-colors`}>
+              <div className={`flex items-center justify-center w-5 h-5 ${isActive(item.href) ? "text-purple-600" : "text-gray-400 group-hover:text-gray-600"} transition-colors duration-300`}>
                 <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d={item.icon} />
                 </svg>
@@ -113,18 +116,18 @@ export function Sidebar() {
 
         {/* System Section */}
         <div>
-          <div className="px-3 mb-2 text-[10px] font-semibold text-gray-400 uppercase tracking-wider">System</div>
+          <div className="px-3.5 mb-2.5 text-[10px] font-bold text-gray-400/80 uppercase tracking-[0.15em]">System</div>
           {filterByRole(settingsNav).map((item) => (
             <Link
               key={item.href}
               href={item.href}
-              className={`group flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition-all duration-200 ${
+              className={`group flex items-center gap-3 rounded-2xl px-3.5 py-2.5 text-sm font-medium transition-all duration-300 ${
                 isActive(item.href)
-                  ? "bg-gradient-to-r from-amber-50 to-orange-50 text-amber-700 shadow-sm shadow-amber-600/5 border border-amber-100"
-                  : "text-gray-600 hover:bg-gray-50 hover:text-gray-900"
+                  ? "bg-gradient-to-r from-amber-50 to-orange-50/80 text-amber-700 shadow-md shadow-amber-600/5 border border-amber-100/80"
+                  : "text-gray-500 hover:bg-gray-50/80 hover:text-gray-900 hover:shadow-sm"
               }`}
             >
-              <div className={`flex items-center justify-center w-5 h-5 ${isActive(item.href) ? "text-amber-600" : "text-gray-400 group-hover:text-gray-600"} transition-colors`}>
+              <div className={`flex items-center justify-center w-5 h-5 ${isActive(item.href) ? "text-amber-600" : "text-gray-400 group-hover:text-gray-600"} transition-colors duration-300`}>
                 <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d={item.icon} />
                 </svg>
@@ -136,18 +139,20 @@ export function Sidebar() {
       </nav>
 
       {/* User Profile */}
-      <div className="p-3 border-t border-gray-100 space-y-2">
+      <div className="p-3 border-t border-gray-100/80">
         {user && (
-          <div className="rounded-xl bg-gradient-to-r from-gray-50 to-gray-100/50 border border-gray-200 p-3">
+          <div className="rounded-2xl bg-gradient-to-r from-gray-50/80 to-gray-100/40 border border-gray-200/60 p-3.5 hover:shadow-md transition-all duration-300 cursor-pointer">
             <div className="flex items-center gap-3">
-              <div className={`relative h-10 w-10 rounded-xl bg-gradient-to-br ${config.gradient} flex items-center justify-center text-white text-sm font-bold shadow-lg`}>
-                {getInitials(user.name)}
-                <div className="absolute -bottom-0.5 -right-0.5 h-3 w-3 rounded-full bg-green-500 border-2 border-white" />
+              <div className="relative">
+                <div className={`h-10 w-10 rounded-xl bg-gradient-to-br ${config.gradient} flex items-center justify-center text-white text-sm font-bold shadow-lg`}>
+                  {getInitials(user.name)}
+                </div>
+                <div className="absolute -bottom-0.5 -right-0.5 h-3 w-3 rounded-full bg-green-500 border-2 border-white shadow-sm" />
               </div>
               <div className="flex-1 min-w-0">
                 <div className="text-sm font-semibold text-gray-900 truncate">{user.name}</div>
                 <div className="flex items-center gap-1.5 mt-0.5">
-                  <span className={`inline-flex items-center rounded-full px-1.5 py-0.5 text-[9px] font-semibold border ${config.color}`}>
+                  <span className={`inline-flex items-center rounded-full px-1.5 py-0.5 text-[9px] font-bold border ${config.color}`}>
                     {config.label}
                   </span>
                 </div>
