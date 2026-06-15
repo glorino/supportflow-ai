@@ -291,7 +291,6 @@ export default function HomePage() {
 
       {/* ═══════ THE SOLUTION ═══════ */}
       <section className="relative py-24 overflow-hidden" style={{ background: "linear-gradient(135deg, #0b1a2e 0%, #0f2340 40%, #142d50 70%, #1a365d 100%)" }}>
-        <div className="absolute top-0 left-0 right-0 h-16 bg-gradient-to-b from-white to-transparent" />
         <div className="absolute top-[-30%] right-[-10%] w-[500px] h-[500px] bg-blue-500/10 rounded-full blur-[100px]" />
         <div className="max-w-[1200px] mx-auto px-6 text-center relative">
           <p className="text-sm font-bold text-blue-300 uppercase tracking-[0.2em] mb-4">{t("solution.label")}</p>
@@ -302,7 +301,6 @@ export default function HomePage() {
             {t("solution.desc")}
           </p>
         </div>
-        <div className="absolute bottom-0 left-0 right-0 h-16 bg-gradient-to-t from-white to-transparent" />
       </section>
 
       {/* ═══════ FEATURES 01-06 ═══════ */}
