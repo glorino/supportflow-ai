@@ -218,23 +218,46 @@ export default function HomePage() {
       </RevealSection>
 
       {/* ═══════ TRUSTED BY ═══════ */}
-      <RevealSection className="py-20 border-b border-gray-100/80">
-        <div className="max-w-[1200px] mx-auto px-6">
-          <div className="flex items-center justify-between mb-10">
-            <p className="text-gray-400 text-[15px] font-medium">{t("trusted.title")}</p>
-            <Link href="/about" className="text-sm font-semibold text-gray-900 border border-gray-200 rounded-xl px-5 py-2.5 hover:bg-gray-50 transition-colors hidden sm:flex items-center gap-2">
-              {t("trusted.readAll")} <span className="text-gray-400">→</span>
-            </Link>
-          </div>
-          <div className="grid grid-cols-3 sm:grid-cols-4 lg:grid-cols-6 gap-0 border border-gray-100 rounded-2xl overflow-hidden">
-            {["Paystack", "Kuda", "PiggyVest", "Chipper", "Moniepoint", "FairMoney", "Glovo", "Wema Bank", "Arm", "Tolaram", "Chowdeck", "Yellow Card"].map((name) => (
-              <div key={name} className="flex items-center justify-center h-20 border-r border-b border-gray-100 last:border-r-0 hover:bg-gray-50/50 transition-colors">
-                <span className="text-sm font-bold text-gray-300 tracking-wide">{name}</span>
+      <section className="py-24 border-b border-gray-100/80" style={{ background: "linear-gradient(180deg, #fafbfc 0%, #ffffff 100%)" }}>
+        <RevealSection>
+          <div className="max-w-[1200px] mx-auto px-6">
+            <div className="text-center mb-12">
+              <p className="text-[13px] font-semibold text-gray-400 uppercase tracking-[0.2em] mb-3">{t("trusted.title")}</p>
+              <div className="flex items-center justify-center gap-3">
+                <div className="h-px w-12 bg-gradient-to-r from-transparent to-gray-200" />
+                <div className="h-1.5 w-1.5 rounded-full bg-blue-400" />
+                <div className="h-px w-12 bg-gradient-to-l from-transparent to-gray-200" />
               </div>
-            ))}
+            </div>
+            <div className="grid grid-cols-3 sm:grid-cols-4 lg:grid-cols-6 gap-px bg-gray-100/60 rounded-2xl overflow-hidden shadow-sm shadow-gray-100/50">
+              {[
+                { name: "Paystack", color: "text-gray-400" },
+                { name: "Kuda", color: "text-gray-400" },
+                { name: "PiggyVest", color: "text-gray-400" },
+                { name: "Chipper", color: "text-gray-400" },
+                { name: "Moniepoint", color: "text-gray-400" },
+                { name: "FairMoney", color: "text-gray-400" },
+                { name: "Glovo", color: "text-gray-400" },
+                { name: "Wema Bank", color: "text-gray-400" },
+                { name: "Arm", color: "text-gray-400" },
+                { name: "Tolaram", color: "text-gray-400" },
+                { name: "Chowdeck", color: "text-gray-400" },
+                { name: "Yellow Card", color: "text-gray-400" },
+              ].map((company) => (
+                <div key={company.name} className="flex items-center justify-center h-[72px] bg-white hover:bg-gray-50/80 transition-all duration-300 group cursor-default">
+                  <span className={`text-[13px] font-semibold ${company.color} tracking-wide group-hover:text-gray-500 transition-colors duration-300`}>{company.name}</span>
+                </div>
+              ))}
+            </div>
+            <div className="flex items-center justify-center mt-8">
+              <Link href="/about" className="inline-flex items-center gap-2 text-[13px] font-medium text-gray-400 hover:text-gray-600 transition-colors duration-300 group">
+                {t("trusted.readAll")}
+                <svg className="w-3.5 h-3.5 group-hover:translate-x-0.5 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" /></svg>
+              </Link>
+            </div>
           </div>
-        </div>
-      </RevealSection>
+        </RevealSection>
+      </section>
 
       {/* ═══════ THE PROBLEM ═══════ */}
       <RevealSection className="py-24 section-mesh">
