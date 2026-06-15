@@ -43,12 +43,12 @@ export default function KnowledgePage() {
 
   return (
     <div className="space-y-6">
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
           <h1 className="text-2xl font-bold text-gray-900">Knowledge Base</h1>
           <p className="text-sm text-gray-500 mt-1">Manage articles, FAQs, and documentation for AI-powered self-service</p>
         </div>
-        <div className="flex items-center gap-3">
+        <div className="flex flex-wrap gap-2">
           <button className="btn-secondary">
             <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" /></svg>
             Import
@@ -93,7 +93,7 @@ export default function KnowledgePage() {
       </div>
 
       {/* Stats */}
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
         {[
           { label: "Total Articles", value: "157", icon: "📚", change: "+8 this week", gradient: "from-blue-500 via-blue-600 to-indigo-600", cardBg: "card-gradient-blue" },
           { label: "AI Resolution", value: "89%", icon: "🤖", change: "+3% this month", gradient: "from-green-500 via-emerald-500 to-teal-600", cardBg: "card-gradient-green" },
@@ -117,7 +117,7 @@ export default function KnowledgePage() {
           <h2 className="text-base font-semibold text-gray-900">Collections</h2>
           <button className="text-sm text-blue-600 hover:text-blue-700 font-medium transition">View all →</button>
         </div>
-        <div className="grid grid-cols-3 lg:grid-cols-6 gap-4">
+        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3 sm:gap-4">
           {collections.map((c) => (
             <button
               key={c.id}
@@ -159,16 +159,17 @@ export default function KnowledgePage() {
         </div>
 
         {view === "list" ? (
+          <div className="overflow-x-auto">
           <table className="w-full">
             <thead>
               <tr className="border-b border-gray-100 bg-gray-50/50">
                 <th className="text-left px-6 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wider">Article</th>
                 <th className="text-left px-6 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wider">Collection</th>
                 <th className="text-left px-6 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wider">Status</th>
-                <th className="text-left px-6 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wider">Views</th>
-                <th className="text-left px-6 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wider">AI Used</th>
+                <th className="hidden sm:table-cell text-left px-6 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wider">Views</th>
+                <th className="hidden sm:table-cell text-left px-6 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wider">AI Used</th>
                 <th className="text-left px-6 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wider">Helpful</th>
-                <th className="text-right px-6 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wider">Updated</th>
+                <th className="hidden sm:table-cell text-right px-6 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wider">Updated</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-50">
@@ -184,14 +185,15 @@ export default function KnowledgePage() {
                   </td>
                   <td className="px-6 py-4 text-sm text-gray-600">{a.collection}</td>
                   <td className="px-6 py-4"><span className={`inline-flex items-center rounded-full px-2.5 py-1 text-xs font-medium ${statusColor[a.status]}`}>{a.status}</span></td>
-                  <td className="px-6 py-4 text-sm text-gray-600">{a.views.toLocaleString()}</td>
-                  <td className="px-6 py-4 text-sm text-blue-600 font-medium">{a.aiUsed}</td>
+                  <td className="hidden sm:table-cell px-6 py-4 text-sm text-gray-600">{a.views.toLocaleString()}</td>
+                  <td className="hidden sm:table-cell px-6 py-4 text-sm text-blue-600 font-medium">{a.aiUsed}</td>
                   <td className="px-6 py-4 text-sm text-gray-600">{a.helpful > 0 ? `${a.helpful}%` : "—"}</td>
-                  <td className="px-6 py-4 text-xs text-gray-400 text-right">{a.lastUpdated}</td>
+                  <td className="hidden sm:table-cell px-6 py-4 text-xs text-gray-400 text-right">{a.lastUpdated}</td>
                 </tr>
               ))}
             </tbody>
           </table>
+          </div>
         ) : (
           <div className="p-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             {filteredArticles.map((a) => (

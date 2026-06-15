@@ -32,7 +32,7 @@ const sentimentIcon: Record<string, string> = {
 export default function EscalationPage() {
   return (
     <div className="space-y-6">
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
           <h1 className="text-2xl font-bold text-gray-900">Escalation Center</h1>
           <p className="text-sm text-gray-500 mt-1">AI-to-human handoff management and routing</p>
@@ -48,7 +48,7 @@ export default function EscalationPage() {
       </div>
 
       {/* Stats */}
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
         {[
           { label: "Pending", value: "2", icon: "⏳", gradient: "from-amber-400 to-orange-500", cardBg: "card-gradient-amber" },
           { label: "In Progress", value: "2", icon: "🔄", gradient: "from-blue-500 to-indigo-600", cardBg: "card-gradient-blue" },
@@ -76,7 +76,7 @@ export default function EscalationPage() {
             <p className="text-xs text-gray-500">Intelligent escalation triggers</p>
           </div>
         </div>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-3 sm:gap-4">
           {[
             { trigger: "Sentiment < -0.5", action: "Route to senior agent", priority: "High", active: true },
             { trigger: "Billing dispute detected", action: "Route to Billing team", priority: "High", active: true },
@@ -112,8 +112,8 @@ export default function EscalationPage() {
         </div>
         <div className="divide-y divide-gray-50">
           {escalations.map((e) => (
-            <div key={e.id} className="flex items-center gap-4 px-6 py-4 hover:bg-gray-50/50 transition-all duration-200 group">
-              <div className="text-xl group-hover:scale-125 transition-transform duration-200">{sentimentIcon[e.sentiment]}</div>
+            <div key={e.id} className="flex flex-col sm:flex-row items-start gap-3 sm:gap-4 px-6 py-4 hover:bg-gray-50/50 transition-all duration-200 group">
+              <div className="text-xl group-hover:scale-125 transition-transform duration-200 shrink-0">{sentimentIcon[e.sentiment]}</div>
               <div className="flex-1 min-w-0">
                 <div className="flex items-center gap-2 mb-0.5">
                   <span className="text-xs font-mono text-gray-400">{e.id}</span>
@@ -122,8 +122,13 @@ export default function EscalationPage() {
                 </div>
                 <div className="text-sm font-medium text-gray-900 truncate group-hover:text-blue-600 transition">{e.subject}</div>
                 <div className="text-xs text-gray-500 mt-0.5">{e.customer} · {e.reason}</div>
+                <div className="flex items-center gap-3 mt-2 sm:hidden">
+                  <span className="text-xs text-gray-400">{e.time}</span>
+                  <button className="btn-ghost text-xs hover:bg-gray-100">Assign</button>
+                  <button className="btn-primary text-xs shadow-sm hover:shadow-md transition-all">Accept</button>
+                </div>
               </div>
-              <div className="text-right shrink-0">
+              <div className="hidden sm:block text-right shrink-0">
                 <div className="text-xs text-gray-400 mb-1">{e.time}</div>
                 <div className="text-xs text-gray-500">
                   <span className="text-gray-400">From:</span> {e.from}
@@ -132,7 +137,7 @@ export default function EscalationPage() {
                   <span className="text-gray-400">To:</span> <span className="font-medium text-blue-600">{e.to}</span>
                 </div>
               </div>
-              <div className="flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+              <div className="hidden sm:flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
                 <button className="btn-ghost text-xs hover:bg-gray-100">Assign</button>
                 <button className="btn-primary text-xs shadow-sm hover:shadow-md transition-all">Accept</button>
               </div>
