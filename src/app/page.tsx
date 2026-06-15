@@ -1,550 +1,693 @@
 "use client";
 
 import Link from "next/link";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 
-const features = [
-  {
-    num: "01",
-    title: "Intelligent Intake",
-    desc: "7 AI agents classify, route, and respond to every customer message instantly. No queue. No delay.",
-    tags: ["Auto-classification", "Smart routing", "Instant response"],
-    color: "from-blue-500 to-indigo-600",
-    bgColor: "bg-blue-500/10",
-    borderColor: "border-blue-500/20",
-    liveFeed: [
-      { action: "Classified", detail: "Billing inquiry", time: "Just now", status: "done" },
-      { action: "Routed", detail: "Urgent API issue → Tier 2", time: "2s ago", status: "done" },
-      { action: "Resolved", detail: "Password reset", time: "5s ago", status: "done" },
-    ],
-  },
-  {
-    num: "02",
-    title: "Unified Inbox",
-    desc: "Every channel — WhatsApp, Email, SMS, Messenger, Instagram, Web Chat — in one conversation thread.",
-    tags: ["6 channels", "Real-time sync", "Full context"],
-    color: "from-emerald-500 to-green-600",
-    bgColor: "bg-emerald-500/10",
-    borderColor: "border-emerald-500/20",
-    liveFeed: [
-      { action: "WhatsApp", detail: "Sarah: My order hasn't arrived", time: "Just now", status: "done" },
-      { action: "Email", detail: "Mike: Refund request for #9876", time: "3s ago", status: "done" },
-      { action: "Web Chat", detail: "New visitor from Lagos", time: "6s ago", status: "pending" },
-    ],
-  },
-  {
-    num: "03",
-    title: "Sentiment Analysis",
-    desc: "Real-time emotion detection on every message. Know when a customer is frustrated before they churn.",
-    tags: ["Real-time scoring", "Trend alerts", "Churn prediction"],
-    color: "from-purple-500 to-violet-600",
-    bgColor: "bg-purple-500/10",
-    borderColor: "border-purple-500/20",
-    liveFeed: [
-      { action: "Detected", detail: "Frustrated tone — escalated", time: "Just now", status: "done" },
-      { action: "Scored", detail: "Positive (0.92) — closed", time: "2s ago", status: "done" },
-      { action: "Alert", detail: "Negative trend on WhatsApp", time: "8s ago", status: "warning" },
-    ],
-  },
-  {
-    num: "04",
-    title: "SLA Monitoring",
-    desc: "Automated escalation when SLAs are breached. Never miss a response deadline again.",
-    tags: ["Auto-escalation", "SLA tracking", "Compliance reporting"],
-    color: "from-amber-500 to-orange-600",
-    bgColor: "bg-amber-500/10",
-    borderColor: "border-amber-500/20",
-    liveFeed: [
-      { action: "Enforced", detail: "SLA 2h met for SSV-1234", time: "Just now", status: "done" },
-      { action: "Breached", detail: "SSV-1230 exceeded 4h", time: "1s ago", status: "breached" },
-      { action: "Escalated", detail: "SSV-1228 → Manager", time: "4s ago", status: "done" },
-    ],
-  },
-  {
-    num: "05",
-    title: "AI Knowledge Base",
-    desc: "Your team's knowledge, auto-digested and searchable. AI agents use it to resolve 67% of tickets autonomously.",
-    tags: ["Auto-ingestion", "Semantic search", "AI-powered answers"],
-    color: "from-cyan-500 to-blue-600",
-    bgColor: "bg-cyan-500/10",
-    borderColor: "border-cyan-500/20",
-    liveFeed: [
-      { action: "Indexed", detail: "12 new articles processed", time: "Just now", status: "done" },
-      { action: "Matched", detail: "Q: reset password → A: article #42", time: "1s ago", status: "done" },
-      { action: "Auto-resolved", detail: "Shipping policy question", time: "3s ago", status: "done" },
-    ],
-  },
-  {
-    num: "06",
-    title: "Real-time Analytics",
-    desc: "Dashboards that update live. Track resolution rates, CSAT, agent performance, and channel health at a glance.",
-    tags: ["Live dashboards", "Export reports", "Custom metrics"],
-    color: "from-rose-500 to-pink-600",
-    bgColor: "bg-rose-500/10",
-    borderColor: "border-rose-500/20",
-    liveFeed: [
-      { action: "Updated", detail: "Resolution rate: 87%", time: "Just now", status: "done" },
-      { action: "Alert", detail: "CSAT dipped below 4.0", time: "5s ago", status: "warning" },
-      { action: "Report", detail: "Weekly summary generated", time: "12s ago", status: "done" },
-    ],
-  },
-];
-
-const channels = [
-  { name: "WhatsApp", icon: "M", color: "bg-green-500", desc: "2B+ users worldwide" },
-  { name: "Email", icon: "@", color: "bg-purple-500", desc: "IMAP/SMTP integration" },
-  { name: "SMS", icon: "~", color: "bg-amber-500", desc: "Termii-powered delivery" },
-  { name: "Web Chat", icon: "W", color: "bg-blue-500", desc: "Embeddable widget" },
-  { name: "Messenger", icon: "M", color: "bg-blue-400", desc: "Facebook integration" },
-  { name: "Instagram", icon: "I", color: "bg-pink-500", desc: "DM support" },
-];
-
-const stats = [
-  { value: "67%", label: "Auto-Resolution Rate", desc: "Tickets resolved without humans" },
-  { value: "42s", label: "Avg Response Time", desc: "First response in seconds" },
-  { value: "99.99%", label: "Uptime SLA", desc: "Enterprise-grade reliability" },
-  { value: "16M+", label: "Customers Served", desc: "Across all channels" },
-];
-
-const agents = [
-  { name: "Intake Agent", desc: "Classifies and routes incoming tickets", color: "from-blue-500 to-indigo-600" },
-  { name: "Knowledge Agent", desc: "Searches and retrieves relevant articles", color: "from-emerald-500 to-green-600" },
-  { name: "Resolution Agent", desc: "Auto-resolves common issues", color: "from-purple-500 to-violet-600" },
-  { name: "QA Agent", desc: "Monitors response quality and tone", color: "from-amber-500 to-orange-600" },
-  { name: "Escalation Agent", desc: "Routes critical issues to the right team", color: "from-rose-500 to-pink-600" },
-  { name: "Sentiment Agent", desc: "Detects emotions in real-time", color: "from-cyan-500 to-blue-600" },
-  { name: "Analytics Agent", desc: "Generates insights and trend reports", color: "from-violet-500 to-purple-600" },
-];
-
-function AnimatedCounter({ target, suffix = "" }: { target: number; suffix?: string }) {
-  const [count, setCount] = useState(0);
+function useScrollReveal(threshold = 0.15) {
+  const ref = useRef<HTMLDivElement>(null);
+  const [visible, setVisible] = useState(false);
   useEffect(() => {
-    let start = 0;
-    const duration = 2000;
-    const increment = target / (duration / 16);
-    const timer = setInterval(() => {
-      start += increment;
-      if (start >= target) {
-        setCount(target);
-        clearInterval(timer);
-      } else {
-        setCount(Math.floor(start));
-      }
-    }, 16);
-    return () => clearInterval(timer);
-  }, [target]);
-  return <span>{count}{suffix}</span>;
+    const el = ref.current;
+    if (!el) return;
+    const obs = new IntersectionObserver(([e]) => { if (e.isIntersecting) { setVisible(true); obs.disconnect(); } }, { threshold });
+    obs.observe(el);
+    return () => obs.disconnect();
+  }, [threshold]);
+  return { ref, visible };
 }
 
+function RevealSection({ children, className = "", delay = 0 }: { children: React.ReactNode; className?: string; delay?: number }) {
+  const { ref, visible } = useScrollReveal(0.1);
+  return (
+    <div ref={ref} className={`${className} transition-all duration-700 ease-out ${visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"}`} style={{ transitionDelay: `${delay}ms` }}>
+      {children}
+    </div>
+  );
+}
+
+const heroWords = ["Fraud", "OTP", "Payment", "Ticket"];
 export default function HomePage() {
+  const [wordIndex, setWordIndex] = useState(0);
   const [scrolled, setScrolled] = useState(false);
+  const [mobileOpen, setMobileOpen] = useState(false);
 
   useEffect(() => {
-    const handleScroll = () => setScrolled(window.scrollY > 50);
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
+    const interval = setInterval(() => setWordIndex((i) => (i + 1) % heroWords.length), 2500);
+    return () => clearInterval(interval);
+  }, []);
+
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 20);
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
   return (
-    <div className="min-h-screen bg-[#0a0e1a] text-white overflow-x-hidden">
-      {/* Nav */}
-      <nav className={`fixed top-0 w-full z-50 transition-all duration-500 ${scrolled ? "bg-[#0a0e1a]/90 backdrop-blur-2xl border-b border-white/5 shadow-2xl shadow-black/20" : "bg-transparent"}`}>
-        <div className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <div className="h-9 w-9 rounded-xl bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center shadow-lg shadow-blue-500/20">
-              <img src="/logo.svg" alt="SSV" className="h-5 w-5" />
-            </div>
-            <span className="text-lg font-bold tracking-tight">SSV</span>
-          </div>
-          <div className="hidden md:flex items-center gap-8">
-            <a href="#features" className="text-sm text-gray-400 hover:text-white transition-colors duration-300">Features</a>
-            <a href="#channels" className="text-sm text-gray-400 hover:text-white transition-colors duration-300">Channels</a>
-            <a href="#agents" className="text-sm text-gray-400 hover:text-white transition-colors duration-300">AI Agents</a>
-            <a href="#stats" className="text-sm text-gray-400 hover:text-white transition-colors duration-300">Results</a>
-          </div>
-          <div className="flex items-center gap-3">
-            <Link href="/login" className="text-sm text-gray-300 hover:text-white transition-colors duration-300 px-4 py-2">
-              Sign in
+    <div className="min-h-screen bg-white text-gray-900 overflow-x-hidden font-sans">
+      {/* ───────── NAV ───────── */}
+      <nav className={`fixed top-0 w-full z-50 transition-all duration-500 ${scrolled ? "bg-white shadow-sm border-b border-gray-100" : "bg-transparent"}`}>
+        <div className="max-w-[1200px] mx-auto px-6 h-[72px] flex items-center justify-between">
+          <div className="flex items-center gap-10">
+            <Link href="/" className="flex items-center gap-2">
+              <div className="h-8 w-8 rounded-lg bg-gradient-to-br from-[#1B6B4A] to-[#22c55e] flex items-center justify-center">
+                <img src="/logo.svg" alt="SSV" className="h-5 w-5 brightness-0 invert" />
+              </div>
+              <span className="text-[22px] font-extrabold tracking-tight text-gray-900">SSV</span>
             </Link>
-            <Link href="/login" className="text-sm font-semibold bg-gradient-to-r from-blue-600 to-indigo-600 text-white px-5 py-2.5 rounded-xl hover:shadow-lg hover:shadow-blue-500/25 transition-all duration-300">
+            <div className="hidden lg:flex items-center gap-8">
+              {[
+                { label: "Platform", hasDropdown: true },
+                { label: "Solutions", hasDropdown: true },
+                { label: "Developers", hasDropdown: false },
+                { label: "Pricing", hasDropdown: false },
+              ].map((item) => (
+                <button key={item.label} className="flex items-center gap-1 text-[15px] font-medium text-gray-600 hover:text-gray-900 transition-colors">
+                  {item.label}
+                  {item.hasDropdown && (
+                    <svg className="w-3.5 h-3.5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" /></svg>
+                  )}
+                </button>
+              ))}
+            </div>
+          </div>
+          <div className="hidden lg:flex items-center gap-4">
+            <Link href="/login" className="text-[15px] font-medium text-gray-600 hover:text-gray-900 transition-colors px-3 py-2">Sign in</Link>
+            <Link href="/login" className="relative text-[15px] font-semibold text-white bg-gray-900 px-5 py-2.5 rounded-full hover:bg-gray-800 transition-colors flex items-center gap-2">
+              <span className="h-2 w-2 rounded-full bg-emerald-400" />
               Get Started
             </Link>
           </div>
+          <button onClick={() => setMobileOpen(!mobileOpen)} className="lg:hidden p-2">
+            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d={mobileOpen ? "M6 18L18 6M6 6l12 12" : "M4 6h16M4 12h16M4 18h16"} /></svg>
+          </button>
         </div>
-      </nav>
-
-      {/* Hero */}
-      <section className="relative pt-32 pb-20 sm:pt-40 sm:pb-28 px-6">
-        {/* Background orbs */}
-        <div className="absolute top-20 left-1/4 w-[600px] h-[600px] bg-blue-600/10 rounded-full blur-[120px] animate-pulse" />
-        <div className="absolute bottom-0 right-1/4 w-[500px] h-[500px] bg-indigo-600/8 rounded-full blur-[100px]" />
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-purple-600/5 rounded-full blur-[150px]" />
-
-        <div className="max-w-7xl mx-auto relative">
-          {/* Badge */}
-          <div className="flex justify-center mb-8">
-            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/5 border border-white/10 backdrop-blur-sm">
-              <span className="h-2 w-2 rounded-full bg-green-400 animate-pulse" />
-              <span className="text-xs font-medium text-gray-300">AI-Powered Support Platform</span>
-              <span className="text-xs text-gray-500">·</span>
-              <span className="text-xs font-medium text-blue-400">Now Live</span>
+        {mobileOpen && (
+          <div className="lg:hidden bg-white border-t border-gray-100 shadow-xl px-6 py-6 space-y-4">
+            {["Platform", "Solutions", "Developers", "Pricing"].map((l) => (
+              <a key={l} href="#" className="block text-base font-medium text-gray-700">{l}</a>
+            ))}
+            <div className="pt-4 border-t border-gray-100 flex flex-col gap-3">
+              <Link href="/login" className="text-center text-sm font-medium text-gray-700 py-2">Sign in</Link>
+              <Link href="/login" className="text-center text-sm font-semibold text-white bg-gray-900 rounded-full py-3">Get Started</Link>
             </div>
           </div>
+        )}
+      </nav>
 
-          {/* Headline */}
-          <h1 className="text-5xl sm:text-7xl lg:text-8xl font-bold text-center tracking-tight leading-[0.95] mb-8">
-            <span className="text-white">Your support team,</span>
-            <br />
-            <span className="bg-gradient-to-r from-blue-400 via-indigo-400 to-purple-400 bg-clip-text text-transparent">supercharged by AI.</span>
-          </h1>
+      {/* ───────── HERO ───────── */}
+      <section className="relative min-h-[92vh] flex items-center bg-gradient-to-br from-[#0f2e1f] via-[#163a28] to-[#1a4432] overflow-hidden">
+        {/* Animated gradient orbs */}
+        <div className="absolute top-[-20%] right-[-10%] w-[700px] h-[700px] bg-emerald-500/15 rounded-full blur-[120px] animate-pulse" />
+        <div className="absolute bottom-[-10%] left-[-5%] w-[500px] h-[500px] bg-green-600/10 rounded-full blur-[100px]" style={{ animation: "float 12s ease-in-out infinite" }} />
 
-          {/* Subheadline */}
-          <p className="text-center text-lg sm:text-xl text-gray-400 max-w-2xl mx-auto mb-12 leading-relaxed">
-            Unify every support channel into one intelligent workspace. 7 AI agents classify, route, respond, and resolve — so your team can focus on what matters.
-          </p>
+        <div className="relative max-w-[1200px] mx-auto px-6 pt-32 pb-20 w-full">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+            {/* Left */}
+            <div>
+              <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/10 backdrop-blur-sm border border-white/10 mb-8">
+                <span className="h-2 w-2 rounded-full bg-emerald-400 animate-pulse" />
+                <span className="text-[13px] font-semibold text-emerald-300 uppercase tracking-wider">3 Billion Tickets Processed</span>
+              </div>
+              <h1 className="text-[56px] sm:text-[72px] lg:text-[80px] font-extrabold leading-[0.95] tracking-tight text-white mb-6">
+                Every{" "}
+                <span className="relative inline-block">
+                  <span className="relative z-10 text-emerald-400 italic">{heroWords[wordIndex]}</span>
+                  <span className="absolute bottom-1 left-0 w-full h-3 bg-emerald-400/20 rounded-sm" />
+                </span>
+                <br />A Resolution.
+              </h1>
+              <p className="text-lg text-gray-300/90 max-w-lg mb-10 leading-relaxed">
+                Resolve tickets across WhatsApp, Email, SMS, Messenger, Instagram, and Web Chat — using AI agents that classify, route, and resolve automatically.
+              </p>
+              <div className="flex flex-col sm:flex-row gap-4">
+                <Link href="/login" className="px-8 py-4 bg-white text-gray-900 rounded-full text-[15px] font-semibold hover:bg-gray-100 transition-all text-center shadow-lg">
+                  Get Started
+                </Link>
+                <Link href="/login" className="px-8 py-4 bg-transparent border-2 border-emerald-400/40 text-emerald-300 rounded-full text-[15px] font-semibold hover:bg-emerald-400/10 transition-all text-center">
+                  Book a demo
+                </Link>
+              </div>
+            </div>
+            {/* Right — Chat Cards */}
+            <div className="hidden lg:block relative">
+              <div className="absolute inset-0 bg-emerald-500/5 rounded-3xl blur-3xl" />
+              <div className="relative space-y-4">
+                {/* User message */}
+                <div className="ml-auto max-w-[340px] bg-white/[0.08] backdrop-blur-md rounded-2xl rounded-br-md px-5 py-4 border border-white/[0.08]">
+                  <p className="text-sm text-white/90">Help me with my support ticket #SSV-1234</p>
+                </div>
+                {/* AI Response */}
+                <div className="max-w-[380px] bg-white/[0.12] backdrop-blur-md rounded-2xl rounded-bl-md px-5 py-4 border border-white/[0.1]">
+                  <div className="flex items-center gap-2 mb-2">
+                    <div className="h-6 w-6 rounded-md bg-emerald-500 flex items-center justify-center">
+                      <span className="text-[9px] font-bold text-white">AI</span>
+                    </div>
+                    <span className="text-xs font-semibold text-emerald-300">SSV AI</span>
+                  </div>
+                  <p className="text-sm text-white/80">Ticket resolved! Refund of ₦45,000 has been processed for your order.</p>
+                </div>
+                {/* Transaction card */}
+                <div className="ml-auto max-w-[360px] bg-white/[0.08] backdrop-blur-md rounded-2xl px-5 py-4 border border-white/[0.08]">
+                  <div className="flex items-center justify-between mb-3">
+                    <span className="text-xs text-gray-400 font-mono">TXN-9190</span>
+                    <span className="text-sm font-bold text-white">₦45,000</span>
+                  </div>
+                  <div className="flex gap-2 flex-wrap">
+                    {["Resolved", "Escalated", "Closed"].map((tag) => (
+                      <span key={tag} className={`px-3 py-1 rounded-full text-[11px] font-semibold ${tag === "Resolved" ? "bg-emerald-500/20 text-emerald-300" : tag === "Escalated" ? "bg-amber-500/20 text-amber-300" : "bg-white/10 text-gray-300"}`}>
+                        {tag}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+                {/* Status */}
+                <div className="max-w-[360px] bg-white/[0.08] backdrop-blur-md rounded-2xl px-5 py-3 border border-white/[0.08] flex items-center justify-between">
+                  <span className="text-sm text-gray-300">Routing ticket...</span>
+                  <svg className="w-5 h-5 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" /></svg>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
 
-          {/* CTA */}
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-16">
-            <Link href="/login" className="w-full sm:w-auto text-center px-8 py-4 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-2xl text-sm font-semibold shadow-lg shadow-blue-600/25 hover:shadow-xl hover:shadow-blue-600/40 hover:from-blue-700 hover:to-indigo-700 transition-all duration-300">
-              Start Free Trial →
-            </Link>
-            <Link href="#features" className="w-full sm:w-auto text-center px-8 py-4 bg-white/5 border border-white/10 rounded-2xl text-sm font-semibold text-gray-300 hover:bg-white/10 hover:border-white/20 transition-all duration-300">
-              See How It Works
+        {/* Bottom gradient fade to white */}
+        <div className="absolute bottom-0 left-0 right-0 h-24 bg-gradient-to-t from-white to-transparent" />
+      </section>
+
+      {/* ───────── TRUSTED BY ───────── */}
+      <RevealSection className="py-20 border-b border-gray-100">
+        <div className="max-w-[1200px] mx-auto px-6">
+          <div className="flex items-center justify-between mb-10">
+            <p className="text-gray-400 text-[15px]">Trusted by leading companies across Nigeria and beyond</p>
+            <Link href="#features" className="text-sm font-semibold text-gray-900 border border-gray-200 rounded-full px-5 py-2.5 hover:bg-gray-50 transition-colors hidden sm:flex items-center gap-2">
+              Read all stories <span className="text-gray-400">→</span>
             </Link>
           </div>
-
-          {/* Stats Row */}
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 max-w-3xl mx-auto">
-            {stats.map((s) => (
-              <div key={s.label} className="text-center p-4 rounded-2xl bg-white/[0.03] border border-white/5 hover:border-white/10 transition-all duration-300">
-                <div className="text-2xl sm:text-3xl font-bold text-white mb-1">{s.value}</div>
-                <div className="text-xs text-gray-400 font-medium">{s.label}</div>
+          <div className="grid grid-cols-3 sm:grid-cols-4 lg:grid-cols-6 gap-0 border border-gray-100 rounded-2xl overflow-hidden">
+            {["Paystack", "Kuda", "PiggyVest", "Chipper", "Moniepoint", "FairMoney", "Glovo", "Wema Bank", "Arm", "Tolaram", "Chowdeck", "Yellow Card"].map((name) => (
+              <div key={name} className="flex items-center justify-center h-20 border-r border-b border-gray-100 last:border-r-0 hover:bg-gray-50/50 transition-colors">
+                <span className="text-sm font-bold text-gray-300 tracking-wide">{name}</span>
               </div>
             ))}
           </div>
         </div>
+      </RevealSection>
+
+      {/* ───────── THE PROBLEM ───────── */}
+      <RevealSection className="py-24">
+        <div className="max-w-[1200px] mx-auto px-6 text-center">
+          <p className="text-sm font-bold text-emerald-600 uppercase tracking-[0.2em] mb-4">The Problem</p>
+          <h2 className="text-[40px] sm:text-[52px] font-extrabold tracking-tight mb-4 leading-[1.05]">
+            Ticket-triggered<br />failures.
+          </h2>
+          <p className="text-gray-500 text-lg max-w-xl mx-auto mb-16">Teams send and forget. But the cost of unresolved tickets is real.</p>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            {[
+              { icon: "!", title: "Ticket never triaged", desc: "Customer sends a message at 2am. No one picks it up. The session dies. They don't come back.", color: "text-emerald-600 bg-emerald-50" },
+              { icon: "~", title: "Escalation fires too late", desc: "By the time your team sees it, the customer has already churned. The damage is done.", color: "text-rose-500 bg-rose-50" },
+              { icon: "₹", title: "Resolution fails", desc: "Agent responds with a template. Customer is frustrated. Silent failures for hours before anyone notices.", color: "text-emerald-600 bg-emerald-50" },
+              { icon: "↻", title: "No fallback path", desc: "One channel fails and everything stops. No automatic second attempt. Just silence.", color: "text-gray-400 bg-gray-50" },
+            ].map((card) => (
+              <div key={card.title} className="text-left p-8 rounded-2xl border border-gray-100 hover:border-gray-200 hover:shadow-lg transition-all duration-300 group">
+                <div className={`h-14 w-14 rounded-2xl ${card.color} flex items-center justify-center text-xl font-bold mb-6 group-hover:scale-110 transition-transform`}>
+                  {card.icon}
+                </div>
+                <h3 className="text-lg font-bold mb-2">{card.title}</h3>
+                <p className="text-sm text-gray-500 leading-relaxed">{card.desc}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </RevealSection>
+
+      {/* ───────── THE SOLUTION (green band) ───────── */}
+      <section className="relative py-24 bg-gradient-to-br from-[#0f2e1f] via-[#163a28] to-[#1a4432] overflow-hidden">
+        <div className="absolute top-0 left-0 right-0 h-16 bg-gradient-to-b from-white to-transparent" />
+        <div className="max-w-[1200px] mx-auto px-6 text-center relative">
+          <p className="text-sm font-bold text-emerald-300 uppercase tracking-[0.2em] mb-4">The Solution</p>
+          <h2 className="text-[40px] sm:text-[52px] font-extrabold tracking-tight text-white mb-6 leading-[1.05]">
+            Failures <span className="italic text-emerald-400">avoided.</span>
+          </h2>
+          <p className="text-gray-300/80 text-lg max-w-2xl mx-auto leading-relaxed">
+            Six capabilities working together — so every ticket, message, alert, and support request actually gets through and gets resolved.
+          </p>
+        </div>
+        <div className="absolute bottom-0 left-0 right-0 h-16 bg-gradient-to-t from-white to-transparent" />
       </section>
 
-      {/* Dashboard Preview */}
-      <section className="relative px-6 pb-24">
-        <div className="max-w-6xl mx-auto">
-          <div className="relative rounded-3xl border border-white/10 bg-white/[0.03] backdrop-blur-sm overflow-hidden shadow-2xl shadow-black/40">
-            {/* Browser chrome */}
-            <div className="flex items-center gap-2 px-5 py-3.5 border-b border-white/5 bg-white/[0.02]">
-              <div className="flex gap-1.5">
-                <div className="h-3 w-3 rounded-full bg-red-500/80" />
-                <div className="h-3 w-3 rounded-full bg-yellow-500/80" />
-                <div className="h-3 w-3 rounded-full bg-green-500/80" />
+      {/* ───────── FEATURES 01-06 ───────── */}
+      <section id="features" className="relative py-12">
+        {/* Dot pattern background */}
+        <div className="absolute inset-0 opacity-[0.03]" style={{ backgroundImage: "radial-gradient(circle, #1a1a1a 1px, transparent 1px)", backgroundSize: "24px 24px" }} />
+
+        <div className="max-w-[1200px] mx-auto px-6 relative space-y-8">
+          {/* 01 · AI Prediction */}
+          <RevealSection>
+            <div className="grid grid-cols-1 lg:grid-cols-2 bg-[#f5f8f6] rounded-3xl overflow-hidden min-h-[420px]">
+              <div className="p-10 lg:p-14 flex flex-col justify-center">
+                <p className="text-sm font-bold text-emerald-600 uppercase tracking-[0.15em] mb-4">01 · AI Classification</p>
+                <h3 className="text-[28px] sm:text-[32px] font-extrabold leading-tight mb-4">Classify every ticket before it moves</h3>
+                <p className="text-gray-500 leading-relaxed mb-6">SSV runs intent detection, sentiment analysis, and priority scoring in under 50ms — before your ticket hits any queue. High-confidence tickets get auto-resolved. Low-confidence ones get routed to the right agent.</p>
+                <div className="flex flex-wrap gap-2">
+                  {["Intent detection", "Sentiment analysis", "Priority scoring", "&lt;50ms latency"].map((t) => (
+                    <span key={t} className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-full bg-emerald-50 border border-emerald-100 text-[13px] font-medium text-emerald-700">
+                      <svg className="w-3.5 h-3.5 text-emerald-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 13l4 4L19 7" /></svg>
+                      {t}
+                    </span>
+                  ))}
+                </div>
               </div>
-              <div className="flex-1 flex justify-center">
-                <div className="px-4 py-1 rounded-lg bg-white/5 text-xs text-gray-500">supportflow-ai-six.vercel.app/dashboard</div>
+              <div className="bg-white p-8 flex flex-col justify-center space-y-3">
+                {[
+                  { id: "TICKET-9436", pct: 98, color: "bg-emerald-500" },
+                  { id: "TICKET-9437", pct: 72, color: "bg-amber-500" },
+                  { id: "TICKET-9438", pct: 95, color: "bg-emerald-500" },
+                ].map((t) => (
+                  <div key={t.id} className="flex items-center justify-between p-4 rounded-xl border border-gray-100 bg-gray-50/50">
+                    <span className="text-sm font-mono text-gray-600">{t.id}</span>
+                    <div className="flex items-center gap-3">
+                      <div className="w-24 h-2 bg-gray-100 rounded-full overflow-hidden">
+                        <div className={`h-full ${t.color} rounded-full transition-all duration-1000`} style={{ width: `${t.pct}%` }} />
+                      </div>
+                      <span className="text-sm font-bold text-gray-900 w-10 text-right">{t.pct}%</span>
+                    </div>
+                  </div>
+                ))}
+                <div className="flex items-center justify-between p-4 rounded-xl border border-gray-100 bg-gray-50/50">
+                  <span className="text-sm text-gray-500">Fraud risk</span>
+                  <span className="text-sm font-bold text-emerald-600">Low · 0.03</span>
+                </div>
               </div>
             </div>
-            {/* Mock dashboard */}
-            <div className="p-6 sm:p-10">
-              <div className="grid grid-cols-3 sm:grid-cols-6 gap-3 mb-8">
-                {["14 Open", "2 Pending", "2 Escalated", "87% Resolved", "4.6 CSAT", "99.9% SLA"].map((s, i) => (
-                  <div key={i} className="p-3 rounded-xl bg-white/[0.04] border border-white/5 text-center">
-                    <div className="text-xs font-bold text-white">{s.split(" ")[0]}</div>
-                    <div className="text-[10px] text-gray-500 mt-0.5">{s.split(" ").slice(1).join(" ")}</div>
+          </RevealSection>
+
+          {/* 02 · Unified Inbox */}
+          <RevealSection>
+            <div className="grid grid-cols-1 lg:grid-cols-2 bg-[#f5f8f6] rounded-3xl overflow-hidden min-h-[420px]">
+              <div className="bg-white p-8 flex flex-col justify-center space-y-3 order-2 lg:order-1">
+                {[
+                  { ch: "WhatsApp", vendor: "Live", ms: "25ms", pct: "97%", active: true },
+                  { ch: "Email", vendor: "IMAP", ms: "30ms", pct: "93%", active: false },
+                  { ch: "SMS", vendor: "Termii", ms: "28ms", pct: "99%", active: false },
+                  { ch: "Web Chat", vendor: "Widget", ms: "12ms", pct: "100%", active: false },
+                ].map((c) => (
+                  <div key={c.ch} className={`flex items-center justify-between p-4 rounded-xl border transition-all ${c.active ? "border-emerald-300 bg-emerald-50/80 shadow-sm" : "border-gray-100 bg-gray-50/50"}`}>
+                    <div className="flex items-center gap-3">
+                      <span className={`h-2 w-2 rounded-full ${c.active ? "bg-emerald-500" : "bg-gray-300"}`} />
+                      <span className="text-sm font-semibold text-gray-800">{c.ch} · {c.vendor}</span>
+                    </div>
+                    <div className="flex items-center gap-3">
+                      <span className="text-xs text-gray-400">{c.ms}</span>
+                      <span className={`text-sm font-bold ${c.active ? "text-emerald-600" : "text-gray-700"}`}>{c.pct}</span>
+                    </div>
                   </div>
                 ))}
               </div>
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                <div className="col-span-2 rounded-xl bg-white/[0.03] border border-white/5 p-5">
-                  <div className="text-xs text-gray-400 mb-3 font-medium">Recent Tickets</div>
-                  {["SSV-1234 · Can't access account · Urgent", "SSV-1233 · Refund request · Medium", "SSV-1232 · API 500 errors · Escalated"].map((t, i) => (
-                    <div key={i} className="flex items-center gap-3 py-2.5 border-b border-white/5 last:border-0">
-                      <div className={`h-2 w-2 rounded-full ${i === 0 ? "bg-red-400" : i === 1 ? "bg-amber-400" : "bg-blue-400"}`} />
-                      <span className="text-xs text-gray-300">{t}</span>
+              <div className="p-10 lg:p-14 flex flex-col justify-center order-1 lg:order-2">
+                <p className="text-sm font-bold text-emerald-600 uppercase tracking-[0.15em] mb-4">02 · Unified Inbox</p>
+                <h3 className="text-[28px] sm:text-[32px] font-extrabold leading-tight mb-4">The best path, chosen in real time</h3>
+                <p className="text-gray-500 leading-relaxed mb-6">SSV evaluates WhatsApp, Email, SMS, Web Chat, Messenger, and Instagram simultaneously — routing to the highest-confidence channel for that ticket, that moment, that customer.</p>
+                <div className="flex flex-wrap gap-2">
+                  {["WhatsApp · Email · SMS · Web", "Auto-failover", "Bring your own channel"].map((t) => (
+                    <span key={t} className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-full bg-emerald-50 border border-emerald-100 text-[13px] font-medium text-emerald-700">
+                      <svg className="w-3.5 h-3.5 text-emerald-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 13l4 4L19 7" /></svg>
+                      {t}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </RevealSection>
+
+          {/* 03 · Sentiment Analysis */}
+          <RevealSection>
+            <div className="grid grid-cols-1 lg:grid-cols-2 bg-[#f5f8f6] rounded-3xl overflow-hidden min-h-[420px]">
+              <div className="p-10 lg:p-14 flex flex-col justify-center">
+                <p className="text-sm font-bold text-emerald-600 uppercase tracking-[0.15em] mb-4">03 · Sentiment Analysis</p>
+                <h3 className="text-[28px] sm:text-[32px] font-extrabold leading-tight mb-4">Read the emotion before the words</h3>
+                <p className="text-gray-500 leading-relaxed mb-6">Real-time fraud and emotion scoring built for customer support. Tone, urgency, and intent assessed in milliseconds. Genuine queries get answered instantly. Angry customers get escalated before they churn.</p>
+                <div className="flex flex-wrap gap-2">
+                  {["Velocity rules", "Device fingerprinting", "0.01% false positive"].map((t) => (
+                    <span key={t} className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-full bg-emerald-50 border border-emerald-100 text-[13px] font-medium text-emerald-700">
+                      <svg className="w-3.5 h-3.5 text-emerald-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 13l4 4L19 7" /></svg>
+                      {t}
+                    </span>
+                  ))}
+                </div>
+              </div>
+              <div className="bg-white p-8 flex flex-col justify-center">
+                <div className="grid grid-cols-2 gap-3 mb-4">
+                  {[
+                    { val: "99.7%", label: "Detection rate", text: "text-emerald-600" },
+                    { val: "48", label: "Flagged today", text: "text-gray-900" },
+                    { val: "46ms", label: "Avg. check time", text: "text-gray-900" },
+                    { val: "0.01%", label: "False positive", text: "text-gray-900" },
+                  ].map((s) => (
+                    <div key={s.label} className="p-4 rounded-xl border border-gray-100 bg-gray-50/50 text-center">
+                      <div className={`text-2xl font-extrabold ${s.text}`}>{s.val}</div>
+                      <div className="text-[11px] text-gray-400 mt-1">{s.label}</div>
                     </div>
                   ))}
                 </div>
-                <div className="rounded-xl bg-white/[0.03] border border-white/5 p-5">
-                  <div className="text-xs text-gray-400 mb-3 font-medium">Channel Activity</div>
-                  {["WhatsApp · 4", "Email · 4", "Web · 6", "SMS · 2"].map((c, i) => (
-                    <div key={i} className="flex items-center justify-between py-2 border-b border-white/5 last:border-0">
-                      <span className="text-xs text-gray-300">{c.split(" · ")[0]}</span>
-                      <span className="text-xs font-bold text-white">{c.split(" · ")[1]}</span>
+                <div className="p-4 rounded-xl border border-gray-100 bg-gray-50/50">
+                  <p className="text-[11px] font-semibold text-gray-400 uppercase tracking-wider mb-3">Live Event Feed</p>
+                  {[
+                    { action: "Review", detail: "TICKET-9454 · Just now", dot: "bg-amber-400" },
+                    { action: "Cleared", detail: "TICKET-9453 · 1s ago", dot: "bg-emerald-500" },
+                    { action: "Cleared", detail: "TICKET-9452 · 3s ago", dot: "bg-emerald-500" },
+                  ].map((e) => (
+                    <div key={e.detail} className="flex items-center gap-3 py-2 border-b border-gray-100 last:border-0">
+                      <span className={`h-2 w-2 rounded-full ${e.dot}`} />
+                      <span className="text-sm font-medium text-gray-700">{e.action}</span>
+                      <span className="text-xs text-gray-400">{e.detail}</span>
                     </div>
                   ))}
                 </div>
               </div>
             </div>
-          </div>
-        </div>
-      </section>
+          </RevealSection>
 
-      {/* Features */}
-      <section id="features" className="relative px-6 py-24">
-        <div className="max-w-7xl mx-auto">
-          <div className="text-center mb-20">
-            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-blue-500/10 border border-blue-500/20 mb-6">
-              <span className="text-xs font-semibold text-blue-400">Platform</span>
-            </div>
-            <h2 className="text-4xl sm:text-5xl font-bold tracking-tight mb-4">
-              Built for <span className="bg-gradient-to-r from-blue-400 to-indigo-400 bg-clip-text text-transparent">speed</span> and{" "}
-              <span className="bg-gradient-to-r from-purple-400 to-violet-400 bg-clip-text text-transparent">reliability</span>.
-            </h2>
-            <p className="text-gray-400 max-w-xl mx-auto text-lg">
-              Six core capabilities. One unified platform. Zero compromises.
-            </p>
-          </div>
-
-          <div className="space-y-8">
-            {features.map((f) => (
-              <div key={f.num} className={`group rounded-3xl border ${f.borderColor} ${f.bgColor} p-8 sm:p-10 hover:scale-[1.01] transition-all duration-500`}>
-                <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
-                  <div>
-                    <div className="flex items-center gap-3 mb-4">
-                      <span className={`text-sm font-bold bg-gradient-to-r ${f.color} bg-clip-text text-transparent`}>{f.num}</span>
-                      <div className={`h-8 w-8 rounded-lg bg-gradient-to-r ${f.color} flex items-center justify-center`}>
-                        <span className="text-white text-xs font-bold">{f.num}</span>
+          {/* 04 · SLA Monitoring */}
+          <RevealSection>
+            <div className="grid grid-cols-1 lg:grid-cols-2 bg-[#f5f8f6] rounded-3xl overflow-hidden min-h-[420px]">
+              <div className="bg-white p-8 flex flex-col justify-center space-y-3 order-2 lg:order-1">
+                {[
+                  { action: "SLA met", detail: "TICKET-9436 · just now", status: "Done", color: "text-emerald-600 bg-emerald-50" },
+                  { action: "Ticket closed", detail: "TICKET-9435 · 3s ago", status: "Done", color: "text-emerald-600 bg-emerald-50" },
+                  { action: "Manual review", detail: "TICKET-9434 · 8s ago", status: "Running", color: "text-amber-600 bg-amber-50" },
+                  { action: "Route switched", detail: "TICKET-9433 · 20s ago", status: "Done", color: "text-emerald-600 bg-emerald-50" },
+                ].map((e) => (
+                  <div key={e.detail} className="flex items-center justify-between p-4 rounded-xl border border-gray-100 bg-gray-50/50">
+                    <div className="flex items-center gap-3">
+                      <svg className="w-5 h-5 text-emerald-500 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" /></svg>
+                      <div>
+                        <span className="text-sm font-semibold text-gray-800">{e.action}</span>
+                        <span className="text-xs text-gray-400 ml-2">{e.detail}</span>
                       </div>
                     </div>
-                    <h3 className="text-2xl font-bold text-white mb-3">{f.title}</h3>
-                    <p className="text-gray-400 leading-relaxed mb-5">{f.desc}</p>
-                    <div className="flex flex-wrap gap-2">
-                      {f.tags.map((tag) => (
-                        <span key={tag} className="px-3 py-1 rounded-lg bg-white/5 border border-white/10 text-xs font-medium text-gray-300">
-                          {tag}
-                        </span>
-                      ))}
-                    </div>
+                    <span className={`text-xs font-semibold px-2.5 py-1 rounded-full ${e.color}`}>{e.status}</span>
                   </div>
-                  <div className="rounded-2xl bg-[#0d1120] border border-white/5 p-5">
-                    <div className="flex items-center gap-2 mb-4">
-                      <span className="h-2 w-2 rounded-full bg-green-400 animate-pulse" />
-                      <span className="text-xs text-gray-400 font-medium">Live Event Feed</span>
-                    </div>
-                    <div className="space-y-3">
-                      {f.liveFeed.map((evt, i) => (
-                        <div key={i} className="flex items-center gap-3 p-3 rounded-xl bg-white/[0.03] border border-white/5">
-                          <div className={`h-6 w-6 rounded-md flex items-center justify-center text-[10px] font-bold text-white ${
-                            evt.status === "done" ? "bg-green-500" : evt.status === "warning" ? "bg-amber-500" : "bg-red-500"
-                          }`}>
-                            {evt.status === "done" ? "✓" : evt.status === "warning" ? "!" : "✕"}
-                          </div>
-                          <div className="flex-1 min-w-0">
-                            <div className="text-xs text-white font-medium">{evt.action}</div>
-                            <div className="text-[11px] text-gray-500 truncate">{evt.detail}</div>
-                          </div>
-                          <span className="text-[10px] text-gray-600 shrink-0">{evt.time}</span>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                </div>
+                ))}
               </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Channels */}
-      <section id="channels" className="relative px-6 py-24 border-t border-white/5">
-        <div className="max-w-7xl mx-auto">
-          <div className="text-center mb-16">
-            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-emerald-500/10 border border-emerald-500/20 mb-6">
-              <span className="text-xs font-semibold text-emerald-400">Channels</span>
-            </div>
-            <h2 className="text-4xl sm:text-5xl font-bold tracking-tight mb-4">
-              All your channels.{" "}
-              <span className="bg-gradient-to-r from-emerald-400 to-green-400 bg-clip-text text-transparent">One inbox.</span>
-            </h2>
-            <p className="text-gray-400 max-w-xl mx-auto text-lg">
-              Connect WhatsApp, Email, SMS, Messenger, Instagram, and Web Chat — all in one place.
-            </p>
-          </div>
-
-          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4">
-            {channels.map((ch) => (
-              <div key={ch.name} className="group p-6 rounded-2xl bg-white/[0.03] border border-white/5 hover:border-white/15 hover:bg-white/[0.06] transition-all duration-300 text-center hover:-translate-y-1">
-                <div className={`h-14 w-14 rounded-2xl ${ch.color} mx-auto mb-4 flex items-center justify-center text-white text-lg font-bold shadow-lg group-hover:scale-110 transition-transform duration-300`}>
-                  {ch.icon}
-                </div>
-                <div className="text-sm font-semibold text-white mb-1">{ch.name}</div>
-                <div className="text-[11px] text-gray-500">{ch.desc}</div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* AI Agents */}
-      <section id="agents" className="relative px-6 py-24 border-t border-white/5">
-        <div className="max-w-7xl mx-auto">
-          <div className="text-center mb-16">
-            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-purple-500/10 border border-purple-500/20 mb-6">
-              <span className="text-xs font-semibold text-purple-400">AI Agents</span>
-            </div>
-            <h2 className="text-4xl sm:text-5xl font-bold tracking-tight mb-4">
-              7 agents.{" "}
-              <span className="bg-gradient-to-r from-purple-400 to-violet-400 bg-clip-text text-transparent">Zero bottlenecks.</span>
-            </h2>
-            <p className="text-gray-400 max-w-xl mx-auto text-lg">
-              Each agent handles a specific part of your support pipeline. Together, they resolve 67% of tickets autonomously.
-            </p>
-          </div>
-
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-            {agents.map((a) => (
-              <div key={a.name} className="group p-6 rounded-2xl bg-white/[0.03] border border-white/5 hover:border-white/15 hover:bg-white/[0.06] transition-all duration-300 hover:-translate-y-1">
-                <div className={`h-10 w-10 rounded-xl bg-gradient-to-r ${a.color} flex items-center justify-center mb-4 shadow-lg group-hover:scale-110 transition-transform duration-300`}>
-                  <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
-                  </svg>
-                </div>
-                <h4 className="text-base font-semibold text-white mb-1.5">{a.name}</h4>
-                <p className="text-sm text-gray-400 leading-relaxed">{a.desc}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* How It Works */}
-      <section className="relative px-6 py-24 border-t border-white/5">
-        <div className="max-w-5xl mx-auto">
-          <div className="text-center mb-16">
-            <h2 className="text-4xl sm:text-5xl font-bold tracking-tight mb-4">
-              From ticket to{" "}
-              <span className="bg-gradient-to-r from-blue-400 to-indigo-400 bg-clip-text text-transparent">resolution</span>.
-            </h2>
-          </div>
-          <div className="space-y-6">
-            {[
-              { step: "01", title: "Ingest", desc: "Customer message arrives on any channel — WhatsApp, Email, SMS, Web, Messenger, or Instagram.", color: "from-blue-500 to-indigo-600" },
-              { step: "02", title: "Classify", desc: "AI Intake Agent detects intent, sentiment, and urgency in under 50ms. Routes to the right queue.", color: "from-emerald-500 to-green-600" },
-              { step: "03", title: "Resolve", desc: "Knowledge Agent and Resolution Agent handle the query. 67% resolved without human intervention.", color: "from-purple-500 to-violet-600" },
-              { step: "04", title: "Escalate", desc: "If needed, the Escalation Agent hands off to a human with full context. SLA is always enforced.", color: "from-amber-500 to-orange-600" },
-            ].map((s) => (
-              <div key={s.step} className="flex items-start gap-6 p-6 rounded-2xl bg-white/[0.03] border border-white/5 hover:border-white/10 transition-all duration-300">
-                <div className={`h-12 w-12 rounded-xl bg-gradient-to-r ${s.color} flex items-center justify-center text-white font-bold shrink-0 shadow-lg`}>
-                  {s.step}
-                </div>
-                <div>
-                  <h4 className="text-lg font-semibold text-white mb-1">{s.title}</h4>
-                  <p className="text-sm text-gray-400 leading-relaxed">{s.desc}</p>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Testimonials */}
-      <section className="relative px-6 py-24 border-t border-white/5">
-        <div className="max-w-7xl mx-auto">
-          <div className="text-center mb-16">
-            <h2 className="text-4xl sm:text-5xl font-bold tracking-tight mb-4">
-              Trusted by{" "}
-              <span className="bg-gradient-to-r from-amber-400 to-orange-400 bg-clip-text text-transparent">support teams</span>.
-            </h2>
-          </div>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {[
-              { quote: "SSV CRM cut our response time by 73%. Our team can focus on complex issues instead of repetitive questions.", name: "Sarah Chen", role: "Head of Support, SSV", gradient: "from-blue-500 to-indigo-600" },
-              { quote: "The AI agents handle 80% of our tickets automatically. We went from 2-hour to 42-second average response times.", name: "David Kim", role: "VP Operations, TechStart", gradient: "from-emerald-500 to-green-600" },
-              { quote: "Finally, a support platform that actually works across all our channels. WhatsApp, email, social — all unified.", name: "Rachel Green", role: "Customer Success Lead, NovaPay", gradient: "from-purple-500 to-violet-600" },
-            ].map((t) => (
-              <div key={t.name} className="p-8 rounded-2xl bg-white/[0.03] border border-white/5 hover:border-white/10 transition-all duration-300">
-                <div className="flex gap-1 mb-6">
-                  {[1, 2, 3, 4, 5].map((star) => (
-                    <svg key={star} className="w-4 h-4 text-amber-400" fill="currentColor" viewBox="0 0 20 20">
-                      <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                    </svg>
+              <div className="p-10 lg:p-14 flex flex-col justify-center order-1 lg:order-2">
+                <p className="text-sm font-bold text-emerald-600 uppercase tracking-[0.15em] mb-4">04 · SLA Monitoring</p>
+                <h3 className="text-[28px] sm:text-[32px] font-extrabold leading-tight mb-4">Failures resolve before you notice them</h3>
+                <p className="text-gray-500 leading-relaxed mb-6">SSV&apos;s AI system monitors your support pipeline around the clock. When a ticket breaches SLA, an escalation fires, or a retry is needed — agents act immediately. They reroute, escalate to your team via Slack or SMS, and close the loop.</p>
+                <div className="flex flex-wrap gap-2">
+                  {["Auto-retry & reroute", "Slack / SMS escalation", "Full audit trail"].map((t) => (
+                    <span key={t} className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-full bg-emerald-50 border border-emerald-100 text-[13px] font-medium text-emerald-700">
+                      <svg className="w-3.5 h-3.5 text-emerald-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 13l4 4L19 7" /></svg>
+                      {t}
+                    </span>
                   ))}
                 </div>
-                <p className="text-gray-300 leading-relaxed mb-6 text-sm">{t.quote}</p>
-                <div className="flex items-center gap-3">
-                  <div className={`h-10 w-10 rounded-xl bg-gradient-to-br ${t.gradient} flex items-center justify-center text-white text-xs font-bold`}>
-                    {t.name.split(" ").map((n) => n[0]).join("")}
-                  </div>
-                  <div>
-                    <div className="text-sm font-semibold text-white">{t.name}</div>
-                    <div className="text-xs text-gray-500">{t.role}</div>
-                  </div>
+              </div>
+            </div>
+          </RevealSection>
+
+          {/* 05 · Knowledge Base */}
+          <RevealSection>
+            <div className="grid grid-cols-1 lg:grid-cols-2 bg-[#f5f8f6] rounded-3xl overflow-hidden min-h-[420px]">
+              <div className="p-10 lg:p-14 flex flex-col justify-center">
+                <p className="text-sm font-bold text-emerald-600 uppercase tracking-[0.15em] mb-4">05 · Knowledge Base</p>
+                <h3 className="text-[28px] sm:text-[32px] font-extrabold leading-tight mb-4">Your team&apos;s knowledge, auto-digested</h3>
+                <p className="text-gray-500 leading-relaxed mb-6">SSV&apos;s Knowledge Base turns every past ticket, article, and FAQ into an intelligent search layer. AI agents use it to resolve 67% of tickets autonomously — so your human agents focus on complex issues only.</p>
+                <div className="flex flex-wrap gap-2">
+                  {["AI-powered answers", "Semantic search", "Auto-ingestion"].map((t) => (
+                    <span key={t} className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-full bg-emerald-50 border border-emerald-100 text-[13px] font-medium text-emerald-700">
+                      <svg className="w-3.5 h-3.5 text-emerald-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 13l4 4L19 7" /></svg>
+                      {t}
+                    </span>
+                  ))}
                 </div>
               </div>
+              <div className="bg-white p-8 flex flex-col justify-center">
+                <div className="p-4 rounded-xl border border-gray-100 bg-gray-50/50 mb-3">
+                  <div className="flex items-center justify-between mb-1">
+                    <span className="text-xs font-semibold text-gray-400 uppercase tracking-wider">CAMPAIGN · LIVE</span>
+                    <span className="text-sm font-bold text-emerald-600">89% opened</span>
+                  </div>
+                  <div className="w-full h-2 bg-gray-100 rounded-full overflow-hidden mt-2">
+                    <div className="h-full bg-emerald-500 rounded-full" style={{ width: "89%" }} />
+                  </div>
+                </div>
+                {[
+                  { ch: "Email", msg: "Tunde · Monthly statement r...", done: true },
+                  { ch: "WhatsApp", msg: "Kemi · ₦2,500 cashback cre...", done: true },
+                ].map((m) => (
+                  <div key={m.msg} className="flex items-center justify-between p-4 rounded-xl border border-gray-100 bg-gray-50/50 mb-3">
+                    <div className="flex items-center gap-3">
+                      <span className="text-xs text-gray-400 font-medium w-16">{m.ch}</span>
+                      <span className="text-sm text-gray-700 truncate">{m.msg}</span>
+                    </div>
+                    {m.done && <svg className="w-4 h-4 text-emerald-500 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 13l4 4L19 7" /></svg>}
+                  </div>
+                ))}
+                <div className="flex items-center justify-between p-4 rounded-xl border border-gray-100 bg-gray-50/50">
+                  <span className="text-sm text-gray-500">Sent today</span>
+                  <span className="text-sm font-bold text-gray-900">11,147</span>
+                </div>
+              </div>
+            </div>
+          </RevealSection>
+
+          {/* 06 · Auto-Resolution */}
+          <RevealSection>
+            <div className="grid grid-cols-1 lg:grid-cols-2 bg-[#f5f8f6] rounded-3xl overflow-hidden min-h-[420px]">
+              <div className="bg-white p-8 flex flex-col justify-center order-2 lg:order-1">
+                <div className="p-5 rounded-xl border border-gray-100 bg-gray-50/50 mb-4">
+                  <div className="flex items-center justify-between mb-3">
+                    <span className="text-sm text-gray-500">Auto-resolved</span>
+                    <span className="text-3xl font-extrabold text-emerald-600">83%</span>
+                  </div>
+                </div>
+                {[
+                  { ch: "WhatsApp", msg: "Balance enquiry · Answered", status: "Closed", sColor: "text-emerald-600 bg-emerald-50" },
+                  { ch: "Email", msg: "Account locked · Unlocked", status: "Closed", sColor: "text-emerald-600 bg-emerald-50" },
+                  { ch: "Messenger", msg: "Disputed charge...", status: "Escalated", sColor: "text-amber-600 bg-amber-50" },
+                ].map((r) => (
+                  <div key={r.msg} className="flex items-center justify-between p-4 rounded-xl border border-gray-100 bg-gray-50/50 mb-3">
+                    <div className="flex items-center gap-3">
+                      <svg className="w-4 h-4 text-emerald-500 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 13l4 4L19 7" /></svg>
+                      <span className="text-sm text-gray-700"><strong>{r.ch}</strong> · {r.msg}</span>
+                    </div>
+                    <span className={`text-xs font-semibold px-2.5 py-1 rounded-full ${r.sColor}`}>{r.status}</span>
+                  </div>
+                ))}
+                <div className="flex items-center justify-between p-4 rounded-xl border border-gray-100 bg-gray-50/50">
+                  <span className="text-sm text-gray-500">Avg. response time</span>
+                  <span className="text-sm font-bold text-gray-900">42s</span>
+                </div>
+              </div>
+              <div className="p-10 lg:p-14 flex flex-col justify-center order-1 lg:order-2">
+                <p className="text-sm font-bold text-emerald-600 uppercase tracking-[0.15em] mb-4">06 · Auto-Resolution</p>
+                <h3 className="text-[28px] sm:text-[32px] font-extrabold leading-tight mb-4">Requests handled. Automatically.</h3>
+                <p className="text-gray-500 leading-relaxed mb-6">SSV Resolve is your autonomous customer resolution layer. It detects issues and handles inbound requests across WhatsApp, Email, SMS, Messenger, and Instagram — responding, resolving, and closing without a human in the loop.</p>
+                <div className="flex flex-wrap gap-2">
+                  {["WhatsApp · Email · SMS · Web", "Instagram · Messenger", "Autonomous resolution"].map((t) => (
+                    <span key={t} className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-full bg-emerald-50 border border-emerald-100 text-[13px] font-medium text-emerald-700">
+                      <svg className="w-3.5 h-3.5 text-emerald-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 13l4 4L19 7" /></svg>
+                      {t}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </RevealSection>
+        </div>
+      </section>
+
+      {/* ───────── HOW IT WORKS ───────── */}
+      <section className="py-24 border-t border-gray-100">
+        <div className="max-w-[1200px] mx-auto px-6">
+          <RevealSection className="text-center mb-16">
+            <p className="text-sm font-bold text-emerald-600 uppercase tracking-[0.2em] mb-4">How it works</p>
+            <h2 className="text-[40px] sm:text-[52px] font-extrabold tracking-tight leading-[1.05]">
+              From ticket to <span className="italic text-emerald-600">confirmed resolution.</span>
+            </h2>
+          </RevealSection>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            {[
+              { num: "01", icon: "↓", title: "Ingest", desc: "Customer message arrives on any channel — WhatsApp, Email, SMS, Web, Messenger, or Instagram." },
+              { num: "02", icon: "⚡", title: "Classify", desc: "AI Intake Agent detects intent, sentiment, and urgency in under 50ms. Routes to the right queue." },
+              { num: "03", icon: "↗", title: "Route", desc: "Highest-confidence channel and agent chosen. Failover paths pre-staged so degradation never causes failure." },
+              { num: "04", icon: "→", title: "Resolve", desc: "Knowledge Agent and Resolution Agent handle the query. 67% resolved without human intervention." },
+              { num: "05", icon: "✓", title: "Confirm", desc: "Confirmation fires to your system via webhook. Dashboard reflects live status per ticket." },
+              { num: "06", icon: "↻", title: "Escalate", desc: "If needed, the Escalation Agent hands off to a human with full context. SLA is always enforced." },
+            ].map((step) => (
+              <RevealSection key={step.num}>
+                <div className="p-8 rounded-2xl border border-gray-100 hover:border-emerald-200 hover:shadow-md transition-all duration-300 group h-full">
+                  <div className="h-10 w-10 rounded-xl bg-emerald-50 flex items-center justify-center text-emerald-600 text-lg font-bold mb-4 group-hover:bg-emerald-500 group-hover:text-white transition-all">
+                    {step.icon}
+                  </div>
+                  <p className="text-[11px] font-bold text-emerald-600 uppercase tracking-[0.15em] mb-2">0{step.num} · {step.title.toUpperCase()}</p>
+                  <h4 className="text-lg font-bold mb-2">{step.title === "01" ? "Signal enters SSV" : step.title === "02" ? "Predicted in &lt;50ms" : step.title === "03" ? "Optimal path selected" : step.title === "04" ? "Ticket resolved" : step.title === "05" ? "Delivery verified" : "Agents close the loop"}</h4>
+                  <p className="text-sm text-gray-500 leading-relaxed">{step.desc}</p>
+                </div>
+              </RevealSection>
             ))}
           </div>
         </div>
       </section>
 
-      {/* CTA */}
-      <section className="relative px-6 py-24 border-t border-white/5">
-        <div className="max-w-4xl mx-auto text-center">
-          <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-            <div className="w-[600px] h-[600px] bg-blue-600/10 rounded-full blur-[120px]" />
-          </div>
-          <h2 className="text-4xl sm:text-6xl font-bold tracking-tight mb-6 relative">
-            Your customers trust you{" "}
-            <br className="hidden sm:block" />
-            <span className="bg-gradient-to-r from-blue-400 via-indigo-400 to-purple-400 bg-clip-text text-transparent">
-              at the moment that matters most.
-            </span>
-          </h2>
-          <p className="text-lg text-gray-400 mb-10 max-w-xl mx-auto relative">
-            Every ticket is a promise. SSV CRM makes sure you keep it.
-          </p>
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-4 relative">
-            <Link href="/login" className="w-full sm:w-auto text-center px-10 py-4 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-2xl text-sm font-semibold shadow-lg shadow-blue-600/25 hover:shadow-xl hover:shadow-blue-600/40 transition-all duration-300">
-              Book a Demo
-            </Link>
-            <Link href="/login" className="w-full sm:w-auto text-center px-10 py-4 bg-white/5 border border-white/10 rounded-2xl text-sm font-semibold text-gray-300 hover:bg-white/10 hover:border-white/20 transition-all duration-300">
-              Start Free Trial
-            </Link>
+      {/* ───────── MEET SSV AI ───────── */}
+      <section className="py-24 border-t border-gray-100 bg-[#f9fafb]">
+        <div className="max-w-[1200px] mx-auto px-6">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+            <RevealSection>
+              <div className="relative rounded-3xl overflow-hidden bg-gradient-to-br from-[#1a4432] to-[#0f2e1f] aspect-[4/5] flex items-end p-8">
+                <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
+                <div className="relative z-10">
+                  <div className="flex items-center gap-2 mb-2">
+                    <span className="h-2.5 w-2.5 rounded-full bg-emerald-400 animate-pulse" />
+                    <span className="text-xs font-semibold text-emerald-300">SSV AI is online</span>
+                  </div>
+                  <p className="text-sm text-gray-300">7 intelligent agents working 24/7</p>
+                </div>
+              </div>
+            </RevealSection>
+            <RevealSection delay={100}>
+              <p className="text-sm font-bold text-emerald-600 uppercase tracking-[0.2em] mb-4">Meet SSV AI</p>
+              <h2 className="text-[40px] sm:text-[48px] font-extrabold leading-[1.05] mb-6">
+                The intelligence layer behind <span className="italic text-emerald-600">every decision</span>
+              </h2>
+              <p className="text-gray-500 text-lg leading-relaxed mb-8">
+                SSV AI is the engine SSV CRM is built on. Trained on real support signals — it classifies, routes, monitors, and resolves so your team can focus on complex issues.
+              </p>
+              <div className="space-y-5">
+                {[
+                  { icon: "⚡", title: "Scores every ticket in &lt;50ms", desc: "Intent detection, sentiment, and priority — pre-execution" },
+                  { icon: "📊", title: "Trained on real support data", desc: "Across industries and markets — continuously improving" },
+                  { icon: "🔔", title: "Monitors 24/7 — no configuration needed", desc: "No thresholds to tune, no dashboards to maintain" },
+                ].map((f) => (
+                  <div key={f.title} className="flex gap-4">
+                    <div className="h-10 w-10 rounded-xl bg-emerald-50 flex items-center justify-center text-lg shrink-0">{f.icon}</div>
+                    <div>
+                      <h4 className="font-bold text-gray-900 mb-0.5">{f.title}</h4>
+                      <p className="text-sm text-gray-500">{f.desc}</p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </RevealSection>
           </div>
         </div>
       </section>
 
-      {/* Footer */}
-      <footer className="border-t border-white/5 px-6 py-12">
-        <div className="max-w-7xl mx-auto">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-8 mb-12">
-            <div>
-              <div className="flex items-center gap-2 mb-4">
-                <div className="h-8 w-8 rounded-lg bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center">
-                  <img src="/logo.svg" alt="SSV" className="h-4 w-4" />
+      {/* ───────── SECURITY & COMPLIANCE ───────── */}
+      <section className="py-24 border-t border-gray-100">
+        <div className="max-w-[1200px] mx-auto px-6 text-center">
+          <RevealSection>
+            <p className="text-sm font-bold text-emerald-600 uppercase tracking-[0.2em] mb-4">Security & Compliance</p>
+            <h2 className="text-[40px] sm:text-[52px] font-extrabold tracking-tight mb-4 leading-[1.05]">
+              Built for <span className="italic text-emerald-600">regulated industries</span>
+            </h2>
+            <p className="text-gray-500 text-lg max-w-2xl mx-auto mb-12">SSV is built to meet data protection, financial regulation, and compliance requirements of banks, fintechs, and institutions globally.</p>
+            <div className="grid grid-cols-3 sm:grid-cols-5 lg:grid-cols-7 gap-0 border border-gray-100 rounded-2xl overflow-hidden max-w-4xl mx-auto">
+              {["SOC 2", "ISO 27001", "GDPR", "NDPC", "PCI DSS", "HIPAA", "CSA"].map((c) => (
+                <div key={c} className="flex items-center justify-center h-20 border-r border-b border-gray-100 last:border-r-0 hover:bg-gray-50/50 transition-colors">
+                  <span className="text-xs font-bold text-gray-300 uppercase tracking-wider">{c}</span>
                 </div>
-                <span className="text-sm font-bold">SSV CRM</span>
-              </div>
-              <p className="text-xs text-gray-500 leading-relaxed">AI-powered customer support platform. Built for teams that move fast.</p>
+              ))}
             </div>
-            <div>
-              <h5 className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-4">Product</h5>
-              <div className="space-y-2">
-                <a href="#features" className="block text-xs text-gray-500 hover:text-white transition-colors">Features</a>
-                <a href="#channels" className="block text-xs text-gray-500 hover:text-white transition-colors">Channels</a>
-                <a href="#agents" className="block text-xs text-gray-500 hover:text-white transition-colors">AI Agents</a>
-                <a href="#stats" className="block text-xs text-gray-500 hover:text-white transition-colors">Results</a>
-              </div>
+          </RevealSection>
+        </div>
+      </section>
+
+      {/* ───────── INTEGRATIONS ───────── */}
+      <section className="py-24 border-t border-gray-100 bg-[#f9fafb]">
+        <div className="max-w-[1200px] mx-auto px-6 text-center">
+          <RevealSection>
+            <p className="text-sm font-bold text-emerald-600 uppercase tracking-[0.2em] mb-4">Integrations</p>
+            <h2 className="text-[40px] sm:text-[52px] font-extrabold tracking-tight mb-4 leading-[1.05]">
+              Works with the stack <span className="italic text-emerald-600">you already run on</span>
+            </h2>
+            <p className="text-gray-500 text-lg max-w-2xl mx-auto mb-12">Connect SSV to your existing tools in minutes — communication channels, automation platforms, cloud services, and CRMs. No rip-and-replace.</p>
+            <div className="grid grid-cols-3 sm:grid-cols-4 lg:grid-cols-6 gap-0 border border-gray-100 rounded-2xl overflow-hidden bg-white max-w-4xl mx-auto mb-8">
+              {["WhatsApp", "Zapier", "Instagram", "Twilio", "Slack", "Gmail", "Mailgun", "Amazon SNS", "Firebase", "Stripe", "HubSpot", "Telegram"].map((name) => (
+                <div key={name} className="flex items-center justify-center h-20 border-r border-b border-gray-100 last:border-r-0 hover:bg-gray-50/50 transition-colors">
+                  <span className="text-xs font-bold text-gray-400">{name}</span>
+                </div>
+              ))}
             </div>
-            <div>
-              <h5 className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-4">Company</h5>
-              <div className="space-y-2">
-                <Link href="/privacy" className="block text-xs text-gray-500 hover:text-white transition-colors">Privacy Policy</Link>
-                <Link href="/terms" className="block text-xs text-gray-500 hover:text-white transition-colors">Terms & Conditions</Link>
+            <p className="text-gray-400 text-sm mb-6">Don&apos;t see your tool? SSV exposes a full REST API — connect anything in your stack.</p>
+            <Link href="/login" className="inline-flex items-center gap-2 px-8 py-3.5 border-2 border-gray-200 rounded-full text-[15px] font-semibold text-gray-700 hover:border-gray-300 hover:bg-white transition-all">
+              Explore the API <span>→</span>
+            </Link>
+          </RevealSection>
+        </div>
+      </section>
+
+      {/* ───────── CTA ───────── */}
+      <section className="relative py-24 bg-gradient-to-br from-[#0f2e1f] via-[#163a28] to-[#1a4432] overflow-hidden">
+        <div className="absolute top-0 left-0 right-0 h-16 bg-gradient-to-b from-[#f9fafb] to-transparent" />
+        <div className="max-w-[800px] mx-auto px-6 text-center relative">
+          <RevealSection>
+            <p className="text-sm font-bold text-emerald-300 uppercase tracking-[0.2em] mb-4">Ready to start</p>
+            <h2 className="text-[40px] sm:text-[52px] font-extrabold tracking-tight text-white mb-6 leading-[1.1]">
+              Your customers trust you at the moment that <span className="italic text-emerald-400">matters most.</span>
+            </h2>
+            <p className="text-gray-300/80 text-lg mb-10">Every ticket is a promise. SSV CRM makes sure you keep it.</p>
+            <Link href="/login" className="inline-flex items-center gap-2 px-10 py-4 bg-white text-gray-900 rounded-full text-[15px] font-semibold hover:bg-gray-100 transition-all shadow-lg">
+              Book a demo
+            </Link>
+          </RevealSection>
+        </div>
+      </section>
+
+      {/* ───────── FOOTER ───────── */}
+      <footer className="border-t border-gray-100 bg-white">
+        <div className="max-w-[1200px] mx-auto px-6 py-16">
+          <div className="grid grid-cols-2 md:grid-cols-5 gap-10 mb-16">
+            <div className="col-span-2 md:col-span-1">
+              <div className="flex items-center gap-2 mb-4">
+                <div className="h-7 w-7 rounded-md bg-gradient-to-br from-[#1B6B4A] to-[#22c55e] flex items-center justify-center">
+                  <img src="/logo.svg" alt="SSV" className="h-4 w-4 brightness-0 invert" />
+                </div>
+                <span className="text-lg font-extrabold">SSV</span>
               </div>
+              <p className="text-sm text-gray-400 leading-relaxed">SSV CRM prevents tickets from going unresolved — using AI.</p>
             </div>
-            <div>
-              <h5 className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-4">Support</h5>
-              <div className="space-y-2">
-                <a href="mailto:support@ssv.com" className="block text-xs text-gray-500 hover:text-white transition-colors">support@ssv.com</a>
-                <Link href="/login" className="block text-xs text-gray-500 hover:text-white transition-colors">Sign In</Link>
+            {[
+              { title: "Platform", links: ["AI Classification", "Unified Inbox", "Sentiment Analysis", "SLA Monitoring", "Knowledge Base", "Auto-Resolution"] },
+              { title: "Solutions", links: ["Enterprise", "Startups", "E-commerce", "Fintech", "SaaS"] },
+              { title: "Resources", links: ["Documentation", "API Reference", "Customer Stories", "Blog", "Status Page"] },
+              { title: "Company", links: ["About", "Careers", "Privacy Policy", "Terms & Conditions"] },
+            ].map((col) => (
+              <div key={col.title}>
+                <h5 className="text-sm font-bold text-gray-900 mb-4">{col.title}</h5>
+                <div className="space-y-2.5">
+                  {col.links.map((link) => (
+                    <a key={link} href="#" className="block text-sm text-gray-400 hover:text-gray-700 transition-colors">{link}</a>
+                  ))}
+                </div>
               </div>
-            </div>
+            ))}
           </div>
-          <div className="border-t border-white/5 pt-8 flex flex-col sm:flex-row items-center justify-between gap-4">
-            <span className="text-xs text-gray-600">&copy; 2026 SSV CRM. All rights reserved.</span>
-            <div className="flex items-center gap-1.5 text-xs text-gray-600">
-              <span className="h-1.5 w-1.5 rounded-full bg-green-500" />
-              <span>All systems operational</span>
+          <div className="border-t border-gray-100 pt-8 flex flex-col sm:flex-row items-center justify-between gap-4">
+            <div className="flex items-center gap-4 text-xs text-gray-400">
+              <span>© 2026 SSV Inc.</span>
+              <a href="#" className="hover:text-gray-600 transition-colors">Privacy Policy</a>
+              <a href="#" className="hover:text-gray-600 transition-colors">Terms & Conditions</a>
+              <a href="mailto:support@ssv.com" className="hover:text-gray-600 transition-colors">support@ssv.com</a>
+            </div>
+            <div className="flex items-center gap-3">
+              <a href="#" className="h-8 w-8 rounded-full border border-gray-200 flex items-center justify-center text-gray-400 hover:text-gray-700 hover:border-gray-300 transition-all">
+                <svg className="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 24 24"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z" /></svg>
+              </a>
+              <a href="#" className="h-8 w-8 rounded-full border border-gray-200 flex items-center justify-center text-gray-400 hover:text-gray-700 hover:border-gray-300 transition-all">
+                <svg className="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" /></svg>
+              </a>
             </div>
           </div>
         </div>
       </footer>
+
+      {/* ───────── EN/FR TOGGLE (fixed bottom-left) ───────── */}
+      <div className="fixed bottom-6 left-6 z-40 flex items-center bg-white border border-gray-200 rounded-full shadow-lg overflow-hidden">
+        <button className="px-3 py-1.5 text-xs font-bold bg-gray-900 text-white">EN</button>
+        <button className="px-3 py-1.5 text-xs font-medium text-gray-400 hover:text-gray-700 transition-colors">FR</button>
+      </div>
     </div>
   );
 }
