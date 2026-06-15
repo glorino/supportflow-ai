@@ -1,76 +1,93 @@
-import { openai } from "@ai-sdk/openai";
-import { generateObject } from "ai";
-import { z } from "zod";
+import { NextRequest, NextResponse } from "next/server";
+import { sql } from "@/lib/db";
 
-const ticketSchema = z.object({
-  classification: z.object({
-    intent: z.enum(["billing", "technical", "account", "general", "feature_request", "bug_report"]),
-    priority: z.enum(["low", "medium", "high", "urgent"]),
-    category: z.string(),
-    confidence: z.number().min(0).max(1),
-  }),
-  sentiment: z.object({
-    sentiment: z.enum(["positive", "neutral", "negative", "angry", "frustrated"]),
-    score: z.number().min(-1).max(1),
-    keywords: z.array(z.string()),
-  }),
-  suggestedResponse: z.object({
-    message: z.string(),
-    tone: z.enum(["formal", "friendly", "empathetic", "apologetic"]),
-    requiresEscalation: z.boolean(),
-    escalationReason: z.string().optional(),
-  }),
-  entities: z.object({
-    orderIds: z.array(z.string()),
-    emailAddresses: z.array(z.string()),
-    productNames: z.array(z.string()),
-  }),
-});
+export async function GET(
+  request: NextRequest,
+  { params }: { params: { id: string } }
+) {
+  try {
+    const ticketNumber = `SSV-${params.id}`;
 
-export async function POST(req: Request) {
-  const { ticketId, message, customerId, channel, history } = await req.json();
+    const tickets = await sql`
+      SELECT 
+        t.*,
+        c.name as customer_name,
+        c.email as customer_email,
+        c.company as customer_company,
+        c.segment as customer_segment,
+        c.csat as customer_csat,
+        c.total_tickets as customer_total_tickets,
+        u.name as assignee_name,
+        u.email as assignee_email
+      FROM tickets t
+      LEFT JOIN customers c ON t.customer_id = c.id
+      LEFT JOIN users u ON t.assignee_id = u.id
+      WHERE t.ticket_number = ${ticketNumber}
+    `;
 
-  const { object: analysis } = await generateObject({
-    model: openai("gpt-4o"),
-    schema: ticketSchema,
-    system: `You are the AI Ticket Analyzer for SupportFlow AI.
+    if (tickets.length === 0) {
+      return NextResponse.json({ error: "Ticket not found" }, { status: 404 });
+    }
 
-Analyze the customer ticket and provide:
-1. Classification (intent, priority, category, confidence)
-2. Sentiment analysis
-3. Suggested response
-4. Entity extraction
+    const ticket = tickets[0];
 
-Be accurate and thorough. Consider the full conversation history.`,
-    prompt: `Analyze this customer ticket:
+    const messages = await sql`
+      SELECT 
+        m.*,
+        CASE 
+          WHEN m.sender_type = 'customer' THEN c.name
+          WHEN m.sender_type = 'agent' THEN u.name
+          ELSE 'AI Agent'
+        END as sender_name
+      FROM messages m
+      LEFT JOIN customers c ON m.sender_id = c.id AND m.sender_type = 'customer'
+      LEFT JOIN users u ON m.sender_id = u.id AND m.sender_type = 'agent'
+      WHERE m.ticket_id = ${ticket.id}
+      ORDER BY m.created_at ASC
+    `;
 
-Ticket ID: ${ticketId}
-Customer ID: ${customerId}
-Channel: ${channel}
-Message: "${message}"
-
-${history && history.length > 0 ? `Conversation history:\n${history.map((h: { role: string; content: string }) => `${h.role}: ${h.content}`).join("\n")}` : "This is the first message in the conversation."}`,
-  });
-
-  return Response.json({
-    ticketId,
-    analysis,
-    processedAt: new Date().toISOString(),
-  });
-}
-
-export async function GET(req: Request) {
-  const { searchParams } = new URL(req.url);
-  const ticketId = searchParams.get("ticketId");
-
-  if (!ticketId) {
-    return Response.json({ error: "ticketId is required" }, { status: 400 });
+    return NextResponse.json({
+      ticket: {
+        id: ticket.id,
+        ticketNumber: ticket.ticket_number,
+        subject: ticket.subject,
+        message: ticket.message,
+        status: ticket.status,
+        priority: ticket.priority,
+        channel: ticket.channel,
+        sentiment: ticket.sentiment,
+        sentimentScore: ticket.sentiment_score,
+        aiConfidence: ticket.ai_confidence,
+        slaStatus: ticket.sla_status,
+        slaDue: ticket.sla_due,
+        tags: ticket.tags,
+        createdAt: ticket.created_at,
+        updatedAt: ticket.updated_at,
+        customer: {
+          name: ticket.customer_name,
+          email: ticket.customer_email,
+          company: ticket.customer_company,
+          segment: ticket.customer_segment,
+          csat: ticket.customer_csat,
+          totalTickets: ticket.customer_total_tickets,
+        },
+        assignee: {
+          name: ticket.assignee_name,
+          email: ticket.assignee_email,
+        },
+      },
+      messages: messages.map(m => ({
+        id: m.id,
+        senderType: m.sender_type,
+        senderName: m.sender_name || "Unknown",
+        content: m.content,
+        channel: m.channel,
+        metadata: m.metadata,
+        createdAt: m.created_at,
+      })),
+    });
+  } catch (error) {
+    console.error("Ticket detail API error:", error);
+    return NextResponse.json({ error: "Failed to fetch ticket" }, { status: 500 });
   }
-
-  return Response.json({
-    ticketId,
-    status: "open",
-    assignedTo: null,
-    lastActivity: new Date().toISOString(),
-  });
 }

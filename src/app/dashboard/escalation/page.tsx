@@ -1,12 +1,24 @@
 "use client";
 
-const escalations = [
-  { id: "SSV-1232", subject: "API returning 500 errors intermittently", customer: "TechStart Inc", from: "AI Agent", to: "Support Engineering", priority: "urgent", reason: "Technical issue requiring specialized knowledge", time: "30 min ago", status: "pending", sentiment: "angry" },
-  { id: "SSV-1228", subject: "App crashes on iOS 17.2", customer: "MobileDev", from: "AI Agent", to: "Support Engineering", priority: "high", reason: "Bug requires developer investigation", time: "2 hours ago", status: "in-progress", sentiment: "frustrated" },
-  { id: "SSV-1219", subject: "Disputed charges on invoice #4455", customer: "RetailCo", from: "AI Agent", to: "Billing & Accounts", priority: "high", reason: "Billing dispute requires human review", time: "5 hours ago", status: "pending", sentiment: "negative" },
-  { id: "SSV-1215", subject: "Enterprise contract renewal question", customer: "FinTech Pro", from: "AI Agent", to: "Customer Success", priority: "medium", reason: "Sales-related inquiry", time: "1 day ago", status: "resolved", sentiment: "neutral" },
-  { id: "SSV-1210", subject: "Data export compliance request", customer: "CorpNet", from: "AI Agent", to: "Support Engineering", priority: "high", reason: "GDPR compliance request", time: "1 day ago", status: "in-progress", sentiment: "neutral" },
-];
+import { useState, useEffect } from "react";
+import Link from "next/link";
+
+interface Escalation {
+  id: string;
+  ticketNumber: string;
+  subject: string;
+  status: string;
+  priority: string;
+  channel: string;
+  sentiment: string;
+  sentimentScore: number;
+  slaStatus: string;
+  createdAt: string;
+  updatedAt: string;
+  customerName: string;
+  customerCompany: string;
+  assigneeName: string;
+}
 
 const priorityColor: Record<string, string> = {
   low: "bg-gray-100 text-gray-600",
@@ -16,7 +28,9 @@ const priorityColor: Record<string, string> = {
 };
 
 const statusColor: Record<string, string> = {
+  open: "bg-amber-100 text-amber-700",
   pending: "bg-amber-100 text-amber-700",
+  escalated: "bg-blue-100 text-blue-700",
   "in-progress": "bg-blue-100 text-blue-700",
   resolved: "bg-green-100 text-green-700",
 };
@@ -29,31 +43,58 @@ const sentimentIcon: Record<string, string> = {
   frustrated: "😤",
 };
 
+function timeAgo(dateStr: string): string {
+  const date = new Date(dateStr);
+  const now = new Date();
+  const diff = now.getTime() - date.getTime();
+  const minutes = Math.floor(diff / 60000);
+  const hours = Math.floor(diff / 3600000);
+  const days = Math.floor(diff / 86400000);
+  if (minutes < 1) return "Just now";
+  if (minutes < 60) return `${minutes} min ago`;
+  if (hours < 24) return `${hours} hours ago`;
+  return `${days} days ago`;
+}
+
 export default function EscalationPage() {
+  const [escalations, setEscalations] = useState<Escalation[]>([]);
+  const [stats, setStats] = useState({ totalEscalated: 0, pending: 0, slaBreached: 0 });
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    fetch("/api/escalation")
+      .then((res) => res.json())
+      .then((data) => {
+        setEscalations(data.escalations || []);
+        setStats(data.stats || { totalEscalated: 0, pending: 0, slaBreached: 0 });
+        setLoading(false);
+      })
+      .catch(() => setLoading(false));
+  }, []);
+
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center h-64">
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600" />
+      </div>
+    );
+  }
+
   return (
     <div className="space-y-6">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
           <h1 className="text-2xl font-bold text-gray-900">Escalation Center</h1>
-          <p className="text-sm text-gray-500 mt-1">AI-to-human handoff management and routing</p>
-        </div>
-        <div className="flex items-center gap-3">
-          <select className="rounded-xl border border-gray-200 px-3 py-2.5 text-sm bg-white focus:border-blue-500 focus:outline-none transition-colors">
-            <option>All Teams</option>
-            <option>Support Engineering</option>
-            <option>Billing & Accounts</option>
-            <option>Customer Success</option>
-          </select>
+          <p className="text-sm text-gray-500 mt-1">{escalations.length} escalated tickets from database</p>
         </div>
       </div>
 
       {/* Stats */}
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
+      <div className="grid grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4">
         {[
-          { label: "Pending", value: "2", icon: "⏳", gradient: "from-amber-400 to-orange-500", cardBg: "card-gradient-amber" },
-          { label: "In Progress", value: "2", icon: "🔄", gradient: "from-blue-500 to-indigo-600", cardBg: "card-gradient-blue" },
-          { label: "Resolved Today", value: "1", icon: "✅", gradient: "from-green-500 to-emerald-600", cardBg: "card-gradient-green" },
-          { label: "Avg Handle Time", value: "3.2m", icon: "⏱️", gradient: "from-purple-500 to-violet-600", cardBg: "card-gradient-purple" },
+          { label: "Escalated", value: stats.totalEscalated, icon: "🚨", gradient: "from-red-500 to-rose-600", cardBg: "card-gradient-red" },
+          { label: "SLA Breached", value: stats.slaBreached, icon: "⚠️", gradient: "from-amber-400 to-orange-500", cardBg: "card-gradient-amber" },
+          { label: "Total Escalations", value: stats.totalEscalated, icon: "📊", gradient: "from-blue-500 to-indigo-600", cardBg: "card-gradient-blue" },
         ].map((s) => (
           <div key={s.label} className={`rounded-2xl border border-gray-200 p-5 group ${s.cardBg} hover:-translate-y-0.5 hover:shadow-lg transition-all duration-300`}>
             <div className="flex items-center gap-2 mb-2">
@@ -113,29 +154,23 @@ export default function EscalationPage() {
         <div className="divide-y divide-gray-50">
           {escalations.map((e) => (
             <div key={e.id} className="flex flex-col sm:flex-row items-start gap-3 sm:gap-4 px-6 py-4 hover:bg-gray-50/50 transition-all duration-200 group">
-              <div className="text-xl group-hover:scale-125 transition-transform duration-200 shrink-0">{sentimentIcon[e.sentiment]}</div>
+              <div className="text-xl group-hover:scale-125 transition-transform duration-200 shrink-0">{sentimentIcon[e.sentiment] || "😐"}</div>
               <div className="flex-1 min-w-0">
                 <div className="flex items-center gap-2 mb-0.5">
-                  <span className="text-xs font-mono text-gray-400">{e.id}</span>
+                  <Link href={`/dashboard/tickets/${e.ticketNumber.replace("SSV-", "")}`} className="text-xs font-mono text-gray-400 hover:text-blue-600 transition">{e.ticketNumber}</Link>
                   <span className={`text-[10px] px-2 py-0.5 rounded-full font-medium ${priorityColor[e.priority]}`}>{e.priority}</span>
-                  <span className={`text-[10px] px-2 py-0.5 rounded-full font-medium ${statusColor[e.status]}`}>{e.status}</span>
+                  <span className={`text-[10px] px-2 py-0.5 rounded-full font-medium ${statusColor[e.status] || "bg-gray-100 text-gray-600"}`}>{e.status}</span>
                 </div>
                 <div className="text-sm font-medium text-gray-900 truncate group-hover:text-blue-600 transition">{e.subject}</div>
-                <div className="text-xs text-gray-500 mt-0.5">{e.customer} · {e.reason}</div>
-                <div className="flex items-center gap-3 mt-2 sm:hidden">
-                  <span className="text-xs text-gray-400">{e.time}</span>
-                  <button className="btn-ghost text-xs hover:bg-gray-100">Assign</button>
-                  <button className="btn-primary text-xs shadow-sm hover:shadow-md transition-all">Accept</button>
-                </div>
+                <div className="text-xs text-gray-500 mt-0.5">{e.customerName || "Unknown"} · {e.customerCompany || ""}</div>
               </div>
               <div className="hidden sm:block text-right shrink-0">
-                <div className="text-xs text-gray-400 mb-1">{e.time}</div>
-                <div className="text-xs text-gray-500">
-                  <span className="text-gray-400">From:</span> {e.from}
-                </div>
-                <div className="text-xs text-gray-500">
-                  <span className="text-gray-400">To:</span> <span className="font-medium text-blue-600">{e.to}</span>
-                </div>
+                <div className="text-xs text-gray-400 mb-1">{timeAgo(e.createdAt)}</div>
+                {e.assigneeName && (
+                  <div className="text-xs text-gray-500">
+                    <span className="text-gray-400">Assignee:</span> <span className="font-medium text-blue-600">{e.assigneeName}</span>
+                  </div>
+                )}
               </div>
               <div className="hidden sm:flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
                 <button className="btn-ghost text-xs hover:bg-gray-100">Assign</button>
@@ -143,6 +178,11 @@ export default function EscalationPage() {
               </div>
             </div>
           ))}
+          {escalations.length === 0 && (
+            <div className="px-6 py-12 text-center text-gray-400 text-sm">
+              No escalated tickets. All tickets are being handled properly.
+            </div>
+          )}
         </div>
       </div>
     </div>

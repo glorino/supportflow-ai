@@ -1,45 +1,154 @@
+"use client";
+
+import { useParams } from "next/navigation";
 import Link from "next/link";
+import { useState, useEffect } from "react";
 
-const messages = [
-  { id: 1, sender: "customer", name: "Sarah Chen", content: "Hi, I can't access my account after resetting my password. I keep getting an error message.", time: "10:30 AM", channel: "WhatsApp" },
-  { id: 2, sender: "ai", name: "AI Agent", content: "I understand you're having trouble accessing your account. Let me help you with that. Could you please confirm the email address associated with your account?", time: "10:30 AM" },
-  { id: 3, sender: "customer", name: "Sarah Chen", content: "Yes, it's sarah.chen@example.com", time: "10:32 AM" },
-  { id: 4, sender: "ai", name: "AI Agent", content: "Thank you, Sarah. I've found your account. It looks like there might be a caching issue. Please try these steps:\n\n1. Clear your browser cache\n2. Try logging in with the new password\n3. If that doesn't work, I can send a password reset link\n\nWould you like me to send a fresh reset link?", time: "10:32 AM" },
-  { id: 5, sender: "customer", name: "Sarah Chen", content: "I already tried clearing the cache. Can you send a new reset link?", time: "10:35 AM" },
-];
+interface TicketData {
+  id: string;
+  ticketNumber: string;
+  subject: string;
+  message: string;
+  status: string;
+  priority: string;
+  channel: string;
+  sentiment: string;
+  sentimentScore: number;
+  aiConfidence: number;
+  slaStatus: string;
+  slaDue: string;
+  tags: string[];
+  createdAt: string;
+  updatedAt: string;
+  customer: {
+    name: string;
+    email: string;
+    company: string;
+    segment: string;
+    csat: number;
+    totalTickets: number;
+  };
+  assignee: {
+    name: string;
+    email: string;
+  };
+}
 
-export default function TicketDetailPage({ params }: { params: { id: string } }) {
+interface Message {
+  id: string;
+  senderType: string;
+  senderName: string;
+  content: string;
+  channel: string;
+  metadata: Record<string, unknown>;
+  createdAt: string;
+}
+
+const statusColor: Record<string, string> = {
+  open: "bg-blue-100 text-blue-700",
+  pending: "bg-amber-100 text-amber-700",
+  escalated: "bg-red-100 text-red-700",
+  resolved: "bg-green-100 text-green-700",
+};
+
+const priorityColor: Record<string, string> = {
+  low: "text-gray-500",
+  medium: "text-amber-600",
+  high: "text-orange-600 font-semibold",
+  urgent: "text-red-600 font-semibold",
+};
+
+const channelDisplayNames: Record<string, string> = {
+  whatsapp: "WhatsApp",
+  email: "Email",
+  web: "Web Chat",
+  sms: "SMS",
+  messenger: "Messenger",
+  instagram: "Instagram",
+};
+
+function formatTime(dateStr: string): string {
+  return new Date(dateStr).toLocaleTimeString("en-US", { hour: "numeric", minute: "2-digit", hour12: true });
+}
+
+export default function TicketDetailPage() {
+  const params = useParams();
+  const id = params.id as string;
+  const [ticket, setTicket] = useState<TicketData | null>(null);
+  const [messages, setMessages] = useState<Message[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    fetch(`/api/tickets/${id}`)
+      .then((res) => res.json())
+      .then((data) => {
+        setTicket(data.ticket || null);
+        setMessages(data.messages || []);
+        setLoading(false);
+      })
+      .catch(() => setLoading(false));
+  }, [id]);
+
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center h-64">
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600" />
+      </div>
+    );
+  }
+
+  if (!ticket) {
+    return (
+      <div className="flex flex-col items-center justify-center py-20">
+        <div className="text-6xl mb-4">🎫</div>
+        <h2 className="text-xl font-bold text-gray-900 mb-2">Ticket Not Found</h2>
+        <p className="text-sm text-gray-500 mb-6">The ticket you&apos;re looking for doesn&apos;t exist.</p>
+        <Link href="/dashboard/tickets" className="btn-primary">Back to Tickets</Link>
+      </div>
+    );
+  }
+
+  const customerInitials = ticket.customer?.name?.split(" ").map((n) => n[0]).join("") || "?";
+
   return (
     <div>
       <div className="flex items-center gap-3 mb-6">
         <Link href="/dashboard/tickets" className="text-gray-400 hover:text-gray-600">
           ← Back
         </Link>
-        <h1 className="text-2xl font-bold text-gray-900">Ticket SSV-{params.id}</h1>
-        <span className="inline-flex items-center rounded-full bg-blue-100 px-2.5 py-0.5 text-xs font-medium text-blue-700">open</span>
-        <span className="text-sm text-orange-600 font-semibold">high</span>
+        <h1 className="text-2xl font-bold text-gray-900">{ticket.ticketNumber}</h1>
+        <span className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium ${statusColor[ticket.status] || "bg-gray-100 text-gray-600"}`}>{ticket.status}</span>
+        <span className={`text-sm capitalize ${priorityColor[ticket.priority] || "text-gray-500"}`}>{ticket.priority}</span>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        {/* Conversation */}
         <div className="lg:col-span-2">
           <div className="rounded-xl border border-gray-200 bg-white">
             <div className="border-b border-gray-100 px-6 py-4">
-              <h2 className="font-semibold text-gray-900">Conversation</h2>
+              <h2 className="font-semibold text-gray-900">{ticket.subject}</h2>
             </div>
             <div className="divide-y divide-gray-100 max-h-[600px] overflow-y-auto p-6 space-y-4">
-              {messages.map((m) => (
-                <div key={m.id} className={`flex ${m.sender === "customer" ? "justify-start" : "justify-end"}`}>
-                  <div className={`max-w-lg rounded-xl px-4 py-3 ${
-                    m.sender === "customer"
-                      ? "bg-gray-100 text-gray-900"
-                      : "bg-blue-600 text-white"
-                  }`}>
-                    <div className="text-xs opacity-70 mb-1">{m.name} · {m.time}</div>
-                    <div className="text-sm whitespace-pre-wrap">{m.content}</div>
+              {messages.length > 0 ? (
+                messages.map((m) => (
+                  <div key={m.id} className={`flex ${m.senderType === "customer" ? "justify-start" : "justify-end"}`}>
+                    <div className={`max-w-lg rounded-xl px-4 py-3 ${
+                      m.senderType === "customer"
+                        ? "bg-gray-100 text-gray-900"
+                        : "bg-blue-600 text-white"
+                    }`}>
+                      <div className="text-xs opacity-70 mb-1">{m.senderName} · {formatTime(m.createdAt)}</div>
+                      <div className="text-sm whitespace-pre-wrap">{m.content}</div>
+                    </div>
+                  </div>
+                ))
+              ) : (
+                <div className="text-center py-8 text-gray-400 text-sm">
+                  <p>No messages yet. The initial message:</p>
+                  <div className="mt-3 p-4 bg-gray-50 rounded-xl text-left max-w-lg mx-auto">
+                    <div className="text-sm text-gray-700 whitespace-pre-wrap">{ticket.message}</div>
                   </div>
                 </div>
-              ))}
+              )}
             </div>
             <div className="border-t border-gray-100 p-4">
               <div className="flex gap-3">
@@ -56,56 +165,58 @@ export default function TicketDetailPage({ params }: { params: { id: string } })
           </div>
         </div>
 
-        {/* Sidebar */}
         <div className="space-y-6">
-          {/* Customer */}
           <div className="rounded-xl border border-gray-200 bg-white p-5">
             <h3 className="font-semibold text-gray-900 mb-3">Customer</h3>
             <div className="flex items-center gap-3 mb-3">
-              <div className="h-10 w-10 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 font-semibold text-sm">SC</div>
+              <div className="h-10 w-10 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 font-semibold text-sm">{customerInitials}</div>
               <div>
-                <div className="font-medium text-gray-900">Sarah Chen</div>
-                <div className="text-sm text-gray-500">sarah.chen@example.com</div>
+                <div className="font-medium text-gray-900">{ticket.customer?.name || "Unknown"}</div>
+                <div className="text-sm text-gray-500">{ticket.customer?.email || ""}</div>
               </div>
             </div>
             <div className="text-sm text-gray-500 space-y-1">
-              <div>Company: Acme Corp</div>
-              <div>Segment: Enterprise</div>
-              <div>Total tickets: 12</div>
+              <div>Company: {ticket.customer?.company || "—"}</div>
+              <div>Segment: <span className="capitalize">{ticket.customer?.segment || "—"}</span></div>
+              <div>Total tickets: {ticket.customer?.totalTickets || 0}</div>
             </div>
           </div>
 
-          {/* Properties */}
           <div className="rounded-xl border border-gray-200 bg-white p-5">
             <h3 className="font-semibold text-gray-900 mb-3">Properties</h3>
             <div className="space-y-3 text-sm">
-              <div className="flex justify-between"><span className="text-gray-500">Status</span><span className="font-medium">Open</span></div>
-              <div className="flex justify-between"><span className="text-gray-500">Priority</span><span className="font-medium text-orange-600">High</span></div>
-              <div className="flex justify-between"><span className="text-gray-500">Channel</span><span className="font-medium">WhatsApp</span></div>
-              <div className="flex justify-between"><span className="text-gray-500">Assignee</span><span className="font-medium">Alex Kim</span></div>
-              <div className="flex justify-between"><span className="text-gray-500">Category</span><span className="font-medium">Account Access</span></div>
+              <div className="flex justify-between"><span className="text-gray-500">Status</span><span className="font-medium capitalize">{ticket.status}</span></div>
+              <div className="flex justify-between"><span className="text-gray-500">Priority</span><span className={`font-medium capitalize ${priorityColor[ticket.priority] || "text-gray-500"}`}>{ticket.priority}</span></div>
+              <div className="flex justify-between"><span className="text-gray-500">Channel</span><span className="font-medium">{channelDisplayNames[ticket.channel] || ticket.channel}</span></div>
+              {ticket.assignee?.name && (
+                <div className="flex justify-between"><span className="text-gray-500">Assignee</span><span className="font-medium">{ticket.assignee.name}</span></div>
+              )}
+              <div className="flex justify-between"><span className="text-gray-500">AI Confidence</span><span className="font-medium">{ticket.aiConfidence}%</span></div>
+              <div className="flex justify-between"><span className="text-gray-500">Sentiment</span><span className="font-medium capitalize">{ticket.sentiment}</span></div>
             </div>
           </div>
 
-          {/* SLA */}
           <div className="rounded-xl border border-gray-200 bg-white p-5">
             <h3 className="font-semibold text-gray-900 mb-3">SLA Status</h3>
             <div className="space-y-3">
               <div>
                 <div className="flex justify-between text-sm mb-1">
-                  <span className="text-gray-500">First Response</span>
-                  <span className="font-medium text-green-600">Achieved</span>
+                  <span className="text-gray-500">SLA Status</span>
+                  <span className={`font-medium ${ticket.slaStatus === "breached" ? "text-red-600" : ticket.slaStatus === "ok" ? "text-green-600" : "text-amber-600"}`}>
+                    {ticket.slaStatus === "breached" ? "BREACHED" : ticket.slaStatus === "ok" ? "On Track" : ticket.slaStatus}
+                  </span>
                 </div>
               </div>
-              <div>
-                <div className="flex justify-between text-sm mb-1">
-                  <span className="text-gray-500">Resolution</span>
-                  <span className="font-medium text-amber-600">23m remaining</span>
+              {ticket.tags && ticket.tags.length > 0 && (
+                <div>
+                  <div className="text-sm text-gray-500 mb-2">Tags</div>
+                  <div className="flex flex-wrap gap-1.5">
+                    {ticket.tags.map((tag) => (
+                      <span key={tag} className="text-[10px] px-2 py-0.5 rounded bg-gray-100 text-gray-600">{tag}</span>
+                    ))}
+                  </div>
                 </div>
-                <div className="h-2 rounded-full bg-gray-100 overflow-hidden">
-                  <div className="h-full bg-amber-500 rounded-full" style={{ width: "75%" }} />
-                </div>
-              </div>
+              )}
             </div>
           </div>
         </div>
