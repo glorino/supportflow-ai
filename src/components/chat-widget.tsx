@@ -214,7 +214,7 @@ function ChatWidgetInner() {
               </button>
             </div>
             <p className="text-[10px] text-gray-400 mt-2 text-center">
-              Powered by SSV AI · 7 Intelligent Agents
+              Powered by SSV AI · 9 Intelligent Agents
             </p>
           </form>
         </div>

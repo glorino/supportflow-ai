@@ -34,7 +34,7 @@ const features = [
     border: "border-blue-100",
     iconBg: "bg-gradient-to-br from-blue-400 to-blue-600",
     title: "Intelligent Intake",
-    desc: "7 AI agents classify, route, and respond instantly",
+    desc: "9 AI agents classify, route, and respond instantly",
     bullets: ["Multi-channel ingestion in <50ms", "Automatic intent & priority detection", "Zero-touch classification engine"],
   },
   {

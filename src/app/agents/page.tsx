@@ -68,6 +68,24 @@ const agents = [
     ringColor: "ring-rose-500/30",
     capabilities: ["Trend analysis", "Custom reports", "Predictive insights", "Data visualization"],
   },
+  {
+    id: "routing",
+    name: "Routing Agent",
+    description: "Intelligently assigns tickets to the best-suited agent based on expertise, workload, and context.",
+    gradient: "from-indigo-500 to-indigo-700",
+    iconBg: "bg-indigo-500/20",
+    ringColor: "ring-indigo-500/30",
+    capabilities: ["Load balancing", "Skill matching", "Priority queuing", "Round-robin fallback"],
+  },
+  {
+    id: "feedback",
+    name: "Feedback Agent",
+    description: "Collects, analyzes, and acts on customer feedback to continuously improve support quality.",
+    gradient: "from-pink-500 to-pink-700",
+    iconBg: "bg-pink-500/20",
+    ringColor: "ring-pink-500/30",
+    capabilities: ["CSAT surveys", "NPS tracking", "Sentiment trends", "Actionable insights"],
+  },
 ];
 
 const pipeline = [
@@ -82,7 +100,7 @@ const stats = [
   { value: "67%", label: "auto-resolution", color: "text-emerald-400" },
   { value: "<50ms", label: "classification", color: "text-blue-400" },
   { value: "24/7", label: "availability", color: "text-purple-400" },
-  { value: "7", label: "specialized agents", color: "text-amber-400" },
+  { value: "9", label: "specialized agents", color: "text-amber-400" },
 ];
 
 function AgentIcon({ gradient }: { gradient: string }) {
@@ -190,7 +208,7 @@ export default function AgentsPage() {
             <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/5 border border-white/10 mb-8 backdrop-blur-sm">
               <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
               <span className="text-sm text-white/70">
-                {t("agents.hero.badge", "7 AI agents working in harmony")}
+                {t("agents.hero.badge", "9 AI agents working in harmony")}
               </span>
             </div>
             <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold text-white mb-6 tracking-tight">
