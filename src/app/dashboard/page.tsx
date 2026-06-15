@@ -132,20 +132,24 @@ export default function DashboardPage() {
             <span className="text-xs font-semibold text-green-700">5 Active</span>
           </div>
         </div>
-        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 divide-x divide-gray-100">
+        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 divide-x divide-gray-100 max-sm:divide-x-0 max-sm:gap-3 max-sm:p-3">
           {[
-            { name: "WhatsApp", icon: "📱", status: "connected", webhook: "/api/webhooks/whatsapp", color: "text-green-600", bgColor: "bg-green-50", borderColor: "border-green-200", messages: 34 },
-            { name: "Email", icon: "📧", status: "connected", webhook: "IMAP/SMTP", color: "text-green-600", bgColor: "bg-purple-50", borderColor: "border-purple-200", messages: 28 },
-            { name: "Web Chat", icon: "💬", status: "active", webhook: "Embedded widget", color: "text-green-600", bgColor: "bg-blue-50", borderColor: "border-blue-200", messages: 24 },
-            { name: "SMS", icon: "💬", status: "connected", webhook: "Termii API", color: "text-green-600", bgColor: "bg-amber-50", borderColor: "border-amber-200", messages: 16 },
-            { name: "Messenger", icon: "💬", status: "needs_token", webhook: "/api/webhooks/messenger", color: "text-amber-600", bgColor: "bg-blue-50", borderColor: "border-blue-200", messages: 11 },
-            { name: "Instagram", icon: "📸", status: "connected", webhook: "/api/webhooks/instagram", color: "text-green-600", bgColor: "bg-pink-50", borderColor: "border-pink-200", messages: 9 },
+            { name: "WhatsApp", icon: "📱", status: "connected", color: "text-green-600", bgColor: "bg-green-50", messages: 34 },
+            { name: "Email", icon: "📧", status: "connected", color: "text-green-600", bgColor: "bg-purple-50", messages: 28 },
+            { name: "Web Chat", icon: "💬", status: "active", color: "text-green-600", bgColor: "bg-blue-50", messages: 24 },
+            { name: "SMS", icon: "💬", status: "connected", color: "text-green-600", bgColor: "bg-amber-50", messages: 16 },
+            { name: "Messenger", icon: "💬", status: "needs_token", color: "text-amber-600", bgColor: "bg-blue-50", messages: 11 },
+            { name: "Instagram", icon: "📸", status: "connected", color: "text-green-600", bgColor: "bg-pink-50", messages: 9 },
           ].map((ch) => (
-            <div key={ch.name} className="p-4 hover:bg-gray-50 transition-colors group">
+            <Link
+              key={ch.name}
+              href={`/dashboard/tickets?channel=${encodeURIComponent(ch.name)}`}
+              className="p-4 hover:bg-gray-50 transition-colors group cursor-pointer"
+            >
               <div className="flex items-center gap-2 mb-3">
                 <div className={`h-10 w-10 rounded-xl ${ch.bgColor} flex items-center justify-center text-lg group-hover:scale-110 transition-transform`}>{ch.icon}</div>
                 <div>
-                  <div className="text-sm font-semibold text-gray-900">{ch.name}</div>
+                  <div className="text-sm font-semibold text-gray-900 group-hover:text-blue-600 transition">{ch.name}</div>
                   <div className="flex items-center gap-1">
                     <span className={`h-1.5 w-1.5 rounded-full ${ch.status === "connected" || ch.status === "active" ? "bg-green-500" : "bg-amber-500 animate-pulse"}`} />
                     <span className={`text-[10px] font-medium ${ch.color}`}>
@@ -156,7 +160,7 @@ export default function DashboardPage() {
               </div>
               <div className="text-lg font-bold text-gray-900">{ch.messages}</div>
               <div className="text-[10px] text-gray-400">messages this week</div>
-            </div>
+            </Link>
           ))}
         </div>
       </div>
@@ -170,7 +174,7 @@ export default function DashboardPage() {
               <h3 className="text-base font-semibold text-gray-900">Ticket Volume</h3>
               <p className="text-xs text-gray-500 mt-0.5">Daily ticket trends this week</p>
             </div>
-            <div className="flex items-center gap-4 text-xs">
+            <div className="hidden sm:flex items-center gap-4 text-xs">
               <span className="flex items-center gap-1.5"><span className="h-2.5 w-2.5 rounded-full bg-gradient-to-r from-blue-400 to-blue-600" />Open</span>
               <span className="flex items-center gap-1.5"><span className="h-2.5 w-2.5 rounded-full bg-gradient-to-r from-green-400 to-green-600" />Resolved</span>
               <span className="flex items-center gap-1.5"><span className="h-2.5 w-2.5 rounded-full bg-gradient-to-r from-red-400 to-red-600" />Escalated</span>
@@ -231,14 +235,14 @@ export default function DashboardPage() {
           <p className="text-xs text-gray-500 mb-5">Tickets by communication channel</p>
           <div className="space-y-3">
             {channelStats.map((ch) => (
-              <div key={ch.name} className="flex items-center gap-3">
-                <div className="w-28 flex items-center gap-2.5 shrink-0">
-                  <div className={`h-8 w-8 rounded-lg ${ch.bgColor} flex items-center justify-center`}>
-                    <svg className={`w-4 h-4 bg-gradient-to-r ${ch.color} bg-clip-text`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <div key={ch.name} className="flex items-center gap-2 sm:gap-3">
+                <div className="w-20 sm:w-28 flex items-center gap-2 shrink-0">
+                  <div className={`h-6 w-6 sm:h-8 sm:w-8 rounded-lg ${ch.bgColor} flex items-center justify-center`}>
+                    <svg className={`w-3 h-3 sm:w-4 sm:h-4 bg-gradient-to-r ${ch.color} bg-clip-text`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d={ch.icon} />
                     </svg>
                   </div>
-                  <span className="text-sm font-medium text-gray-700">{ch.name}</span>
+                  <span className="text-xs sm:text-sm font-medium text-gray-700">{ch.name}</span>
                 </div>
                 <div className="flex-1 h-8 bg-white/80 rounded-full overflow-hidden border border-gray-100 shadow-inner">
                   <div className={`h-full bg-gradient-to-r ${ch.color} rounded-full flex items-center pl-3 transition-all duration-700 shadow-sm`} style={{ width: `${Math.max(ch.pct * 3.5, 8)}%` }}>
@@ -310,8 +314,8 @@ export default function DashboardPage() {
                 <th className="text-left px-6 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wider">Ticket</th>
                 <th className="text-left px-6 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wider">Customer</th>
                 <th className="text-left px-6 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wider">Status</th>
-                <th className="text-left px-6 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wider">Priority</th>
-                <th className="text-left px-6 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wider">AI</th>
+                <th className="text-left px-6 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wider hidden sm:table-cell">Priority</th>
+                <th className="text-left px-6 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wider hidden sm:table-cell">AI</th>
                 <th className="text-right px-6 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wider">SLA</th>
               </tr>
             </thead>
@@ -330,8 +334,8 @@ export default function DashboardPage() {
                   </td>
                   <td className="px-6 py-4 text-sm text-gray-600 font-medium">{t.customer}</td>
                   <td className="px-6 py-4"><span className={`inline-flex items-center rounded-full px-2.5 py-1 text-xs font-semibold ${statusColor[t.status]}`}>{t.status}</span></td>
-                  <td className="px-6 py-4"><span className={`text-xs capitalize ${priorityColor[t.priority]}`}>{t.priority}</span></td>
-                  <td className="px-6 py-4"><span className="text-sm font-bold text-gray-700">{t.ai}%</span></td>
+                  <td className="px-6 py-4 hidden sm:table-cell"><span className={`text-xs capitalize ${priorityColor[t.priority]}`}>{t.priority}</span></td>
+                  <td className="px-6 py-4 hidden sm:table-cell"><span className="text-sm font-bold text-gray-700">{t.ai}%</span></td>
                   <td className={`px-6 py-4 text-right text-xs font-semibold ${slaColor[t.slaStatus]}`}>{t.sla}</td>
                 </tr>
               ))}
@@ -341,7 +345,7 @@ export default function DashboardPage() {
       </div>
 
       {/* SLA & AI Activity */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6">
         <div className="rounded-2xl border border-green-200/60 p-6 card-premium-green">
           <h3 className="text-base font-semibold text-gray-900 mb-1">SLA Compliance</h3>
           <p className="text-xs text-gray-500 mb-5">Service level agreement metrics</p>

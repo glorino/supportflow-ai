@@ -67,7 +67,7 @@ export default function AnalyticsPage() {
 
   return (
     <div className="space-y-6">
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
           <h1 className="text-2xl font-bold text-gray-900">Analytics</h1>
           <p className="text-sm text-gray-500 mt-1">AI-powered insights and performance metrics</p>
@@ -127,24 +127,26 @@ export default function AnalyticsPage() {
             <span className="flex items-center gap-1.5"><span className="h-2.5 w-2.5 rounded-full bg-red-400" />Escalated</span>
           </div>
         </div>
-        <div className="grid grid-cols-6 gap-4">
-          {monthlyData.map((m) => (
-            <div key={m.month} className="flex flex-col items-center group">
-              <div className="w-full flex flex-col justify-end" style={{ height: "200px" }}>
-                <div className="w-full flex flex-col gap-0.5 group-hover:scale-x-110 transition-transform duration-300 origin-bottom">
-                  <div className="w-full bg-red-400 rounded-t-lg group-hover:bg-red-500 transition-colors" style={{ height: `${(m.escalated / maxMonthly) * 200}px` }} />
-                  <div className="w-full bg-green-500 group-hover:bg-green-600 transition-colors" style={{ height: `${(m.resolved / maxMonthly) * 200}px` }} />
-                  <div className="w-full bg-blue-500 rounded-b-lg group-hover:bg-blue-600 transition-colors" style={{ height: `${((m.created - m.resolved) / maxMonthly) * 200}px` }} />
+        <div className="overflow-x-auto">
+          <div className="grid grid-cols-6 gap-4 min-w-[600px]">
+            {monthlyData.map((m) => (
+              <div key={m.month} className="flex flex-col items-center group">
+                <div className="w-full flex flex-col justify-end" style={{ height: "200px" }}>
+                  <div className="w-full flex flex-col gap-0.5 group-hover:scale-x-110 transition-transform duration-300 origin-bottom">
+                    <div className="w-full bg-red-400 rounded-t-lg group-hover:bg-red-500 transition-colors" style={{ height: `${(m.escalated / maxMonthly) * 200}px` }} />
+                    <div className="w-full bg-green-500 group-hover:bg-green-600 transition-colors" style={{ height: `${(m.resolved / maxMonthly) * 200}px` }} />
+                    <div className="w-full bg-blue-500 rounded-b-lg group-hover:bg-blue-600 transition-colors" style={{ height: `${((m.created - m.resolved) / maxMonthly) * 200}px` }} />
+                  </div>
                 </div>
+                <div className="mt-3 text-sm font-bold text-gray-900 group-hover:text-blue-600 transition">{m.created.toLocaleString()}</div>
+                <div className="text-xs text-gray-400">{m.month}</div>
               </div>
-              <div className="mt-3 text-sm font-bold text-gray-900 group-hover:text-blue-600 transition">{m.created.toLocaleString()}</div>
-              <div className="text-xs text-gray-400">{m.month}</div>
-            </div>
-          ))}
+            ))}
+          </div>
         </div>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6">
         {/* CSAT Distribution */}
         <div className="rounded-2xl border border-gray-200 p-6 card-gradient-amber">
           <h3 className="text-base font-semibold text-gray-900 mb-1">Customer Satisfaction</h3>
@@ -206,7 +208,7 @@ export default function AnalyticsPage() {
       </div>
 
       {/* Forecasts & AI Insights */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6">
         {/* Forecasts */}
         <div className="rounded-2xl border border-gray-200 p-6 card-gradient-cyan">
           <div className="flex items-center gap-2 mb-1">
@@ -262,7 +264,7 @@ export default function AnalyticsPage() {
       </div>
 
       {/* Channel & AI Performance */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6">
         <div className="rounded-2xl border border-gray-200 p-6 card-gradient-pink">
           <h3 className="text-base font-semibold text-gray-900 mb-1">Channel Performance</h3>
           <p className="text-xs text-gray-500 mb-5">Tickets by channel</p>
@@ -276,7 +278,7 @@ export default function AnalyticsPage() {
               { channel: "Instagram", count: 650, pct: 9, color: "bg-pink-500", icon: "📸" },
             ].map((ch) => (
               <div key={ch.channel} className="flex items-center gap-3 group">
-                <div className="w-28 flex items-center gap-2 shrink-0">
+                <div className="hidden sm:flex w-28 items-center gap-2 shrink-0">
                   <span className="group-hover:scale-125 transition-transform">{ch.icon}</span>
                   <span className="text-sm text-gray-600">{ch.channel}</span>
                 </div>

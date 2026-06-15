@@ -1,7 +1,8 @@
 "use client";
 
-import { useState, useCallback } from "react";
+import { useState, useCallback, Suspense } from "react";
 import Link from "next/link";
+import { useSearchParams, useRouter } from "next/navigation";
 import { useRealtimeTickets } from "@/hooks/use-sse";
 
 const tickets = [
@@ -54,8 +55,22 @@ const sentimentBg: Record<string, string> = {
   frustrated: "from-orange-50 to-amber-50 border-orange-200",
 };
 
-export default function TicketsPage() {
+const channelColor: Record<string, string> = {
+  WhatsApp: "bg-green-100 text-green-700",
+  Email: "bg-purple-100 text-purple-700",
+  Web: "bg-blue-100 text-blue-700",
+  "Web Chat": "bg-blue-100 text-blue-700",
+  SMS: "bg-amber-100 text-amber-700",
+  Messenger: "bg-blue-100 text-blue-600",
+  Instagram: "bg-pink-100 text-pink-700",
+};
+
+function TicketsContent() {
+  const searchParams = useSearchParams();
+  const router = useRouter();
+  const urlChannel = searchParams.get("channel") || "all";
   const [statusFilter, setStatusFilter] = useState("all");
+  const [channelFilter, setChannelFilter] = useState(urlChannel);
   const [selectedTickets, setSelectedTickets] = useState<string[]>([]);
   const realtimeUpdates = useRealtimeTickets();
 
@@ -72,9 +87,21 @@ export default function TicketsPage() {
   realtimeUpdates.forEach(handleRealtimeUpdate);
 
   const filteredTickets = tickets.filter((t) => {
-    if (statusFilter === "all") return true;
-    return t.status === statusFilter;
+    if (statusFilter !== "all" && t.status !== statusFilter) return false;
+    if (channelFilter !== "all" && t.channel !== channelFilter && !(channelFilter === "Web Chat" && t.channel === "Web")) return false;
+    return true;
   });
+
+  const handleChannelChange = (value: string) => {
+    setChannelFilter(value);
+    const params = new URLSearchParams(searchParams.toString());
+    if (value === "all") {
+      params.delete("channel");
+    } else {
+      params.set("channel", value);
+    }
+    router.push(`/dashboard/tickets?${params.toString()}`);
+  };
 
   const toggleTicket = (id: string) => {
     setSelectedTickets((prev) =>
@@ -84,12 +111,12 @@ export default function TicketsPage() {
 
   return (
     <div className="space-y-6">
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
           <h1 className="text-2xl font-bold text-gray-900">Tickets</h1>
           <p className="text-sm text-gray-500 mt-1">Manage and track all customer conversations</p>
         </div>
-        <div className="flex items-center gap-3">
+        <div className="flex flex-wrap gap-2">
           <button className="btn-secondary">
             <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" /></svg>
             Export
@@ -102,7 +129,7 @@ export default function TicketsPage() {
       </div>
 
       {/* Stats */}
-      <div className="grid grid-cols-2 sm:grid-cols-5 gap-4">
+      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4">
         {[
           { label: "Open", count: 6, gradient: "from-blue-500 to-indigo-600", cardBg: "card-gradient-blue", icon: "📂" },
           { label: "Pending", count: 1, gradient: "from-amber-400 to-orange-500", cardBg: "card-gradient-amber", icon: "⏳" },
@@ -129,19 +156,23 @@ export default function TicketsPage() {
       </div>
 
       {/* Filters */}
-      <div className="flex items-center gap-3">
+      <div className="flex flex-col sm:flex-row gap-3">
         <div className="flex-1 relative">
           <svg className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg>
-          <input type="text" placeholder="Search tickets by ID, subject, customer..." className="input-search" />
+          <input type="text" placeholder="Search tickets by ID, subject, customer..." className="input-search w-full" />
         </div>
-        <select className="rounded-xl border border-gray-200 px-3 py-2.5 text-sm bg-white focus:border-blue-500 focus:outline-none transition-colors">
-          <option>All Channels</option>
-          <option>WhatsApp</option>
-          <option>Email</option>
-          <option>Web Chat</option>
-          <option>SMS</option>
-          <option>Messenger</option>
-          <option>Instagram</option>
+        <select
+          value={channelFilter}
+          onChange={(e) => handleChannelChange(e.target.value)}
+          className="rounded-xl border border-gray-200 px-3 py-2.5 text-sm bg-white focus:border-blue-500 focus:outline-none transition-colors"
+        >
+          <option value="all">All Channels</option>
+          <option value="WhatsApp">WhatsApp</option>
+          <option value="Email">Email</option>
+          <option value="Web">Web Chat</option>
+          <option value="SMS">SMS</option>
+          <option value="Messenger">Messenger</option>
+          <option value="Instagram">Instagram</option>
         </select>
         <select className="rounded-xl border border-gray-200 px-3 py-2.5 text-sm bg-white focus:border-blue-500 focus:outline-none transition-colors">
           <option>All Priority</option>
@@ -161,7 +192,7 @@ export default function TicketsPage() {
 
       {/* Bulk Actions */}
       {selectedTickets.length > 0 && (
-        <div className="flex items-center gap-3 p-3 bg-blue-50 rounded-xl border border-blue-200 animate-[slide-up_0.2s_ease]">
+        <div className="flex flex-wrap gap-2 p-3 bg-blue-50 rounded-xl border border-blue-200 animate-[slide-up_0.2s_ease]">
           <span className="text-sm text-blue-700 font-medium">{selectedTickets.length} selected</span>
           <button className="btn-ghost text-xs">Assign to...</button>
           <button className="btn-ghost text-xs">Change status</button>
@@ -172,6 +203,7 @@ export default function TicketsPage() {
 
       {/* Ticket Table */}
       <div className="rounded-2xl border border-gray-200 bg-white overflow-hidden shadow-sm">
+        <div className="overflow-x-auto">
         <table className="w-full">
           <thead>
             <tr className="border-b border-gray-100 bg-gray-50/50">
@@ -181,10 +213,10 @@ export default function TicketsPage() {
               <th className="text-left px-4 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wider">Ticket</th>
               <th className="text-left px-4 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wider">Customer</th>
               <th className="text-left px-4 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wider">Status</th>
-              <th className="text-left px-4 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wider">Priority</th>
-              <th className="text-left px-4 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wider">Assignee</th>
+              <th className="hidden sm:table-cell text-left px-4 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wider">Priority</th>
+              <th className="hidden sm:table-cell text-left px-4 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wider">Assignee</th>
               <th className="text-left px-4 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wider">SLA</th>
-              <th className="text-left px-4 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wider">AI</th>
+              <th className="hidden sm:table-cell text-left px-4 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wider">AI</th>
               <th className="text-right px-4 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wider">Actions</th>
             </tr>
           </thead>
@@ -203,7 +235,7 @@ export default function TicketsPage() {
                   <Link href={`/dashboard/tickets/${t.id.replace("SF-", "")}`} className="block">
                     <div className="flex items-center gap-2 mb-0.5">
                       <span className="text-xs font-mono text-gray-400">{t.id}</span>
-                      <span>{t.channelIcon}</span>
+                      <span className={`text-[10px] px-1.5 py-0.5 rounded font-medium ${channelColor[t.channel] || "bg-gray-100 text-gray-600"}`}>{t.channel}</span>
                     </div>
                     <div className="text-sm font-medium text-gray-900 group-hover:text-blue-600 transition truncate max-w-xs">{t.subject}</div>
                     <div className="flex items-center gap-1.5 mt-1">
@@ -229,16 +261,16 @@ export default function TicketsPage() {
                     {t.status}
                   </span>
                 </td>
-                <td className="px-4 py-3">
+                <td className="hidden sm:table-cell px-4 py-3">
                   <span className={`text-xs ${priorityColor[t.priority]}`}>{t.priority}</span>
                 </td>
-                <td className="px-4 py-3">
+                <td className="hidden sm:table-cell px-4 py-3">
                   <span className="text-sm text-gray-600">{t.assignee}</span>
                 </td>
                 <td className="px-4 py-3">
                   <div className={`text-xs font-medium ${slaColor[t.slaStatus]}`}>{t.sla}</div>
                 </td>
-                <td className="px-4 py-3">
+                <td className="hidden sm:table-cell px-4 py-3">
                   <div className="flex items-center gap-1.5">
                     <span className="text-sm">{sentimentIcon[t.sentiment]}</span>
                     <span className="text-xs text-gray-500">{t.aiConfidence}%</span>
@@ -261,7 +293,8 @@ export default function TicketsPage() {
             ))}
           </tbody>
         </table>
-        <div className="flex items-center justify-between px-4 py-3 border-t border-gray-100 bg-gray-50/50">
+        </div>
+        <div className="flex flex-col sm:flex-row items-center justify-between gap-3 px-4 py-3 border-t border-gray-100 bg-gray-50/50">
           <span className="text-sm text-gray-500">Showing {filteredTickets.length} of {tickets.length} tickets</span>
           <div className="flex items-center gap-2">
             <button className="btn-ghost text-xs" disabled>Previous</button>
@@ -272,5 +305,13 @@ export default function TicketsPage() {
         </div>
       </div>
     </div>
+  );
+}
+
+export default function TicketsPage() {
+  return (
+    <Suspense fallback={<div className="flex items-center justify-center h-64"><div className="animate-spin h-8 w-8 border-4 border-blue-500 border-t-transparent rounded-full" /></div>}>
+      <TicketsContent />
+    </Suspense>
   );
 }
