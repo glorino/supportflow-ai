@@ -97,7 +97,7 @@ export const translations = {
     start: { en: "Start Free Trial", fr: "Essai Gratuit" },
   },
   footer: {
-    desc: { en: "AI-powered customer support platform. Built for teams that move fast.", fr: "Plateforme de support client alimentée par l'IA. Conçue pour les équipes qui avancent vite." },
+    desc: { en: "AI-powered customer support platform. Built by SSV for teams that move fast.", fr: "Plateforme de support client alimentée par l'IA. Construite par SSV pour les équipes qui avancent vite." },
     platform: { en: "Platform", fr: "Plateforme" },
     company: { en: "Company", fr: "Entreprise" },
     support: { en: "Support", fr: "Support" },
@@ -115,8 +115,8 @@ export const translations = {
     subtitle: { en: "Seven intelligent agents working together to resolve your support tickets.", fr: "Sept agents intelligents travaillant ensemble pour résoudre vos tickets de support." },
   },
   pricingPage: {
-    title: { en: "Simple, transparent pricing", fr: "Tarification simple et transparente" },
-    subtitle: { en: "Start free, scale as you grow. No hidden fees.", fr: "Commencez gratuitement, évoluez à votre rythme. Pas de frais cachés." },
+    title: { en: "Plans for every team size", fr: "Des formules pour chaque taille d'équipe" },
+    subtitle: { en: "Start with what you need. Scale as your support grows.", fr: "Commencez par ce dont vous avez besoin. Évoluez à mesure que votre support grandit." },
   },
   aboutPage: {
     title: { en: "About SSV", fr: "À propos de SSV" },
