@@ -223,7 +223,7 @@ export default function CustomersPage() {
                   </td>
                   <td className="px-6 py-4">
                     <div className="flex items-center gap-1.5">
-                      <span className={`h-2.5 w-2.5 rounded-full ${c.status === "active" ? "bg-green-500 animate-glow" : "bg-gray-300"}`} />
+                      <span className={`h-2.5 w-2.5 rounded-full ${c.status === "active" ? "bg-green-500" : "bg-gray-300"}`} />
                       <span className="text-xs font-medium text-gray-600 capitalize">{c.status}</span>
                     </div>
                   </td>

@@ -102,7 +102,7 @@
     @apply transition-all duration-500 hover:shadow-2xl hover:shadow-gray-200/60 hover:border-gray-300 hover:-translate-y-1;
   }
   .card-glow {
-    @apply transition-all duration-500 hover:shadow-2xl hover:shadow-blue-600/10 hover:border-blue-200;
+    @apply transition-all duration-500 hover:shadow-2xl hover:border-gray-300;
   }
   .card-blue {
     @apply border-l-4 border-l-blue-500 bg-gradient-to-r from-blue-50/50 to-white;
@@ -268,24 +268,7 @@
     animation: gradient-shift 15s ease infinite;
   }
 
-  /* Animated border */
-  .animated-border {
-    position: relative;
-    border: none;
-  }
-  .animated-border::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    border-radius: inherit;
-    padding: 1px;
-    background: linear-gradient(135deg, rgba(59,130,246,0.3), rgba(139,92,246,0.3), rgba(59,130,246,0.3));
-    -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-    mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-    -webkit-mask-composite: xor;
-    mask-composite: exclude;
-    animation: border-flow 4s ease-in-out infinite;
-  }
+  /* Animated border - removed */
 
   /* Premium input */
   .input-premium {
@@ -340,8 +323,7 @@
 }
 
 @keyframes pulse-glow {
-  0%, 100% { box-shadow: 0 0 0 0 rgba(59, 130, 246, 0.4); }
-  50% { box-shadow: 0 0 20px 5px rgba(59, 130, 246, 0.1); }
+  /* removed */
 }
 
 @keyframes slide-up {
@@ -387,15 +369,11 @@
 }
 
 @keyframes glow-pulse {
-  0%, 100% { box-shadow: 0 0 0 0 rgba(59, 130, 246, 0); }
-  50% { box-shadow: 0 0 24px 6px rgba(59, 130, 246, 0.12); }
+  /* removed */
 }
 
 @keyframes border-flow {
-  0% { border-color: rgba(59, 130, 246, 0.3); }
-  33% { border-color: rgba(139, 92, 246, 0.3); }
-  66% { border-color: rgba(16, 185, 129, 0.3); }
-  100% { border-color: rgba(59, 130, 246, 0.3); }
+  /* removed */
 }
 
 @keyframes aurora {
@@ -430,11 +408,11 @@
 }
 
 .animate-glow {
-  animation: glow-pulse 3s ease-in-out infinite;
+  /* removed */
 }
 
 .animate-border-flow {
-  animation: border-flow 4s ease-in-out infinite;
+  /* removed */
 }
 
   .animate-morph {
