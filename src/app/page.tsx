@@ -288,7 +288,7 @@ export default function HomePage() {
                 {[
                   { ch: "WhatsApp", vendor: "Live", ms: "25ms", pct: "97%", active: true },
                   { ch: "Email", vendor: "IMAP", ms: "30ms", pct: "93%", active: false },
-                  { ch: "SMS", vendor: "Termii", ms: "28ms", pct: "99%", active: false },
+                  { ch: "SMS", vendor: "SSV", ms: "28ms", pct: "99%", active: false },
                   { ch: "Web Chat", vendor: "Widget", ms: "12ms", pct: "100%", active: false },
                 ].map((c) => (
                   <div key={c.ch} className={`flex items-center justify-between p-4 rounded-xl border transition-all ${c.active ? "border-blue-300 bg-blue-50/80 shadow-sm" : "border-gray-100 bg-gray-50/50"}`}>
