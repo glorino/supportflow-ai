@@ -2,8 +2,11 @@
 
 import Link from "next/link";
 import { useState } from "react";
+import { LangToggle } from "@/components/lang-toggle";
+import { useLang } from "@/lib/i18n/context";
 
 export default function ResetPasswordPage() {
+  const { t } = useLang();
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
@@ -65,14 +68,17 @@ export default function ResetPasswordPage() {
       <div className="w-full max-w-md">
         {/* Logo */}
         <div className="text-center mb-8">
+          <div className="flex justify-center mb-6">
+            <LangToggle />
+          </div>
           <Link href="/" className="inline-flex items-center gap-3 mb-6">
             <div className="h-12 w-12 rounded-2xl gradient-primary flex items-center justify-center shadow-lg shadow-blue-600/25">
               <span className="text-white font-bold text-xl">SF</span>
             </div>
           </Link>
-          <h1 className="text-2xl font-bold text-gray-900">Reset your password</h1>
+          <h1 className="text-2xl font-bold text-gray-900">{t("resetPassword.title")}</h1>
           <p className="mt-2 text-sm text-gray-500">
-            Enter your new password below.
+            {t("resetPassword.desc")}
           </p>
         </div>
 
@@ -81,14 +87,14 @@ export default function ResetPasswordPage() {
           {status === "success" ? (
             <div className="text-center">
               <div className="h-16 w-16 rounded-2xl bg-green-100 flex items-center justify-center text-3xl mx-auto mb-4">✅</div>
-              <h2 className="text-lg font-semibold text-gray-900 mb-2">Password Reset!</h2>
-              <p className="text-sm text-gray-500">Redirecting to login...</p>
+              <h2 className="text-lg font-semibold text-gray-900 mb-2">{t("resetPassword.success")}</h2>
+              <p className="text-sm text-gray-500">{t("resetPassword.redirecting")}</p>
             </div>
           ) : (
             <form onSubmit={handleSubmit}>
               <div className="space-y-4 mb-6">
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">New Password</label>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">{t("resetPassword.newPassword")}</label>
                   <input
                     type="password"
                     value={password}
@@ -99,7 +105,7 @@ export default function ResetPasswordPage() {
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">Confirm Password</label>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">{t("resetPassword.confirmPassword")}</label>
                   <input
                     type="password"
                     value={confirmPassword}
@@ -120,12 +126,12 @@ export default function ResetPasswordPage() {
                 disabled={status === "loading"}
                 className="w-full rounded-xl bg-blue-600 px-4 py-3 text-sm font-semibold text-white hover:bg-blue-700 transition-colors disabled:opacity-50"
               >
-                {status === "loading" ? "Resetting..." : "Reset Password"}
+                {status === "loading" ? t("resetPassword.resetting") : t("resetPassword.resetBtn")}
               </button>
 
               <div className="mt-6 text-center">
                 <Link href="/login" className="text-sm text-blue-600 hover:text-blue-700 font-medium">
-                  ← Back to Sign In
+                  ← {t("resetPassword.backToSignIn")}
                 </Link>
               </div>
             </form>

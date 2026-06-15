@@ -3,6 +3,8 @@
 import Link from "next/link";
 import { useState } from "react";
 import { ChatWidget } from "@/components/chat-widget";
+import { LangToggle } from "@/components/lang-toggle";
+import { useLang } from "@/lib/i18n/context";
 
 const demoLogins = [
   { email: "admin@ssv.com", password: "admin123", role: "Super Admin", name: "Alex Johnson", avatar: "AJ", gradient: "from-violet-500 to-indigo-600" },
@@ -12,6 +14,7 @@ const demoLogins = [
 ];
 
 export default function LoginPage() {
+  const { t } = useLang();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
@@ -84,13 +87,11 @@ export default function LoginPage() {
 
           {/* Hero */}
           <div className="animate-slide-up">
-            <h1 className="text-4xl xl:text-[3.4rem] font-bold text-white mb-6 leading-[1.15] tracking-tight">
-              Your Support Team,
-              <br />
-              <span className="bg-gradient-to-r from-blue-300 via-cyan-300 to-purple-300 bg-clip-text text-transparent">Supercharged by AI</span>
+            <h1 className="text-4xl xl:text-[3.4rem] font-bold text-white mb-6 leading-[1.15] tracking-tight whitespace-pre-line">
+              {t("login.heroTitle")}
             </h1>
             <p className="text-lg text-blue-100/60 mb-14 max-w-md leading-relaxed">
-              Unify every support channel into one intelligent workspace. 7 AI agents classify, route, respond, and resolve.
+              {t("login.heroDesc")}
             </p>
           </div>
 
@@ -152,14 +153,17 @@ export default function LoginPage() {
           </div>
 
           {/* Header */}
-          <div className="mb-10 animate-slide-up">
-            <h2 className="text-[2rem] font-bold text-gray-900 mb-2.5 tracking-tight">Welcome back</h2>
-            <p className="text-sm text-gray-500">Sign in to your support dashboard</p>
+          <div className="flex items-center justify-between mb-10 animate-slide-up">
+            <div>
+              <h2 className="text-[2rem] font-bold text-gray-900 mb-2.5 tracking-tight">{t("login.welcomeBack")}</h2>
+              <p className="text-sm text-gray-500">{t("login.signInDesc")}</p>
+            </div>
+            <LangToggle />
           </div>
 
           {/* Demo Logins */}
           <div className="mb-8 animate-slide-up stagger-1">
-            <div className="text-[10px] font-bold text-gray-400 uppercase tracking-[0.15em] mb-3">Quick Demo Access</div>
+            <div className="text-[10px] font-bold text-gray-400 uppercase tracking-[0.15em] mb-3">{t("login.quickAccess")}</div>
             <div className="grid grid-cols-2 gap-2.5">
               {demoLogins.map((demo) => (
                 <button
@@ -186,7 +190,7 @@ export default function LoginPage() {
           {/* Divider */}
           <div className="flex items-center gap-4 mb-8 animate-slide-up stagger-2">
             <div className="flex-1 h-px bg-gradient-to-r from-transparent via-gray-200 to-transparent" />
-            <span className="text-[11px] text-gray-400 font-medium">or sign in with email</span>
+            <span className="text-[11px] text-gray-400 font-medium">{t("login.orEmail")}</span>
             <div className="flex-1 h-px bg-gradient-to-r from-transparent via-gray-200 to-transparent" />
           </div>
 
@@ -194,7 +198,7 @@ export default function LoginPage() {
           <form onSubmit={handleSubmit} className="animate-slide-up stagger-3">
             <div className="space-y-5">
               <div>
-                <label className="block text-sm font-semibold text-gray-700 mb-2.5">Email address</label>
+                <label className="block text-sm font-semibold text-gray-700 mb-2.5">{t("login.emailLabel")}</label>
                 <input
                   type="email"
                   value={email}
@@ -206,9 +210,9 @@ export default function LoginPage() {
               </div>
               <div>
                 <div className="flex items-center justify-between mb-2.5">
-                  <label className="text-sm font-semibold text-gray-700">Password</label>
+                  <label className="text-sm font-semibold text-gray-700">{t("login.passwordLabel")}</label>
                   <Link href="/forgot-password" className="text-xs text-blue-600 hover:text-blue-700 font-semibold transition">
-                    Forgot password?
+                    {t("login.forgotPassword")}
                   </Link>
                 </div>
                 <div className="relative">
@@ -250,10 +254,10 @@ export default function LoginPage() {
               {status === "loading" ? (
                 <span className="flex items-center justify-center gap-2">
                   <svg className="animate-spin h-4 w-4" fill="none" viewBox="0 0 24 24"><circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" /><path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" /></svg>
-                  Signing in...
+                  {t("login.signingIn")}
                 </span>
               ) : (
-                "Sign In"
+                t("login.signIn")
               )}
             </button>
           </form>
@@ -261,7 +265,7 @@ export default function LoginPage() {
           {/* Footer */}
           <div className="mt-10 text-center animate-slide-up stagger-4">
             <p className="text-sm text-gray-500">
-              Contact your administrator for account access
+              {t("login.adminNote")}
             </p>
           </div>
 
