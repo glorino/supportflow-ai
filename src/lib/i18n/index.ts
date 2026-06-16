@@ -104,6 +104,17 @@ export const translations = {
   featuresPage: {
     title: { en: "Platform Features", fr: "Fonctionnalités de la Plateforme" },
     subtitle: { en: "Everything you need to deliver exceptional customer support, powered by AI.", fr: "Tout ce dont vous avez besoin pour offrir un support client exceptionnel, propulsé par l'IA." },
+    stats: {
+      uptime: { en: "Uptime", fr: "Disponibilité" },
+      response: { en: "Response Time", fr: "Temps de réponse" },
+      resolved: { en: "Auto-Resolved", fr: "Auto-résolus" },
+      processed: { en: "Tickets Processed", fr: "Tickets traités" },
+    },
+    cta: {
+      title: { en: "Ready to Transform Your Support?", fr: "Prêt à transformer votre support ?" },
+      desc: { en: "Start resolving tickets with AI in minutes, not months.", fr: "Commencez à résoudre les tickets avec l'IA en minutes, pas en mois." },
+      button: { en: "Get Started Free", fr: "Commencer gratuitement" },
+    },
   },
   channelsPage: {
     title: { en: "Channel Integrations", fr: "Intégrations de Canaux" },
