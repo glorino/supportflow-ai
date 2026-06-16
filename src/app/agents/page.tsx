@@ -7,84 +7,57 @@ import { useLang } from "@/lib/i18n/context";
 const agents = [
   {
     id: "intake",
-    name: "Intake Agent",
-    description: "Classifies and routes incoming tickets based on intent, sentiment, and priority levels.",
     gradient: "from-blue-500 to-blue-700",
     iconBg: "bg-blue-500/20",
     ringColor: "ring-blue-500/30",
-    capabilities: ["Auto-classification", "Priority detection", "Intent analysis", "Multi-channel intake"],
   },
   {
     id: "knowledge",
-    name: "Knowledge Agent",
-    description: "Searches and retrieves relevant articles from your knowledge base to power resolutions.",
     gradient: "from-emerald-500 to-emerald-700",
     iconBg: "bg-emerald-500/20",
     ringColor: "ring-emerald-500/30",
-    capabilities: ["Semantic search", "Article matching", "Context enrichment", "Gap detection"],
   },
   {
     id: "resolution",
-    name: "Resolution Agent",
-    description: "Auto-resolves common issues without human intervention using learned patterns.",
     gradient: "from-purple-500 to-purple-700",
     iconBg: "bg-purple-500/20",
     ringColor: "ring-purple-500/30",
-    capabilities: ["Pattern matching", "Step-by-step fixes", "Self-learning", "Escalation triggers"],
   },
   {
     id: "qa",
-    name: "QA Agent",
-    description: "Monitors response quality, tone, and compliance across all support interactions.",
     gradient: "from-amber-500 to-amber-700",
     iconBg: "bg-amber-500/20",
     ringColor: "ring-amber-500/30",
-    capabilities: ["Tone analysis", "Compliance checks", "Quality scoring", "Coaching tips"],
   },
   {
     id: "escalation",
-    name: "Escalation Agent",
-    description: "Routes critical issues to the right team with full context and recommended actions.",
     gradient: "from-red-500 to-red-700",
     iconBg: "bg-red-500/20",
     ringColor: "ring-red-500/30",
-    capabilities: ["Smart routing", "Context packaging", "SLA tracking", "Team assignment"],
   },
   {
     id: "sentiment",
-    name: "Sentiment Agent",
-    description: "Detects emotions in real-time across all channels to prioritize empathy-driven responses.",
     gradient: "from-cyan-500 to-cyan-700",
     iconBg: "bg-cyan-500/20",
     ringColor: "ring-cyan-500/30",
-    capabilities: ["Real-time detection", "Multi-language", "Trend tracking", "Alert triggers"],
   },
   {
     id: "analytics",
-    name: "Analytics Agent",
-    description: "Generates insights, trend reports, and actionable recommendations from support data.",
     gradient: "from-rose-500 to-rose-700",
     iconBg: "bg-rose-500/20",
     ringColor: "ring-rose-500/30",
-    capabilities: ["Trend analysis", "Custom reports", "Predictive insights", "Data visualization"],
   },
   {
     id: "routing",
-    name: "Routing Agent",
-    description: "Intelligently assigns tickets to the best-suited agent based on expertise, workload, and context.",
     gradient: "from-indigo-500 to-indigo-700",
     iconBg: "bg-indigo-500/20",
     ringColor: "ring-indigo-500/30",
-    capabilities: ["Load balancing", "Skill matching", "Priority queuing", "Round-robin fallback"],
   },
   {
     id: "feedback",
-    name: "Feedback Agent",
-    description: "Collects, analyzes, and acts on customer feedback to continuously improve support quality.",
     gradient: "from-pink-500 to-pink-700",
     iconBg: "bg-pink-500/20",
     ringColor: "ring-pink-500/30",
-    capabilities: ["CSAT surveys", "NPS tracking", "Sentiment trends", "Actionable insights"],
   },
 ];
 
@@ -284,13 +257,13 @@ export default function AgentsPage() {
                     <StatusBadge />
                   </div>
 
-                  <h3 className="text-xl font-semibold text-white mb-2">{agent.name}</h3>
+                  <h3 className="text-xl font-semibold text-white mb-2">{t(`agentsPage.${agent.id}.name`) || agent.id}</h3>
                   <p className="text-sm text-white/50 mb-5 leading-relaxed">
-                    {agent.description}
+                    {t(`agentsPage.${agent.id}.desc`)}
                   </p>
 
                   <div className="space-y-2">
-                    {agent.capabilities.map((cap) => (
+                    {(t(`agentsPage.${agent.id}.capabilities`) || "").split(",").filter(Boolean).map((cap: string) => (
                       <div
                         key={cap}
                         className="flex items-center gap-2.5 text-sm text-white/40 group-hover:text-white/60 transition-colors"
