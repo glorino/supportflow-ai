@@ -3,6 +3,7 @@
 import PublicShell from "@/app/public-shell";
 import { useLang } from "@/lib/i18n/context";
 import { useEffect, useRef, useState } from "react";
+import { BookDemoModal } from "@/components/book-demo-modal";
 
 function useScrollReveal(threshold = 0.15) {
   const ref = useRef<HTMLDivElement>(null);
@@ -153,6 +154,7 @@ const comparisonFeatures = [
 
 export default function ChannelsPage() {
   const { t } = useLang();
+  const [demoOpen, setDemoOpen] = useState(false);
 
   return (
     <PublicShell>
@@ -479,17 +481,18 @@ console.log(status);`}</code>
                 >
                   {t("cta.start") || "Start Free Trial"}
                 </a>
-                <a
-                  href="/login"
+                <button
+                  onClick={() => setDemoOpen(true)}
                   className="inline-flex items-center justify-center gap-2 px-8 py-4 border-2 border-gray-200 rounded-full text-[15px] font-semibold text-gray-700 hover:border-gray-300 hover:bg-gray-50 transition-all"
                 >
                   {t("cta.book") || "Book a demo"}
-                </a>
+                </button>
               </div>
             </RevealSection>
           </div>
         </section>
       </div>
+      <BookDemoModal isOpen={demoOpen} onClose={() => setDemoOpen(false)} />
     </PublicShell>
   );
 }

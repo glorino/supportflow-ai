@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useState, useEffect, useRef } from "react";
 import PublicShell from "./public-shell";
 import { useLang } from "@/lib/i18n/context";
+import { BookDemoModal } from "@/components/book-demo-modal";
 
 function useScrollReveal(threshold = 0.15) {
   const ref = useRef<HTMLDivElement>(null);
@@ -81,6 +82,7 @@ export default function HomePage() {
   const { t } = useLang();
   const [wordIndex, setWordIndex] = useState(0);
   const [stats, setStats] = useState<any>(null);
+  const [demoOpen, setDemoOpen] = useState(false);
 
   useEffect(() => {
     const interval = setInterval(() => setWordIndex((i) => (i + 1) % heroWords.length), 2500);
@@ -130,9 +132,9 @@ export default function HomePage() {
                 <Link href="/login" className="px-8 py-4 bg-white text-gray-900 rounded-2xl text-[15px] font-semibold hover:bg-gray-50 transition-all text-center shadow-xl hover:shadow-2xl hover:scale-[1.02] active:scale-[0.98]">
                   {t("hero.cta")}
                 </Link>
-                <Link href="/features" className="px-8 py-4 bg-transparent border-2 border-blue-300/30 text-blue-200 rounded-2xl text-[15px] font-semibold hover:bg-white/5 transition-all text-center hover:scale-[1.02] active:scale-[0.98]">
+                <button onClick={() => setDemoOpen(true)} className="px-8 py-4 bg-transparent border-2 border-blue-300/30 text-blue-200 rounded-2xl text-[15px] font-semibold hover:bg-white/5 transition-all text-center hover:scale-[1.02] active:scale-[0.98]">
                   {t("hero.demo")}
-                </Link>
+                </button>
               </div>
             </div>
 
@@ -528,9 +530,9 @@ export default function HomePage() {
             </h2>
             <p className="text-blue-100/70 text-lg mb-10">{t("cta.desc")}</p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Link href="/login" className="inline-flex items-center justify-center gap-2 px-10 py-4 bg-white text-gray-900 rounded-2xl text-[15px] font-semibold hover:bg-gray-50 transition-all shadow-xl hover:shadow-2xl hover:scale-[1.02] active:scale-[0.98]">
+              <button onClick={() => setDemoOpen(true)} className="inline-flex items-center justify-center gap-2 px-10 py-4 bg-white text-gray-900 rounded-2xl text-[15px] font-semibold hover:bg-gray-50 transition-all shadow-xl hover:shadow-2xl hover:scale-[1.02] active:scale-[0.98]">
                 {t("cta.book")}
-              </Link>
+              </button>
               <Link href="/login" className="inline-flex items-center justify-center gap-2 px-10 py-4 border-2 border-blue-300/30 text-blue-200 rounded-2xl text-[15px] font-semibold hover:bg-white/5 transition-all hover:scale-[1.02] active:scale-[0.98]">
                 {t("cta.start")}
               </Link>
@@ -538,6 +540,7 @@ export default function HomePage() {
           </RevealSection>
         </div>
       </section>
+      <BookDemoModal isOpen={demoOpen} onClose={() => setDemoOpen(false)} />
     </PublicShell>
   );
 }
