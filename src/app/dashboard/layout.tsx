@@ -1,10 +1,7 @@
 "use client";
 
 import { Sidebar } from "@/components/sidebar";
-import { ChatWidget } from "@/components/chat-widget";
 import { AuthProvider, useAuth, getInitials } from "@/lib/auth/context";
-import { LangToggle } from "@/components/lang-toggle";
-import { useLang } from "@/lib/i18n/context";
 import Link from "next/link";
 import { useState } from "react";
 
@@ -22,7 +19,6 @@ function MobileMenu({ isOpen, onClose }: { isOpen: boolean; onClose: () => void 
 
 function DashboardHeader() {
   const { user, logout } = useAuth();
-  const { t } = useLang();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   const roleBadge: Record<string, { label: string; color: string; gradient: string }> = {
@@ -55,7 +51,7 @@ function DashboardHeader() {
               </svg>
               <input
                 type="text"
-                placeholder={t("dashboard.search")}
+                placeholder="Search tickets, customers, articles..."
                 className="w-full rounded-2xl border border-gray-200/60 bg-gray-50/50 pl-10 pr-4 py-2.5 text-sm placeholder-gray-400 focus:border-blue-500 focus:bg-white focus:outline-none focus:ring-4 focus:ring-blue-500/10 transition-all duration-300"
               />
               <kbd className="absolute right-3 top-1/2 -translate-y-1/2 rounded-lg border border-gray-200/60 bg-white/80 px-1.5 py-0.5 text-[10px] font-medium text-gray-400 hidden sm:inline-flex">⌘K</kbd>
@@ -65,12 +61,12 @@ function DashboardHeader() {
           <div className="flex items-center gap-2">
             <div className="hidden sm:flex items-center gap-2 px-3.5 py-2 rounded-2xl bg-gradient-to-r from-green-50/80 to-emerald-50/60 border border-green-200/60 mr-2">
               <span className="h-2 w-2 rounded-full bg-green-500 animate-pulse shadow-sm shadow-green-500/50" />
-              <span className="text-xs font-semibold text-green-700">{t("dashboard.aiActive")}</span>
+              <span className="text-xs font-semibold text-green-700">AI Active</span>
               <span className="text-[10px] text-green-600/60">·</span>
-              <span className="text-[10px] text-green-600 font-medium">67% {t("dashboard.autoResolved")}</span>
+              <span className="text-[10px] text-green-600 font-medium">67% auto-resolved</span>
             </div>
 
-            <LangToggle variant="minimal" />
+            <LangToggleMinimal />
 
             <button className="h-10 w-10 rounded-xl hover:bg-gray-100/80 flex items-center justify-center text-gray-500 hover:text-gray-700 transition-all duration-200 relative">
               <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -110,6 +106,27 @@ function DashboardHeader() {
   );
 }
 
+function LangToggleMinimal() {
+  const [lang, setLang] = useState<"en" | "fr">("en");
+  return (
+    <div className="flex items-center bg-gray-100 rounded-lg p-0.5">
+      {(["en", "fr"] as const).map((l) => (
+        <button
+          key={l}
+          onClick={() => setLang(l)}
+          className={`px-2.5 py-1 rounded-md text-[11px] font-bold transition-all ${
+            lang === l
+              ? "bg-white text-gray-900 shadow-sm"
+              : "text-gray-400 hover:text-gray-600"
+          }`}
+        >
+          {l.toUpperCase()}
+        </button>
+      ))}
+    </div>
+  );
+}
+
 export default function DashboardLayout({
   children,
 }: {
@@ -130,8 +147,6 @@ export default function DashboardLayout({
             <main className="p-4 sm:p-6 lg:p-8">{children}</main>
           </div>
         </div>
-
-        <ChatWidget />
       </div>
     </AuthProvider>
   );
