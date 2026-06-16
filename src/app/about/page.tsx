@@ -35,8 +35,7 @@ const values = [
       </svg>
     ),
     gradient: "from-blue-500 to-blue-600",
-    title: "Innovation",
-    desc: "Pushing boundaries of what AI can do for customer support",
+    tKey: "innovation",
   },
   {
     icon: (
@@ -45,8 +44,7 @@ const values = [
       </svg>
     ),
     gradient: "from-emerald-500 to-emerald-600",
-    title: "Reliability",
-    desc: "99.99% uptime SLA, never miss a ticket",
+    tKey: "reliability",
   },
   {
     icon: (
@@ -55,8 +53,7 @@ const values = [
       </svg>
     ),
     gradient: "from-purple-500 to-purple-600",
-    title: "Simplicity",
-    desc: "Complex AI made simple for any team to use",
+    tKey: "simplicity",
   },
   {
     icon: (
@@ -65,8 +62,7 @@ const values = [
       </svg>
     ),
     gradient: "from-amber-500 to-orange-500",
-    title: "Security",
-    desc: "Enterprise-grade security and compliance",
+    tKey: "security",
   },
 ];
 
@@ -78,10 +74,10 @@ const team = [
 ];
 
 const statItems = [
-  { value: "500+", label: "Teams Using SSV" },
-  { value: "3B+", label: "Tickets Processed" },
-  { value: "99.99%", label: "Uptime SLA" },
-  { value: "<50ms", label: "Avg Response Time" },
+  { value: "500+", labelKey: "aboutPage.numbers.teams", fallback: "Teams Using SSV" },
+  { value: "3B+", labelKey: "aboutPage.numbers.tickets", fallback: "Tickets Processed" },
+  { value: "99.99%", labelKey: "aboutPage.numbers.uptime", fallback: "Uptime SLA" },
+  { value: "<50ms", labelKey: "aboutPage.numbers.response", fallback: "Avg Response Time" },
 ];
 
 export default function AboutPage() {
@@ -143,37 +139,37 @@ export default function AboutPage() {
 
       <section className="max-w-[1200px] mx-auto px-6 py-24">
         <RevealSection className="text-center mb-16">
-          <p className="text-sm font-bold text-blue-600 uppercase tracking-[0.2em] mb-4">Our Mission</p>
+          <p className="text-sm font-bold text-blue-600 uppercase tracking-[0.2em] mb-4">{t("aboutPage.mission.label") || "Our Mission"}</p>
           <h2 className="text-[36px] sm:text-[48px] font-extrabold tracking-tight leading-[1.05] mb-6">
-            We&apos;re building the future of customer support with{" "}
+            {t("aboutPage.mission.title") || "We're building the future of customer support with"}{" "}
             <span className="italic text-blue-600">AI</span>
           </h2>
           <p className="text-gray-500 text-lg max-w-3xl mx-auto leading-relaxed">
-            SSV empowers businesses to deliver exceptional customer experiences through intelligent automation. We believe every customer interaction is an opportunity to build trust, and AI is the key to making that happen at scale.
+            {t("aboutPage.mission.desc") || "SSV empowers businesses to deliver exceptional customer experiences through intelligent automation."}
           </p>
         </RevealSection>
       </section>
 
       <section className="max-w-[1200px] mx-auto px-6 pb-24">
         <RevealSection className="text-center mb-16">
-          <p className="text-sm font-bold text-blue-600 uppercase tracking-[0.2em] mb-4">Our Values</p>
+          <p className="text-sm font-bold text-blue-600 uppercase tracking-[0.2em] mb-4">{t("aboutPage.values.label") || "Our Values"}</p>
           <h2 className="text-[36px] sm:text-[48px] font-extrabold tracking-tight leading-[1.05]">
-            What drives{" "}
-            <span className="italic text-blue-600">everything we build</span>
+            {t("aboutPage.values.title") || "What drives"}{" "}
+            <span className="italic text-blue-600">{t("aboutPage.values.subtitle") || "everything we build"}</span>
           </h2>
         </RevealSection>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
           {values.map((value, i) => (
-            <RevealSection key={value.title} delay={i * 80}>
+            <RevealSection key={value.tKey} delay={i * 80}>
               <div className="group relative h-full p-8 rounded-3xl border border-gray-100 bg-white hover:border-transparent transition-all duration-500 overflow-hidden hover:shadow-2xl hover:shadow-gray-200/50">
                 <div className={`absolute inset-0 rounded-3xl bg-gradient-to-br ${value.gradient} opacity-0 group-hover:opacity-[0.03] transition-opacity duration-500`} />
                 <div className={`absolute -inset-px rounded-3xl bg-gradient-to-br ${value.gradient} opacity-0 group-hover:opacity-100 transition-opacity duration-500 -z-10`} />
                 <div className={`h-14 w-14 rounded-2xl bg-gradient-to-br ${value.gradient} flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300 shadow-lg`}>
                   {value.icon}
                 </div>
-                <h3 className="text-xl font-bold text-gray-900 mb-3">{value.title}</h3>
-                <p className="text-sm text-gray-500 leading-relaxed">{value.desc}</p>
+                <h3 className="text-xl font-bold text-gray-900 mb-3">{t(`aboutPage.values.${value.tKey}.title`) || value.tKey}</h3>
+                <p className="text-sm text-gray-500 leading-relaxed">{t(`aboutPage.values.${value.tKey}.desc`)}</p>
               </div>
             </RevealSection>
           ))}
@@ -186,15 +182,15 @@ export default function AboutPage() {
           <RevealSection>
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
               <div>
-                <p className="text-sm font-bold text-blue-300 uppercase tracking-[0.2em] mb-4">Our Story</p>
+                <p className="text-sm font-bold text-blue-300 uppercase tracking-[0.2em] mb-4">{t("aboutPage.story.label") || "Our Story"}</p>
                 <h2 className="text-[36px] sm:text-[48px] font-extrabold text-white leading-[1.05] mb-6">
-                  Born from <span className="italic text-blue-400">frustration</span>
+                  {t("aboutPage.story.title") || "Born from"} <span className="italic text-blue-400">{t("aboutPage.story.subtitle") || "frustration"}</span>
                 </h2>
                 <p className="text-gray-300/80 text-lg leading-relaxed mb-6">
-                  Founded in Nigeria, SSV was born from the frustration of managing customer support across too many channels. We watched businesses struggle with fragmented tools, missed tickets, and unhappy customers.
+                  {t("aboutPage.story.p1") || "Founded in Nigeria, SSV was born from the frustration of managing customer support across too many channels."}
                 </p>
                 <p className="text-gray-300/80 text-lg leading-relaxed">
-                  We built the platform we wished existed — a single place where AI handles the repetitive work, agents focus on what matters, and no customer ever feels ignored. Today, SSV powers support for hundreds of teams across Africa and beyond.
+                  {t("aboutPage.story.p2") || "We built the platform we wished existed — a single place where AI handles the repetitive work."}
                 </p>
               </div>
               <div className="relative">
@@ -202,10 +198,10 @@ export default function AboutPage() {
                 <div className="relative bg-white/[0.08] backdrop-blur-md rounded-3xl p-8 border border-white/[0.08]">
                   <div className="space-y-4">
                     {[
-                      { year: "2023", event: "Founded in Lagos, Nigeria" },
-                      { year: "2024", event: "First 100 teams onboarded" },
-                      { year: "2025", event: "3 billion tickets processed" },
-                      { year: "2026", event: "Scaling across Africa & beyond" },
+                      { year: "2023", event: t("aboutPage.story.m1") || "Founded in Lagos, Nigeria" },
+                      { year: "2024", event: t("aboutPage.story.m2") || "First 100 teams onboarded" },
+                      { year: "2025", event: t("aboutPage.story.m3") || "3 billion tickets processed" },
+                      { year: "2026", event: t("aboutPage.story.m4") || "Scaling across Africa & beyond" },
                     ].map((milestone) => (
                       <div key={milestone.year} className="flex items-center gap-4">
                         <div className="h-10 w-10 rounded-xl bg-blue-500/20 flex items-center justify-center shrink-0">
@@ -225,9 +221,9 @@ export default function AboutPage() {
 
       <section className="max-w-[1200px] mx-auto px-6 py-24">
         <RevealSection className="text-center mb-16">
-          <p className="text-sm font-bold text-blue-600 uppercase tracking-[0.2em] mb-4">Our Team</p>
+          <p className="text-sm font-bold text-blue-600 uppercase tracking-[0.2em] mb-4">{t("aboutPage.team.label") || "Our Team"}</p>
           <h2 className="text-[36px] sm:text-[48px] font-extrabold tracking-tight leading-[1.05]">
-            The people behind{" "}
+            {t("aboutPage.team.title") || "The people behind"}{" "}
             <span className="italic text-blue-600">SSV</span>
           </h2>
         </RevealSection>
@@ -250,16 +246,16 @@ export default function AboutPage() {
 
       <section ref={statsRef} className="max-w-[1200px] mx-auto px-6 pb-24">
         <RevealSection className="text-center mb-12">
-          <p className="text-sm font-bold text-blue-600 uppercase tracking-[0.2em] mb-4">By The Numbers</p>
+          <p className="text-sm font-bold text-blue-600 uppercase tracking-[0.2em] mb-4">{t("aboutPage.numbers.label") || "By The Numbers"}</p>
           <h2 className="text-[36px] sm:text-[48px] font-extrabold tracking-tight leading-[1.05]">
-            Trusted by teams across{" "}
-            <span className="italic text-blue-600">Nigeria</span>
+            {t("aboutPage.numbers.title") || "Trusted by teams across"}{" "}
+            <span className="italic text-blue-600">{t("aboutPage.numbers.subtitle") || "Nigeria"}</span>
           </h2>
         </RevealSection>
 
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
           {statItems.map((stat, i) => (
-            <div key={stat.label} className="bg-white rounded-2xl border border-gray-100 p-6 text-center shadow-lg shadow-gray-100/50 hover:shadow-xl transition-shadow duration-300">
+            <div key={stat.labelKey} className="bg-white rounded-2xl border border-gray-100 p-6 text-center shadow-lg shadow-gray-100/50 hover:shadow-xl transition-shadow duration-300">
               <div className="text-3xl sm:text-4xl font-extrabold text-gray-900 mb-1">
                 {statsVisible ? (
                   <>
@@ -270,7 +266,7 @@ export default function AboutPage() {
                   <span className="opacity-0">0</span>
                 )}
               </div>
-              <div className="text-sm text-gray-400 font-medium">{stat.label}</div>
+              <div className="text-sm text-gray-400 font-medium">{t(stat.labelKey) || stat.fallback}</div>
             </div>
           ))}
         </div>
@@ -280,20 +276,20 @@ export default function AboutPage() {
         <div className="absolute top-0 left-0 right-0 h-16 bg-gradient-to-b from-white to-transparent" />
         <div className="max-w-[800px] mx-auto px-6 text-center relative">
           <RevealSection>
-            <p className="text-sm font-bold text-blue-300 uppercase tracking-[0.2em] mb-4">Join Us</p>
+            <p className="text-sm font-bold text-blue-300 uppercase tracking-[0.2em] mb-4">{t("aboutPage.cta.label") || "Join Us"}</p>
             <h2 className="text-[36px] sm:text-[48px] font-extrabold tracking-tight text-white mb-6 leading-[1.1]">
-              Ready to build the future of{" "}
-              <span className="italic text-blue-400">support?</span>
+              {t("aboutPage.cta.title") || "Ready to build the future of"}{" "}
+              <span className="italic text-blue-400">{t("aboutPage.cta.subtitle") || "support?"}</span>
             </h2>
             <p className="text-gray-300/80 text-lg mb-10">
-              Whether you&apos;re a business looking for better support or an engineer passionate about AI, we&apos;d love to have you.
+              {t("aboutPage.cta.desc") || "Whether you're a business looking for better support or an engineer passionate about AI."}
             </p>
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
               <Link href="/login" className="inline-flex items-center gap-2 px-10 py-4 bg-white text-gray-900 rounded-full text-[15px] font-semibold hover:bg-gray-100 transition-all shadow-lg">
-                Get Started
+                {t("aboutPage.cta.getStarted") || "Get Started"}
               </Link>
               <a href="mailto:careers@ssv.com" className="inline-flex items-center gap-2 px-10 py-4 bg-transparent border-2 border-blue-400/40 text-blue-300 rounded-full text-[15px] font-semibold hover:bg-blue-400/10 transition-all">
-                View Careers
+                {t("aboutPage.cta.careers") || "View Careers"}
               </a>
             </div>
           </RevealSection>
