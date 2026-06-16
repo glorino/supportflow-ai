@@ -487,6 +487,14 @@ export const translations = {
     errorConnection: { en: "Connection failed. Please try again.", fr: "Connexion échouée. Veuillez réessayer." },
   },
   dashboardPage: {
+    channels: {
+      whatsapp: { en: "WhatsApp", fr: "WhatsApp" },
+      email: { en: "Email", fr: "Email" },
+      web: { en: "Web Chat", fr: "Chat Web" },
+      sms: { en: "SMS", fr: "SMS" },
+      messenger: { en: "Messenger", fr: "Messenger" },
+      instagram: { en: "Instagram", fr: "Instagram" },
+    },
     title: { en: "Dashboard", fr: "Tableau de bord" },
     welcomeBack: { en: "Welcome back, {name}. Here's your SSV support overview.", fr: "Bon retour, {name}. Voici votre aperçu du support SSV." },
     export: { en: "Export", fr: "Exporter" },
@@ -675,6 +683,7 @@ export const translations = {
     sentimentDistribution: { en: "Sentiment Distribution", fr: "Distribution des sentiments" },
     sentimentDesc: { en: "Customer emotion breakdown", fr: "Répartition des émotions clients" },
     aiPerformance: { en: "AI Performance", fr: "Performance IA" },
+    slaCompliance: { en: "SLA Compliance", fr: "Conformité SLA" },
     agentMetrics: { en: "Agent metrics", fr: "Métriques des agents" },
   },
   teamsPage: {
