@@ -5,6 +5,7 @@ import { AuthProvider, useAuth, getInitials } from "@/lib/auth/context";
 import Link from "next/link";
 import { useState } from "react";
 import { useLang } from "@/lib/i18n/context";
+import { ChatWidget } from "@/components/chat-widget";
 
 function MobileMenu({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }) {
   if (!isOpen) return null;
@@ -109,15 +110,15 @@ function DashboardHeader() {
 }
 
 function LangToggleMinimal() {
-  const [lang, setLang] = useState<"en" | "fr">("en");
+  const { locale, setLocale } = useLang();
   return (
     <div className="flex items-center bg-gray-100 rounded-lg p-0.5">
       {(["en", "fr"] as const).map((l) => (
         <button
           key={l}
-          onClick={() => setLang(l)}
+          onClick={() => setLocale(l)}
           className={`px-2.5 py-1 rounded-md text-[11px] font-bold transition-all ${
-            lang === l
+            locale === l
               ? "bg-white text-gray-900 shadow-sm"
               : "text-gray-400 hover:text-gray-600"
           }`}
@@ -149,6 +150,7 @@ export default function DashboardLayout({
             <main className="p-4 sm:p-6 lg:p-8">{children}</main>
           </div>
         </div>
+        <ChatWidget />
       </div>
     </AuthProvider>
   );

@@ -141,16 +141,18 @@ const channels = [
   },
 ];
 
-const comparisonFeatures = [
-  { feature: "Real-time messaging", whatsapp: true, messenger: true, instagram: true, telegram: true, email: true, sms: true },
-  { feature: "Rich media support", whatsapp: true, messenger: true, instagram: true, telegram: true, email: true, sms: false },
-  { feature: "Read receipts", whatsapp: true, messenger: true, instagram: true, telegram: true, email: false, sms: false },
-  { feature: "AI auto-response", whatsapp: true, messenger: true, instagram: true, telegram: true, email: true, sms: true },
-  { feature: "Template messaging", whatsapp: true, messenger: false, instagram: false, telegram: true, email: true, sms: true },
-  { feature: "Group support", whatsapp: true, messenger: true, instagram: false, telegram: true, email: true, sms: false },
-  { feature: "File attachments", whatsapp: true, messenger: true, instagram: true, telegram: true, email: true, sms: false },
-  { feature: "End-to-end encryption", whatsapp: true, messenger: false, instagram: false, telegram: true, email: false, sms: false },
-];
+function getComparisonFeatures(t: (key: string) => string) {
+  return [
+    { feature: t("channelsPage.comparison.realtimeMessaging") || "Real-time messaging", whatsapp: true, messenger: true, instagram: true, telegram: true, email: true, sms: true },
+    { feature: t("channelsPage.comparison.richMedia") || "Rich media support", whatsapp: true, messenger: true, instagram: true, telegram: true, email: true, sms: false },
+    { feature: t("channelsPage.comparison.readReceipts") || "Read receipts", whatsapp: true, messenger: true, instagram: true, telegram: true, email: false, sms: false },
+    { feature: t("channelsPage.comparison.aiAutoResponse") || "AI auto-response", whatsapp: true, messenger: true, instagram: true, telegram: true, email: true, sms: true },
+    { feature: t("channelsPage.comparison.templateMessaging") || "Template messaging", whatsapp: true, messenger: false, instagram: false, telegram: true, email: true, sms: true },
+    { feature: t("channelsPage.comparison.groupSupport") || "Group support", whatsapp: true, messenger: true, instagram: false, telegram: true, email: true, sms: false },
+    { feature: t("channelsPage.comparison.fileAttachments") || "File attachments", whatsapp: true, messenger: true, instagram: true, telegram: true, email: true, sms: false },
+    { feature: t("channelsPage.comparison.e2eEncryption") || "End-to-end encryption", whatsapp: true, messenger: false, instagram: false, telegram: true, email: false, sms: false },
+  ];
+}
 
 const channelTKeys: Record<string, string> = {
   "WhatsApp": "whatsapp",
@@ -276,11 +278,11 @@ export default function ChannelsPage() {
                       </div>
                       <div className="text-center">
                         <div className="text-lg font-extrabold text-gray-900">{ch.uptime}</div>
-                        <div className="text-[10px] text-gray-400 mt-0.5">Uptime</div>
+                        <div className="text-[10px] text-gray-400 mt-0.5">{t("misc.uptime") || "Uptime"}</div>
                       </div>
                       <div className="text-center">
                         <div className="text-lg font-extrabold text-gray-900">{ch.latency}</div>
-                        <div className="text-[10px] text-gray-400 mt-0.5">Latency</div>
+                        <div className="text-[10px] text-gray-400 mt-0.5">{t("misc.latency") || "Latency"}</div>
                       </div>
                     </div>
                   </div>
@@ -294,12 +296,12 @@ export default function ChannelsPage() {
         <section className="py-24 bg-[#f8fafc]">
           <div className="max-w-[1200px] mx-auto px-6">
             <RevealSection className="text-center mb-16">
-              <p className="text-sm font-bold text-blue-600 uppercase tracking-[0.2em] mb-4">Compare Channels</p>
+              <p className="text-sm font-bold text-blue-600 uppercase tracking-[0.2em] mb-4">{t("channelsPage.comparison.label") || "Compare Channels"}</p>
               <h2 className="text-[40px] sm:text-[52px] font-extrabold tracking-tight leading-[1.05]">
-                Feature comparison <span className="italic text-blue-600">across all channels</span>
+                {t("channelsPage.comparison.title") || "Feature comparison"} <span className="italic text-blue-600">{t("channelsPage.comparison.acrossAll") || "across all channels"}</span>
               </h2>
               <p className="text-gray-500 text-lg max-w-2xl mx-auto mt-4">
-                Every channel is built with the same reliability standards. Choose the right mix for your customers.
+                {t("channelsPage.comparison.desc") || "Every channel is built with the same reliability standards. Choose the right mix for your customers."}
               </p>
             </RevealSection>
 
@@ -309,7 +311,7 @@ export default function ChannelsPage() {
                   <table className="w-full min-w-[800px]">
                     <thead>
                       <tr className="border-b border-gray-100">
-                        <th className="text-left px-6 py-4 text-sm font-bold text-gray-500 uppercase tracking-wider">Feature</th>
+                        <th className="text-left px-6 py-4 text-sm font-bold text-gray-500 uppercase tracking-wider">{t("channelsPage.comparison.featureHeader") || "Feature"}</th>
                         {channels.map((ch) => (
                           <th key={ch.name} className="text-center px-4 py-4">
                             <div className="flex flex-col items-center gap-2">
@@ -326,7 +328,7 @@ export default function ChannelsPage() {
                       </tr>
                     </thead>
                     <tbody>
-                      {comparisonFeatures.map((row, i) => (
+                      {getComparisonFeatures(t).map((row, i) => (
                         <tr key={row.feature} className={`border-b border-gray-50 ${i % 2 === 0 ? "bg-gray-50/50" : ""}`}>
                           <td className="px-6 py-4 text-sm font-medium text-gray-700">{row.feature}</td>
                           {[
@@ -368,18 +370,18 @@ export default function ChannelsPage() {
           <div className="max-w-[1200px] mx-auto px-6">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
               <RevealSection>
-                <p className="text-sm font-bold text-blue-600 uppercase tracking-[0.2em] mb-4">Developer-First</p>
+                <p className="text-sm font-bold text-blue-600 uppercase tracking-[0.2em] mb-4">{t("channelsPage.developer.label") || "Developer-First"}</p>
                 <h2 className="text-[40px] sm:text-[48px] font-extrabold leading-[1.05] mb-6">
-                  Connect in <span className="italic text-blue-600">minutes, not days</span>
+                  {t("channelsPage.developer.titleConnect") || "Connect in"} <span className="italic text-blue-600">{t("channelsPage.developer.titleTime") || "minutes, not days"}</span>
                 </h2>
                 <p className="text-gray-500 text-lg leading-relaxed mb-8">
-                  SSV provides a clean, intuitive API that makes channel integration effortless. One endpoint per channel, consistent response formats, and comprehensive documentation.
+                  {t("channelsPage.developer.desc") || "SSV provides a clean, intuitive API that makes channel integration effortless. One endpoint per channel, consistent response formats, and comprehensive documentation."}
                 </p>
                 <div className="space-y-4">
                   {[
-                    { title: "RESTful API", desc: "Simple HTTP endpoints with JSON payloads" },
-                    { title: "Webhook support", desc: "Real-time event notifications for every message" },
-                    { title: "SDK libraries", desc: "Official libraries for Node.js, Python, PHP, and Go" },
+                    { title: t("channelsPage.developer.restApiTitle") || "RESTful API", desc: t("channelsPage.developer.restApiDesc") || "Simple HTTP endpoints with JSON payloads" },
+                    { title: t("channelsPage.developer.webhookTitle") || "Webhook support", desc: t("channelsPage.developer.webhookDesc") || "Real-time event notifications for every message" },
+                    { title: t("channelsPage.developer.sdkTitle") || "SDK libraries", desc: t("channelsPage.developer.sdkDesc") || "Official libraries for Node.js, Python, PHP, and Go" },
                   ].map((f) => (
                     <div key={f.title} className="flex items-start gap-4">
                       <div className="h-8 w-8 rounded-lg bg-blue-50 flex items-center justify-center shrink-0 mt-0.5">
@@ -402,7 +404,7 @@ export default function ChannelsPage() {
                     <span className="h-3 w-3 rounded-full bg-red-500/80" />
                     <span className="h-3 w-3 rounded-full bg-yellow-500/80" />
                     <span className="h-3 w-3 rounded-full bg-green-500/80" />
-                    <span className="ml-3 text-xs font-mono text-gray-400">channels.ts</span>
+                    <span className="ml-3 text-xs font-mono text-gray-400">{t("channelsPage.developer.codeFileName") || "channels.ts"}</span>
                   </div>
                   <pre className="p-6 text-sm font-mono text-gray-300 overflow-x-auto leading-relaxed">
                     <code>{`import { SSV } from '@ssv/sdk';
@@ -411,7 +413,7 @@ const ssv = new SSV({
   apiKey: 'your-api-key'
 });
 
-// Connect WhatsApp channel
+// ${t("channelsPage.developer.commentWhatsApp") || "Connect WhatsApp channel"}
 await ssv.channels.connect({
   type: 'whatsapp',
   phone: '+234801234567',
@@ -420,7 +422,7 @@ await ssv.channels.connect({
   aiEnabled: true
 });
 
-// Connect Email channel
+// ${t("channelsPage.developer.commentEmail") || "Connect Email channel"}
 await ssv.channels.connect({
   type: 'email',
   imap: 'imap.example.com',
@@ -433,7 +435,7 @@ await ssv.channels.connect({
   aiEnabled: true
 });
 
-// Connect SMS via Termii
+// ${t("channelsPage.developer.commentSms") || "Connect SMS via Termii"}
 await ssv.channels.connect({
   type: 'sms',
   provider: 'termii',
@@ -442,7 +444,7 @@ await ssv.channels.connect({
   autoReply: true
 });
 
-// All channels are now live
+// ${t("channelsPage.developer.commentAllLive") || "All channels are now live"}
 const status = await ssv.channels.list();
 console.log(status);`}</code>
                   </pre>
@@ -457,10 +459,10 @@ console.log(status);`}</code>
           <div className="max-w-[1200px] mx-auto px-6">
             <div className="grid grid-cols-2 lg:grid-cols-4 gap-8">
               {[
-                { value: "6+", label: "Channels supported", color: "text-blue-400" },
-                { value: "99.99%", label: "Average uptime", color: "text-green-400" },
-                { value: "<50ms", label: "Average latency", color: "text-purple-400" },
-                { value: "50M+", label: "Messages processed daily", color: "text-orange-400" },
+                { value: "6+", label: t("channelsPage.stats.channelsSupported") || "Channels supported", color: "text-blue-400" },
+                { value: "99.99%", label: t("channelsPage.stats.avgUptime") || "Average uptime", color: "text-green-400" },
+                { value: "<50ms", label: t("channelsPage.stats.avgLatency") || "Average latency", color: "text-purple-400" },
+                { value: "50M+", label: t("channelsPage.stats.messagesDaily") || "Messages processed daily", color: "text-orange-400" },
               ].map((stat, i) => (
                 <RevealSection key={stat.label} delay={i * 100}>
                   <div className="text-center">
@@ -478,10 +480,10 @@ console.log(status);`}</code>
           <div className="max-w-[800px] mx-auto px-6 text-center">
             <RevealSection>
               <h2 className="text-[40px] sm:text-[52px] font-extrabold tracking-tight mb-6 leading-[1.1]">
-                Ready to unify your <span className="italic text-blue-600">customer channels?</span>
+                {t("channelsPage.ctaSection.titleReady") || "Ready to unify your"} <span className="italic text-blue-600">{t("channelsPage.ctaSection.titleChannels") || "customer channels?"}</span>
               </h2>
               <p className="text-gray-500 text-lg mb-10">
-                Start connecting your channels today. No setup fees, no long-term contracts.
+                {t("channelsPage.ctaSection.desc") || "Start connecting your channels today. No setup fees, no long-term contracts."}
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
                 <a

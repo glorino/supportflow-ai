@@ -61,19 +61,19 @@ const agents = [
   },
 ];
 
-const pipeline = [
-  { label: "Intake", color: "bg-blue-500", icon: "📥" },
-  { label: "Knowledge", color: "bg-emerald-500", icon: "📚" },
-  { label: "Resolution", color: "bg-purple-500", icon: "✅" },
-  { label: "QA", color: "bg-amber-500", icon: "🔍" },
-  { label: "Escalate", color: "bg-red-500", icon: "🚨", condition: "if needed" },
+const getPipeline = (t: (key: string) => string) => [
+  { label: t("agentsPage.pipelineLabel.intake"), color: "bg-blue-500", icon: "📥" },
+  { label: t("agentsPage.pipelineLabel.knowledge"), color: "bg-emerald-500", icon: "📚" },
+  { label: t("agentsPage.pipelineLabel.resolution"), color: "bg-purple-500", icon: "✅" },
+  { label: t("agentsPage.pipelineLabel.qa"), color: "bg-amber-500", icon: "🔍" },
+  { label: t("agentsPage.pipelineLabel.escalate"), color: "bg-red-500", icon: "🚨", condition: t("agentsPage.pipelineCondition") },
 ];
 
-const stats = [
-  { value: "67%", label: "auto-resolution", color: "text-emerald-400" },
-  { value: "<50ms", label: "classification", color: "text-blue-400" },
-  { value: "24/7", label: "availability", color: "text-purple-400" },
-  { value: "9", label: "specialized agents", color: "text-amber-400" },
+const getStats = (t: (key: string) => string) => [
+  { value: "67%", label: t("agentsPage.statLabel.autoResolution"), color: "text-emerald-400" },
+  { value: "<50ms", label: t("agentsPage.statLabel.classification"), color: "text-blue-400" },
+  { value: "24/7", label: t("agentsPage.statLabel.availability"), color: "text-purple-400" },
+  { value: "9", label: t("agentsPage.statLabel.specializedAgents"), color: "text-amber-400" },
 ];
 
 function AgentIcon({ gradient }: { gradient: string }) {
@@ -88,11 +88,11 @@ function AgentIcon({ gradient }: { gradient: string }) {
   );
 }
 
-function StatusBadge() {
+function StatusBadge({ t }: { t: (key: string) => string }) {
   return (
     <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
       <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
-      Active
+      {t("agentsPage.statusActive")}
     </span>
   );
 }
@@ -204,7 +204,7 @@ export default function AgentsPage() {
           className="max-w-5xl mx-auto px-4 py-12"
         >
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-            {stats.map((stat, i) => (
+            {getStats(t).map((stat, i) => (
               <div
                 key={stat.label}
                 className={`relative group p-6 rounded-2xl bg-white/[0.03] border border-white/[0.06] backdrop-blur-sm text-center transition-all duration-500 hover:bg-white/[0.06] hover:border-white/[0.12] hover:scale-[1.02] ${
@@ -254,7 +254,7 @@ export default function AgentsPage() {
                 <div className="relative">
                   <div className="flex items-start justify-between mb-4">
                     <AgentIcon gradient={agent.gradient} />
-                    <StatusBadge />
+                    <StatusBadge t={t} />
                   </div>
 
                   <h3 className="text-xl font-semibold text-white mb-2">{t(`agentsPage.${agent.id}.name`) || agent.id}</h3>
@@ -299,7 +299,7 @@ export default function AgentsPage() {
             <div className="hidden md:block absolute top-1/2 left-0 right-0 h-px bg-gradient-to-r from-transparent via-white/10 to-transparent -translate-y-1/2" />
 
             <div className="flex flex-col md:flex-row items-center justify-between gap-4 md:gap-2">
-              {pipeline.map((step, i) => (
+              {getPipeline(t).map((step, i) => (
                 <div
                   key={step.label}
                   className={`relative flex flex-col items-center transition-all duration-700 ${
