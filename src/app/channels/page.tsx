@@ -152,6 +152,15 @@ const comparisonFeatures = [
   { feature: "End-to-end encryption", whatsapp: true, messenger: false, instagram: false, telegram: true, email: false, sms: false },
 ];
 
+const channelTKeys: Record<string, string> = {
+  "WhatsApp": "whatsapp",
+  "Facebook Messenger": "messenger",
+  "Instagram DM": "instagram",
+  "Email": "email",
+  "SMS": "sms",
+  "Web Chat": "webchat",
+};
+
 export default function ChannelsPage() {
   const { t } = useLang();
   const [demoOpen, setDemoOpen] = useState(false);
@@ -238,11 +247,11 @@ export default function ChannelsPage() {
                     </div>
 
                     <h3 className="text-xl font-bold text-gray-900 mb-1">{ch.name}</h3>
-                    <p className="text-sm font-medium text-gray-400 mb-4">{ch.category}</p>
-                    <p className="text-sm text-gray-500 leading-relaxed mb-6">{ch.description}</p>
+                    <p className="text-sm font-medium text-gray-400 mb-4">{t(`channelsPage.${channelTKeys[ch.name]}.category`) || ch.category}</p>
+                    <p className="text-sm text-gray-500 leading-relaxed mb-6">{t(`channelsPage.${channelTKeys[ch.name]}.desc`) || ch.description}</p>
 
                     <div className="flex flex-wrap gap-2 mb-6">
-                      {ch.features.map((f) => (
+                      {(t(`channelsPage.${channelTKeys[ch.name]}.features`) || ch.features.join(",")).split(",").map((f: string) => (
                         <span
                           key={f}
                           className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-[12px] font-medium border"
@@ -263,7 +272,7 @@ export default function ChannelsPage() {
                     <div className="grid grid-cols-3 gap-3 pt-6 border-t border-gray-100">
                       <div className="text-center">
                         <div className="text-lg font-extrabold text-gray-900">{ch.users}</div>
-                        <div className="text-[10px] text-gray-400 mt-0.5">{ch.usersLabel}</div>
+                        <div className="text-[10px] text-gray-400 mt-0.5">{t(`channelsPage.${channelTKeys[ch.name]}.usersLabel`) || ch.usersLabel}</div>
                       </div>
                       <div className="text-center">
                         <div className="text-lg font-extrabold text-gray-900">{ch.uptime}</div>

@@ -119,10 +119,91 @@ export const translations = {
   channelsPage: {
     title: { en: "Channel Integrations", fr: "Intégrations de Canaux" },
     subtitle: { en: "Connect every communication channel your customers use into one unified inbox.", fr: "Connectez chaque canal de communication utilisé par vos clients dans une boîte de réception unifiée." },
+    whatsapp: {
+      category: { en: "Instant Messaging", fr: "Messagerie instantanée" },
+      desc: { en: "Reach customers on the world's most popular messaging app. Rich media, read receipts, and end-to-end encryption built in.", fr: "Atteignez les clients sur l'application de messagerie la plus populaire. Médias enrichis, accusés de réception et chiffrement de bout en bout." },
+      usersLabel: { en: "users worldwide", fr: "utilisateurs dans le monde" },
+      features: { en: "Rich media support,Read receipts,End-to-end encryption,Template messaging", fr: "Support médias enrichis,Accusés de réception,Chiffrement de bout en bout,Messagerie par modèles" },
+    },
+    messenger: {
+      category: { en: "Facebook Integration", fr: "Intégration Facebook" },
+      desc: { en: "Seamlessly connect with Facebook's massive user base. Handle inquiries directly from your business page with AI-powered responses.", fr: "Connectez-vous facilement à l'immense base d'utilisateurs de Facebook. Gérez les demandes directement depuis votre page entreprise." },
+      usersLabel: { en: "monthly users", fr: "utilisateurs mensuels" },
+      features: { en: "Facebook Page integration,Automated replies,Messenger plugins,Quick replies", fr: "Intégration Page Facebook,Réponses automatisées,Plugins Messenger,Réponses rapides" },
+    },
+    instagram: {
+      category: { en: "Social Media", fr: "Réseaux sociaux" },
+      desc: { en: "Handle Instagram DMs alongside all your other channels. Perfect for brands with a strong visual presence.", fr: "Gérez les DM Instagram avec vos autres canaux. Parfait pour les marques avec une forte présence visuelle." },
+      usersLabel: { en: "monthly users", fr: "utilisateurs mensuels" },
+      features: { en: "DM support,Story mentions,Visual media handling,Auto-replies", fr: "Support DM,Mentions Stories,Gestion des médias visuels,Réponses auto" },
+    },
+    email: {
+      category: { en: "Email Integration", fr: "Intégration Email" },
+      desc: { en: "Full IMAP/SMTP support. Send and receive emails with AI-powered classification and response drafting.", fr: "Support IMAP/SMTP complet. Envoyez et recevez des emails avec classification IA et brouillon de réponses." },
+      usersLabel: { en: "billion users", fr: "milliards d'utilisateurs" },
+      features: { en: "IMAP/SMTP support,Auto-classification,Template responses,Attachment handling", fr: "Support IMAP/SMTP,Classification auto,Réponses par modèles,Gestion des pièces jointes" },
+    },
+    sms: {
+      category: { en: "SMS Gateway", fr: " passerelle SMS" },
+      desc: { en: "Termii-powered delivery across Nigeria and beyond. Transactional SMS, OTPs, and two-way messaging.", fr: "Livraison via Termii au Nigéria et au-delà. SMS transactionnels, OTP et messagerie bidirectionnelle." },
+      usersLabel: { en: "deliveries/month", fr: "livraisons/mois" },
+      features: { en: "Termii-powered delivery,Two-way SMS,OTP support,Delivery tracking", fr: "Livraison via Termii,SMS bidirectionnel,Suivi de livraison,Suivi OTP" },
+    },
+    webchat: {
+      category: { en: "Web Widget", fr: "Widget Web" },
+      desc: { en: "Embeddable chat widget for your website. Customizable, lightweight, and powered by your AI agents.", fr: "Widget de chat intégrable pour votre site web. Personnalisable, léger et propulsé par vos agents IA." },
+      usersLabel: { en: "embeddable", fr: "intégrable" },
+      features: { en: "Customizable theme,Mobile responsive,Agent handoff,Pre-chat forms", fr: "Thème personnalisable,Responsive mobile,Transfert agent,Formulaires pré-chat" },
+    },
   },
   agentsPage: {
     title: { en: "AI Agent Suite", fr: "Suite d'Agents IA" },
     subtitle: { en: "Nine intelligent agents working together to resolve your support tickets.", fr: "Neuf agents intelligents travaillant ensemble pour résoudre vos tickets de support." },
+    intake: {
+      name: { en: "Intake Agent", fr: "Agent Réception" },
+      desc: { en: "Classifies and routes incoming tickets based on intent, sentiment, and priority levels.", fr: "Classe et route les tickets entrants selon l'intention, le sentiment et les niveaux de priorité." },
+      capabilities: { en: "Auto-classification,Priority detection,Intent analysis,Multi-channel intake", fr: "Classification auto,Détection de priorité,Analyse d'intention,Ingestion multi-canaux" },
+    },
+    knowledge: {
+      name: { en: "Knowledge Agent", fr: "Agent Connaissances" },
+      desc: { en: "Searches and retrieves relevant articles from your knowledge base to power resolutions.", fr: "Recherche et récupère les articles pertinents de votre base de connaissances." },
+      capabilities: { en: "Semantic search,Article matching,Context enrichment,Gap detection", fr: "Recherche sémantique,Correspondance d'articles enrichissement de contexte,Détection de lacunes" },
+    },
+    resolution: {
+      name: { en: "Resolution Agent", fr: "Agent Résolution" },
+      desc: { en: "Auto-resolves common issues without human intervention using learned patterns.", fr: "Résout automatiquement les problèmes courants sans intervention humaine." },
+      capabilities: { en: "Pattern matching,Step-by-step fixes,Self-learning,Escalation triggers", fr: "Correspondance de motifs,Corrections étape par étape,Auto-apprentissage,Déclencheurs d'escalade" },
+    },
+    qa: {
+      name: { en: "QA Agent", fr: "Agent AQ" },
+      desc: { en: "Monitors response quality, tone, and compliance across all support interactions.", fr: "Surveille la qualité, le ton et la conformité de toutes les interactions de support." },
+      capabilities: { en: "Tone analysis,Compliance checks,Quality scoring,Coaching tips", fr: "Analyse de ton,Vérifications de conformité,Évaluation de qualité,Conseils de coaching" },
+    },
+    escalation: {
+      name: { en: "Escalation Agent", fr: "Agent Escalade" },
+      desc: { en: "Routes critical issues to the right team with full context and recommended actions.", fr: "Route les problèmes critiques vers la bonne équipe avec le contexte complet." },
+      capabilities: { en: "Smart routing,Context packaging,SLA tracking,Team assignment", fr: "Routage intelligent,Embassage de contexte,Suivi SLA,Attribution d'équipe" },
+    },
+    sentiment: {
+      name: { en: "Sentiment Agent", fr: "Agent Sentiment" },
+      desc: { en: "Detects emotions in real-time across all channels to prioritize empathy-driven responses.", fr: "Détecte les émotions en temps réel sur tous les canaux pour prioriser les réponses empathiques." },
+      capabilities: { en: "Real-time detection,Multi-language,Trend tracking,Alert triggers", fr: "Détection en temps réel,Multi-langues,Suivi de tendances,Déclencheurs d'alerte" },
+    },
+    analytics: {
+      name: { en: "Analytics Agent", fr: "Agent Analytique" },
+      desc: { en: "Generates insights, trend reports, and actionable recommendations from support data.", fr: "Génère des insights, rapports de tendances et recommandations actionnables." },
+      capabilities: { en: "Trend analysis,Custom reports,Predictive insights,Data visualization", fr: "Analyse de tendances,Rapports personnalisés,Insights prédictifs,Visualisation de données" },
+    },
+    routing: {
+      name: { en: "Routing Agent", fr: "Agent Routage" },
+      desc: { en: "Intelligently assigns tickets to the best-suited agent based on expertise, workload, and context.", fr: "Attribue intelligemment les tickets à l'agent le plus compétent selon l'expertise et le contexte." },
+      capabilities: { en: "Load balancing,Skill matching,Priority queuing,Round-robin fallback", fr: "Équilibrage de charge,Correspondance de compétences,File de priorité,Rotation de secours" },
+    },
+    feedback: {
+      name: { en: "Feedback Agent", fr: "Agent Feedback" },
+      desc: { en: "Collects, analyzes, and acts on customer feedback to continuously improve support quality.", fr: "Collecte, analyse et agit sur les retours clients pour améliorer continuellement la qualité." },
+      capabilities: { en: "CSAT surveys,NPS tracking,Sentiment trends,Actionable insights", fr: "Enquêtes CSAT,Suivi NPS,Tendances de sentiment,Insights actionnables" },
+    },
   },
   aboutPage: {
     title: { en: "About SSV", fr: "À propos de SSV" },
