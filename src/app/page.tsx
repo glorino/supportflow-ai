@@ -54,34 +54,34 @@ export default function HomePage() {
   const [stats, setStats] = useState<any>(null);
   const [demoOpen, setDemoOpen] = useState(false);
 
-  const heroWords = [t("heroWords.ticket"), t("heroWords.query"), t("heroWords.complaint"), t("heroWords.request")];
+  const heroWords = [t("landing.heroWords.ticket"), t("landing.heroWords.query"), t("landing.heroWords.complaint"), t("landing.heroWords.request")];
 
   const features = [
-    { num: "01", title: t("features.f1.title"), desc: t("features.f1.desc"), color: "blue", gradient: "from-blue-500 to-blue-600", bg: "bg-blue-50", border: "border-blue-100", text: "text-blue-600", iconBg: "bg-blue-500", bullets: [t("features.f1.b1"), t("features.f1.b2"), t("features.f1.b3")], feed: [{ icon: "✓", text: t("features.f1.e1i"), detail: t("features.f1.e1d") }, { icon: "✓", text: t("features.f1.e2i"), detail: t("features.f1.e2d") }, { icon: "✓", text: t("features.f1.e3i"), detail: t("features.f1.e3d") }] },
-    { num: "02", title: t("features.f2.title"), desc: t("features.f2.desc"), color: "emerald", gradient: "from-emerald-500 to-emerald-600", bg: "bg-emerald-50", border: "border-emerald-100", text: "text-emerald-600", iconBg: "bg-emerald-500", bullets: [t("features.f2.b1"), t("features.f2.b2"), t("features.f2.b3")], feed: [{ icon: "✓", text: t("features.f2.e1i"), detail: t("features.f2.e1d") }, { icon: "✓", text: t("features.f2.e2i"), detail: t("features.f2.e2d") }, { icon: "✓", text: t("features.f2.e3i"), detail: t("features.f2.e3d") }] },
-    { num: "03", title: t("features.f3.title"), desc: t("features.f3.desc"), color: "purple", gradient: "from-purple-500 to-purple-600", bg: "bg-purple-50", border: "border-purple-100", text: "text-purple-600", iconBg: "bg-purple-500", bullets: [t("features.f3.b1"), t("features.f3.b2"), t("features.f3.b3")], feed: [{ icon: "✓", text: t("features.f3.e1i"), detail: t("features.f3.e1d") }, { icon: "✓", text: t("features.f3.e2i"), detail: t("features.f3.e2d") }, { icon: "!", text: t("features.f3.e3i"), detail: t("features.f3.e3d") }] },
-    { num: "04", title: t("features.f4.title"), desc: t("features.f4.desc"), color: "amber", gradient: "from-amber-500 to-amber-600", bg: "bg-amber-50", border: "border-amber-100", text: "text-amber-600", iconBg: "bg-amber-500", bullets: [t("features.f4.b1"), t("features.f4.b2"), t("features.f4.b3")], feed: [{ icon: "✓", text: t("features.f4.e1i"), detail: t("features.f4.e1d") }, { icon: "✕", text: t("features.f4.e2i"), detail: t("features.f4.e2d") }, { icon: "✓", text: t("features.f4.e3i"), detail: t("features.f4.e3d") }] },
-    { num: "05", title: t("features.f5.title"), desc: t("features.f5.desc"), color: "cyan", gradient: "from-cyan-500 to-cyan-600", bg: "bg-cyan-50", border: "border-cyan-100", text: "text-cyan-600", iconBg: "bg-cyan-500", bullets: [t("features.f5.b1"), t("features.f5.b2"), t("features.f5.b3")], feed: [{ icon: "✓", text: t("features.f5.e1i"), detail: t("features.f5.e1d") }, { icon: "✓", text: t("features.f5.e2i"), detail: t("features.f5.e2d") }, { icon: "✓", text: t("features.f5.e3i"), detail: t("features.f5.e3d") }] },
-    { num: "06", title: t("features.f6.title"), desc: t("features.f6.desc"), color: "rose", gradient: "from-rose-500 to-rose-600", bg: "bg-rose-50", border: "border-rose-100", text: "text-rose-600", iconBg: "bg-rose-500", bullets: [t("features.f6.b1"), t("features.f6.b2"), t("features.f6.b3")], feed: [{ icon: "✓", text: t("features.f6.e1i"), detail: t("features.f6.e1d") }, { icon: "!", text: t("features.f6.e2i"), detail: t("features.f6.e2d") }, { icon: "✓", text: t("features.f6.e3i"), detail: t("features.f6.e3d") }] },
+    { num: "01", title: t("landing.features.intake.title"), desc: t("landing.features.intake.desc"), color: "blue", gradient: "from-blue-500 to-blue-600", bg: "bg-blue-50", border: "border-blue-100", text: "text-blue-600", iconBg: "bg-blue-500", bullets: (t("landing.features.intake.bullets") || "").split(",").map((s: string) => s.trim()) || ["Auto-classification", "Smart routing", "Instant response"], feed: [{ icon: "✓", text: "Classified", detail: "Billing inquiry" }, { icon: "✓", text: "Routed", detail: "Urgent issue → Tier 2" }, { icon: "✓", text: "Resolved", detail: "Password reset" }] },
+    { num: "02", title: t("landing.features.inbox.title"), desc: t("landing.features.inbox.desc"), color: "emerald", gradient: "from-emerald-500 to-emerald-600", bg: "bg-emerald-50", border: "border-emerald-100", text: "text-emerald-600", iconBg: "bg-emerald-500", bullets: (t("landing.features.inbox.bullets") || "").split(",").map((s: string) => s.trim()) || ["6 channels unified", "Real-time sync", "Full context"], feed: [{ icon: "✓", text: "WhatsApp", detail: "Order status inquiry" }, { icon: "✓", text: "Email", detail: "Refund request received" }, { icon: "✓", text: "Web Chat", detail: "New visitor from Lagos" }] },
+    { num: "03", title: t("landing.features.sentiment.title"), desc: t("landing.features.sentiment.desc"), color: "purple", gradient: "from-purple-500 to-purple-600", bg: "bg-purple-50", border: "border-purple-100", text: "text-purple-600", iconBg: "bg-purple-500", bullets: (t("landing.features.sentiment.bullets") || "").split(",").map((s: string) => s.trim()) || ["Real-time scoring", "Trend alerts", "Churn prediction"], feed: [{ icon: "✓", text: "Detected", detail: "Frustrated tone — escalated" }, { icon: "✓", text: "Scored", detail: "Positive (0.92) — closed" }, { icon: "!", text: "Alert", detail: "Negative trend on WhatsApp" }] },
+    { num: "04", title: t("landing.features.sla.title"), desc: t("landing.features.sla.desc"), color: "amber", gradient: "from-amber-500 to-amber-600", bg: "bg-amber-50", border: "border-amber-100", text: "text-amber-600", iconBg: "bg-amber-500", bullets: (t("landing.features.sla.bullets") || "").split(",").map((s: string) => s.trim()) || ["Auto-escalation", "SLA tracking", "Compliance reporting"], feed: [{ icon: "✓", text: "Enforced", detail: "SLA 2h met for SSV-1234" }, { icon: "✕", text: "Breached", detail: "SSV-1230 exceeded 4h" }, { icon: "✓", text: "Escalated", detail: "SSV-1228 → Manager" }] },
+    { num: "05", title: t("landing.features.knowledge.title"), desc: t("landing.features.knowledge.desc"), color: "cyan", gradient: "from-cyan-500 to-cyan-600", bg: "bg-cyan-50", border: "border-cyan-100", text: "text-cyan-600", iconBg: "bg-cyan-500", bullets: (t("landing.features.knowledge.bullets") || "").split(",").map((s: string) => s.trim()) || ["Auto-ingestion", "Semantic search", "AI-powered answers"], feed: [{ icon: "✓", text: "Indexed", detail: "12 new articles processed" }, { icon: "✓", text: "Matched", detail: "Q: reset password → A: #42" }, { icon: "✓", text: "Auto-resolved", detail: "Shipping policy question" }] },
+    { num: "06", title: t("landing.features.analytics.title"), desc: t("landing.features.analytics.desc"), color: "rose", gradient: "from-rose-500 to-rose-600", bg: "bg-rose-50", border: "border-rose-100", text: "text-rose-600", iconBg: "bg-rose-500", bullets: (t("landing.features.analytics.bullets") || "").split(",").map((s: string) => s.trim()) || ["Live dashboards", "Export reports", "Custom metrics"], feed: [{ icon: "✓", text: "Updated", detail: "Resolution rate: 87%" }, { icon: "!", text: "Alert", detail: "CSAT dipped below 4.0" }, { icon: "✓", text: "Report", detail: "Weekly summary generated" }] },
   ];
 
   const agents = [
-    { name: t("agents.intake.name"), desc: t("agents.intake.desc"), color: "from-blue-500 to-blue-600", gradient: "#3b82f6" },
-    { name: t("agents.knowledge.name"), desc: t("agents.knowledge.desc"), color: "from-emerald-500 to-emerald-600", gradient: "#10b981" },
-    { name: t("agents.resolution.name"), desc: t("agents.resolution.desc"), color: "from-purple-500 to-purple-600", gradient: "#8b5cf6" },
-    { name: t("agents.qa.name"), desc: t("agents.qa.desc"), color: "from-amber-500 to-amber-600", gradient: "#f59e0b" },
-    { name: t("agents.escalation.name"), desc: t("agents.escalation.desc"), color: "from-red-500 to-red-600", gradient: "#ef4444" },
-    { name: t("agents.sentiment.name"), desc: t("agents.sentiment.desc"), color: "from-cyan-500 to-cyan-600", gradient: "#06b6d4" },
-    { name: t("agents.analytics.name"), desc: t("agents.analytics.desc"), color: "from-rose-500 to-rose-600", gradient: "#f43f5e" },
+    { name: "Intake", desc: t("landing.agents.intake"), color: "from-blue-500 to-blue-600", gradient: "#3b82f6" },
+    { name: "Knowledge", desc: t("landing.agents.knowledge"), color: "from-emerald-500 to-emerald-600", gradient: "#10b981" },
+    { name: "Resolution", desc: t("landing.agents.resolution"), color: "from-purple-500 to-purple-600", gradient: "#8b5cf6" },
+    { name: "QA", desc: t("landing.agents.qa"), color: "from-amber-500 to-amber-600", gradient: "#f59e0b" },
+    { name: "Escalation", desc: t("landing.agents.escalation"), color: "from-red-500 to-red-600", gradient: "#ef4444" },
+    { name: "Sentiment", desc: t("landing.agents.sentiment"), color: "from-cyan-500 to-cyan-600", gradient: "#06b6d4" },
+    { name: "Analytics", desc: t("landing.agents.analytics"), color: "from-rose-500 to-rose-600", gradient: "#f43f5e" },
   ];
 
   const channels = [
-    { name: t("channels.whatsapp.name"), desc: t("channels.whatsapp.desc"), color: "from-[#25D366] to-[#128C7E]", icon: "M", stats: "whatsapp" },
-    { name: t("channels.email.name"), desc: t("channels.email.desc"), color: "from-[#FF6600] to-[#E55B00]", icon: "@", stats: "email" },
-    { name: t("channels.sms.name"), desc: t("channels.sms.desc"), color: "from-[#2196F3] to-[#1976D2]", icon: "~", stats: "sms" },
-    { name: t("channels.webchat.name"), desc: t("channels.webchat.desc"), color: "from-[#8B5CF6] to-[#7C3AED]", icon: "W", stats: "web_chat" },
-    { name: t("channels.messenger.name"), desc: t("channels.messenger.desc"), color: "from-[#1877F2] to-[#0D65D9]", icon: "M", stats: "messenger" },
-    { name: t("channels.instagram.name"), desc: t("channels.instagram.desc"), color: "from-[#833AB4] to-[#FD1D1D]", icon: "I", stats: "instagram" },
+    { name: "WhatsApp", desc: t("landing.channels.whatsapp"), color: "from-[#25D366] to-[#128C7E]", icon: "M", stats: "whatsapp" },
+    { name: "Email", desc: t("landing.channels.email"), color: "from-[#FF6600] to-[#E55B00]", icon: "@", stats: "email" },
+    { name: "SMS", desc: t("landing.channels.sms"), color: "from-[#2196F3] to-[#1976D2]", icon: "~", stats: "sms" },
+    { name: "Web Chat", desc: t("landing.channels.web"), color: "from-[#8B5CF6] to-[#7C3AED]", icon: "W", stats: "web_chat" },
+    { name: "Messenger", desc: t("landing.channels.messenger"), color: "from-[#1877F2] to-[#0D65D9]", icon: "M", stats: "messenger" },
+    { name: "Instagram", desc: t("landing.channels.instagram"), color: "from-[#833AB4] to-[#FD1D1D]", icon: "I", stats: "instagram" },
   ];
 
   useEffect(() => {
@@ -145,10 +145,10 @@ export default function HomePage() {
                 {/* Stats */}
                 <div className="grid grid-cols-4 gap-3">
                   {[
-                    { label: t("dashboard.open"), value: ticket.open, color: "text-blue-300", bg: "bg-blue-500/10" },
-                    { label: t("dashboard.pending"), value: ticket.pending, color: "text-amber-300", bg: "bg-amber-500/10" },
-                    { label: t("dashboard.escalated"), value: ticket.escalated, color: "text-red-300", bg: "bg-red-500/10" },
-                    { label: t("dashboard.resolved"), value: ticket.resolved, color: "text-emerald-300", bg: "bg-emerald-500/10" },
+                    { label: "Open", value: ticket.open, color: "text-blue-300", bg: "bg-blue-500/10" },
+                    { label: "Pending", value: ticket.pending, color: "text-amber-300", bg: "bg-amber-500/10" },
+                    { label: "Escalated", value: ticket.escalated, color: "text-red-300", bg: "bg-red-500/10" },
+                    { label: "Resolved", value: ticket.resolved, color: "text-emerald-300", bg: "bg-emerald-500/10" },
                   ].map((s) => (
                     <div key={s.label} className={`text-center p-3 rounded-xl ${s.bg} border border-white/[0.05]`}>
                       <div className={`text-xl font-extrabold ${s.color}`}>{s.value}</div>
@@ -272,10 +272,10 @@ export default function HomePage() {
           <p className="text-gray-500 text-lg max-w-xl mx-auto mb-16">{t("problem.desc")}</p>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
             {[
-              { icon: "!", title: t("problems.p1.title"), desc: t("problems.p1.desc"), gradient: "from-blue-500 to-blue-600", topClass: "card-top-blue" },
-              { icon: "~", title: t("problems.p2.title"), desc: t("problems.p2.desc"), gradient: "from-rose-500 to-rose-600", topClass: "card-top-rose" },
-              { icon: "●", title: t("problems.p3.title"), desc: t("problems.p3.desc"), gradient: "from-amber-500 to-amber-600", topClass: "card-top-amber" },
-              { icon: "↻", title: t("problems.p4.title"), desc: t("problems.p4.desc"), gradient: "from-gray-400 to-gray-500", topClass: "" },
+              { icon: "!", title: t("landing.problems.triage.title"), desc: t("landing.problems.triage.desc"), gradient: "from-blue-500 to-blue-600", topClass: "card-top-blue" },
+              { icon: "~", title: t("landing.problems.escalation.title"), desc: t("landing.problems.escalation.desc"), gradient: "from-rose-500 to-rose-600", topClass: "card-top-rose" },
+              { icon: "●", title: t("landing.problems.resolution.title"), desc: t("landing.problems.resolution.desc"), gradient: "from-amber-500 to-amber-600", topClass: "card-top-amber" },
+              { icon: "↻", title: t("landing.problems.fallback.title"), desc: t("landing.problems.fallback.desc"), gradient: "from-gray-400 to-gray-500", topClass: "" },
             ].map((card, i) => (
               <RevealSection key={card.title} delay={i * 100}>
                 <div className={`text-left p-8 rounded-2xl border border-gray-100 hover:border-gray-200 hover:shadow-xl transition-all duration-300 group bg-white ${card.topClass}`}>
@@ -453,10 +453,10 @@ export default function HomePage() {
           </RevealSection>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
             {[
-              { num: "01", icon: "↓", title: t("steps.s1.title"), desc: t("steps.s1.desc"), gradient: "from-blue-500 to-blue-600" },
-              { num: "02", icon: "⚡", title: t("steps.s2.title"), desc: t("steps.s2.desc"), gradient: "from-emerald-500 to-emerald-600" },
-              { num: "03", icon: "↗", title: t("steps.s3.title"), desc: t("steps.s3.desc"), gradient: "from-purple-500 to-purple-600" },
-              { num: "04", icon: "✓", title: t("steps.s4.title"), desc: t("steps.s4.desc"), gradient: "from-amber-500 to-amber-600" },
+              { num: "01", icon: "↓", title: t("landing.steps.ingest.title"), desc: t("landing.steps.ingest.desc"), gradient: "from-blue-500 to-blue-600" },
+              { num: "02", icon: "⚡", title: t("landing.steps.classify.title"), desc: t("landing.steps.classify.desc"), gradient: "from-emerald-500 to-emerald-600" },
+              { num: "03", icon: "↗", title: t("landing.steps.resolve.title"), desc: t("landing.steps.resolve.desc"), gradient: "from-purple-500 to-purple-600" },
+              { num: "04", icon: "✓", title: t("landing.steps.escalate.title"), desc: t("landing.steps.escalate.desc"), gradient: "from-amber-500 to-amber-600" },
             ].map((step, i) => (
               <RevealSection key={step.num} delay={i * 100}>
                 <div className="p-8 rounded-2xl border border-gray-100 hover:border-gray-200 hover:shadow-xl transition-all duration-300 group h-full bg-white relative overflow-hidden">
