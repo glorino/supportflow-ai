@@ -64,14 +64,14 @@ const channelColor: Record<string, string> = {
   instagram: "bg-pink-100 text-pink-700 ring-1 ring-pink-200/60",
 };
 
-const channelDisplayNames: Record<string, string> = {
-  whatsapp: "WhatsApp",
-  email: "Email",
-  web: "Web Chat",
-  sms: "SMS",
-  messenger: "Messenger",
-  instagram: "Instagram",
-};
+const getChannelDisplayNames = (t: (key: string) => string): Record<string, string> => ({
+  whatsapp: t("dashboardPage.channels.whatsapp"),
+  email: t("dashboardPage.channels.email"),
+  web: t("dashboardPage.channels.web"),
+  sms: t("dashboardPage.channels.sms"),
+  messenger: t("dashboardPage.channels.messenger"),
+  instagram: t("dashboardPage.channels.instagram"),
+});
 
 function TicketsContent() {
   const { t } = useLang();
@@ -213,12 +213,12 @@ function TicketsContent() {
           className="rounded-2xl border-2 border-gray-100 bg-white/80 backdrop-blur-sm px-4 py-3.5 text-sm font-medium text-gray-700 focus:border-blue-500 focus:outline-none focus:ring-4 focus:ring-blue-500/10 transition-all duration-300"
         >
           <option value="all">{t("ticketsPage.allChannels")}</option>
-          <option value="whatsapp">WhatsApp</option>
-          <option value="email">Email</option>
-          <option value="web">Web Chat</option>
-          <option value="sms">SMS</option>
-          <option value="messenger">Messenger</option>
-          <option value="instagram">Instagram</option>
+          <option value="whatsapp">{t("dashboardPage.channels.whatsapp")}</option>
+          <option value="email">{t("dashboardPage.channels.email")}</option>
+          <option value="web">{t("dashboardPage.channels.web")}</option>
+          <option value="sms">{t("dashboardPage.channels.sms")}</option>
+          <option value="messenger">{t("dashboardPage.channels.messenger")}</option>
+          <option value="instagram">{t("dashboardPage.channels.instagram")}</option>
         </select>
         <select
           value={statusFilter}
@@ -281,7 +281,7 @@ function TicketsContent() {
                     <Link href={`/dashboard/tickets/${tk.ticketNumber.replace("SSV-", "")}`} className="block hover-lift rounded-xl p-1 -m-1">
                       <div className="flex items-center gap-2 mb-1">
                         <span className="text-xs font-mono text-gray-400">{tk.ticketNumber}</span>
-                        <span className={`text-[10px] px-2 py-0.5 rounded-full font-semibold ${channelColor[tk.channel] || "bg-gray-100 text-gray-600"}`}>{channelDisplayNames[tk.channel] || tk.channel}</span>
+                        <span className={`text-[10px] px-2 py-0.5 rounded-full font-semibold ${channelColor[tk.channel] || "bg-gray-100 text-gray-600"}`}>{getChannelDisplayNames(t)[tk.channel] || tk.channel}</span>
                       </div>
                       <div className="text-sm font-semibold text-gray-900 group-hover:text-blue-600 transition-colors truncate max-w-xs">{tk.subject}</div>
                       {tk.tags && tk.tags.length > 0 && (
@@ -306,11 +306,11 @@ function TicketsContent() {
                   </td>
                   <td className="px-5 py-4">
                     <span className={`inline-flex items-center rounded-full px-3 py-1 text-xs font-semibold ${statusColor[tk.status] || "bg-gray-100 text-gray-700"}`}>
-                      {tk.status}
+                      {t(`dashboardPage.status.${tk.status}`)}
                     </span>
                   </td>
                   <td className="hidden sm:table-cell px-5 py-4">
-                    <span className={`text-xs capitalize font-medium ${priorityColor[tk.priority] || "text-gray-500"}`}>{tk.priority}</span>
+                    <span className={`text-xs capitalize font-medium ${priorityColor[tk.priority] || "text-gray-500"}`}>{tk.priority.charAt(0).toUpperCase() + tk.priority.slice(1)}</span>
                   </td>
                   <td className="px-5 py-4">
                     <div className={`text-xs font-semibold ${slaColor[tk.slaStatus] || "text-gray-400"}`}>

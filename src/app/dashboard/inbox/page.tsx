@@ -36,15 +36,15 @@ interface InboxData {
   total: number;
 }
 
-const channelMeta: Record<string, { name: string; icon: string; gradient: string }> = {
-  all: { name: "All Channels", icon: "📥", gradient: "from-slate-500 to-gray-600" },
+const getChannelMeta = (t: (key: string) => string) => ({
+  all: { name: t("inboxPage.allChannels"), icon: "📥", gradient: "from-slate-500 to-gray-600" },
   whatsapp: { name: "WhatsApp", icon: "📱", gradient: "from-green-500 to-emerald-600" },
   email: { name: "Email", icon: "📧", gradient: "from-purple-500 to-violet-600" },
-  web: { name: "Web Chat", icon: "💬", gradient: "from-blue-500 to-indigo-600" },
+  web: { name: t("dashboardPage.channels.web"), icon: "💬", gradient: "from-blue-500 to-indigo-600" },
   sms: { name: "SMS", icon: "💬", gradient: "from-amber-500 to-orange-600" },
   messenger: { name: "Messenger", icon: "💬", gradient: "from-blue-400 to-blue-600" },
   instagram: { name: "Instagram", icon: "📸", gradient: "from-pink-500 to-rose-600" },
-};
+});
 
 const sentimentColor: Record<string, string> = {
   positive: "text-emerald-500",
@@ -70,26 +70,26 @@ const sentimentBg: Record<string, string> = {
   frustrated: "bg-orange-50 border-orange-200",
 };
 
-const priorityConfig: Record<string, { bg: string; text: string; label: string }> = {
-  low: { bg: "bg-gray-100 text-gray-600", text: "text-gray-600", label: "Low" },
-  medium: { bg: "bg-blue-100 text-blue-700", text: "text-blue-600", label: "Med" },
-  high: { bg: "bg-orange-100 text-orange-700", text: "text-orange-600", label: "High" },
-  urgent: { bg: "bg-red-100 text-red-700", text: "text-red-600", label: "Urgent" },
-};
+const getPriorityConfig = (t: (key: string) => string) => ({
+  low: { bg: "bg-gray-100 text-gray-600", text: "text-gray-600", label: t("inboxPage.low") },
+  medium: { bg: "bg-blue-100 text-blue-700", text: "text-blue-600", label: t("inboxPage.med") },
+  high: { bg: "bg-orange-100 text-orange-700", text: "text-orange-600", label: t("inboxPage.high") },
+  urgent: { bg: "bg-red-100 text-red-700", text: "text-red-600", label: t("inboxPage.urgent") },
+});
 
-const statusConfig: Record<string, { bg: string; dot: string; label: string }> = {
-  open: { bg: "bg-emerald-100 text-emerald-700", dot: "bg-emerald-500", label: "Open" },
-  pending: { bg: "bg-amber-100 text-amber-700", dot: "bg-amber-500", label: "Pending" },
-  escalated: { bg: "bg-red-100 text-red-700", dot: "bg-red-500", label: "Escalated" },
-  resolved: { bg: "bg-gray-100 text-gray-600", dot: "bg-gray-400", label: "Resolved" },
-};
+const getStatusConfig = (t: (key: string) => string) => ({
+  open: { bg: "bg-emerald-100 text-emerald-700", dot: "bg-emerald-500", label: t("dashboardPage.status.open") },
+  pending: { bg: "bg-amber-100 text-amber-700", dot: "bg-amber-500", label: t("dashboardPage.status.pending") },
+  escalated: { bg: "bg-red-100 text-red-700", dot: "bg-red-500", label: t("dashboardPage.status.escalated") },
+  resolved: { bg: "bg-gray-100 text-gray-600", dot: "bg-gray-400", label: t("dashboardPage.status.resolved") },
+});
 
-const slaConfig: Record<string, { bg: string; text: string; label: string; icon: string }> = {
-  ok: { bg: "bg-emerald-50 border-emerald-200", text: "text-emerald-700", label: "On Track", icon: "✓" },
-  warning: { bg: "bg-amber-50 border-amber-200", text: "text-amber-700", label: "At Risk", icon: "⚠" },
-  breached: { bg: "bg-red-50 border-red-200", text: "text-red-700", label: "Breached", icon: "✕" },
-  done: { bg: "bg-gray-50 border-gray-200", text: "text-gray-600", label: "Completed", icon: "✓" },
-};
+const getSlaConfig = (t: (key: string) => string) => ({
+  ok: { bg: "bg-emerald-50 border-emerald-200", text: "text-emerald-700", label: t("inboxPage.onTrack"), icon: "✓" },
+  warning: { bg: "bg-amber-50 border-amber-200", text: "text-amber-700", label: t("inboxPage.atRisk"), icon: "⚠" },
+  breached: { bg: "bg-red-50 border-red-200", text: "text-red-700", label: t("inboxPage.breached"), icon: "✕" },
+  done: { bg: "bg-gray-50 border-gray-200", text: "text-gray-600", label: t("inboxPage.completed"), icon: "✓" },
+});
 
 function getInitials(name: string): string {
   return name
@@ -115,18 +115,10 @@ function timeAgo(dateStr: string, t: (key: string) => string): string {
 
 export default function InboxPage() {
   const { t } = useLang();
-  const priorityLabels: Record<string, string> = {
-    low: t("inboxPage.low"),
-    medium: t("inboxPage.med"),
-    high: t("inboxPage.high"),
-    urgent: t("inboxPage.urgent"),
-  };
-  const slaLabels: Record<string, string> = {
-    ok: t("inboxPage.onTrack"),
-    warning: t("inboxPage.atRisk"),
-    breached: t("inboxPage.breached"),
-    done: t("inboxPage.completed"),
-  };
+  const channelMeta = getChannelMeta(t);
+  const priorityConfig = getPriorityConfig(t);
+  const statusConfig = getStatusConfig(t);
+  const slaConfig = getSlaConfig(t);
   const [inboxData, setInboxData] = useState<InboxData>({
     conversations: [],
     channelCounts: [],
@@ -332,7 +324,7 @@ export default function InboxPage() {
                     <div className="text-xs text-gray-500 truncate mb-1.5 leading-relaxed">{c.lastMessage}</div>
                     <div className="flex items-center gap-1.5 flex-wrap">
                       <span className={`h-2 w-2 rounded-full ${sentimentDot[c.sentiment]}`} />
-                      <span className={`text-[10px] font-semibold px-1.5 py-0.5 rounded-md ${prio.bg}`}>{priorityLabels[c.priority]}</span>
+                      <span className={`text-[10px] font-semibold px-1.5 py-0.5 rounded-md ${prio.bg}`}>{prio.label}</span>
                       <span className={`text-[10px] font-medium px-1.5 py-0.5 rounded-md ${stat.bg}`}>{stat.label}</span>
                       {c.tags.slice(0, 1).map((tag) => (
                         <span key={tag} className="text-[10px] px-1.5 py-0.5 rounded-md bg-white/60 text-gray-500 font-medium">{tag}</span>
@@ -531,15 +523,15 @@ export default function InboxPage() {
                   <div className="font-bold text-gray-900 truncate">{selectedConversation.customerCompany}</div>
                 </div>
                 <div className="rounded-xl p-2.5 card-premium-green">
-                  <div className="text-gray-400 mb-0.5 text-[10px] font-medium">Status</div>
+                  <div className="text-gray-400 mb-0.5 text-[10px] font-medium">{t("dashboardPage.th.status")}</div>
                   <div className="font-bold text-gray-900 capitalize">{selectedConversation.status}</div>
                 </div>
                 <div className="rounded-xl p-2.5 card-premium-purple">
-                  <div className="text-gray-400 mb-0.5 text-[10px] font-medium">Priority</div>
+                  <div className="text-gray-400 mb-0.5 text-[10px] font-medium">{t("dashboardPage.th.priority")}</div>
                   <div className="font-bold text-gray-900 capitalize">{selectedConversation.priority}</div>
                 </div>
                 <div className="rounded-xl p-2.5 card-premium-amber">
-                  <div className="text-gray-400 mb-0.5 text-[10px] font-medium">Tickets</div>
+                  <div className="text-gray-400 mb-0.5 text-[10px] font-medium">{t("ticketsPage.title")}</div>
                   <div className="font-bold text-gray-900">1</div>
                 </div>
               </div>
@@ -560,7 +552,7 @@ export default function InboxPage() {
                 </div>
                 <div className="rounded-xl card-premium-blue p-3 hover-lift">
                   <div className="flex items-center justify-between">
-                    <span className="text-sm font-semibold text-gray-900">AI Confidence</span>
+                    <span className="text-sm font-semibold text-gray-900">{t("dashboardPage.aiConfidence")}</span>
                     <span className="text-sm font-bold text-blue-700">{selectedConversation.aiConfidence}%</span>
                   </div>
                   <div className="w-full h-1.5 bg-blue-100 rounded-full mt-2 overflow-hidden">
@@ -574,7 +566,7 @@ export default function InboxPage() {
                   <div className="flex items-center justify-between">
                     <span className="text-sm font-semibold text-gray-900">{t("inboxPage.slaStatus")}</span>
                     <span className={`text-sm font-bold ${slaConfig[selectedConversation.slaStatus]?.text || "text-gray-600"}`}>
-                      {slaConfig[selectedConversation.slaStatus]?.icon} {slaLabels[selectedConversation.slaStatus] || selectedConversation.slaStatus}
+                      {slaConfig[selectedConversation.slaStatus]?.icon} {slaConfig[selectedConversation.slaStatus]?.label || selectedConversation.slaStatus}
                     </span>
                   </div>
                 </div>

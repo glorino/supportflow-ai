@@ -19,14 +19,14 @@ interface AnalyticsData {
   priorityCounts: { priority: string; count: number }[];
 }
 
-const channelDisplayNames: Record<string, string> = {
-  whatsapp: "WhatsApp",
-  email: "Email",
-  web: "Web Chat",
-  sms: "SMS",
-  messenger: "Messenger",
-  instagram: "Instagram",
-};
+const getChannelDisplayNames = (t: (key: string) => string): Record<string, string> => ({
+  whatsapp: t("dashboardPage.channels.whatsapp"),
+  email: t("dashboardPage.channels.email"),
+  web: t("dashboardPage.channels.web"),
+  sms: t("dashboardPage.channels.sms"),
+  messenger: t("dashboardPage.channels.messenger"),
+  instagram: t("dashboardPage.channels.instagram"),
+});
 
 const channelColors: Record<string, string> = {
   whatsapp: "bg-green-500",
@@ -123,7 +123,7 @@ export default function AnalyticsPage() {
       glow: "shadow-green-500/30",
     },
     {
-      label: "SLA Compliance",
+      label: t("analyticsPage.slaCompliance"),
       value: `${totalTickets > 0 ? Math.round(((totalTickets - stats.slaBreached) / totalTickets) * 100) : 100}%`,
       width: `${totalTickets > 0 ? ((totalTickets - stats.slaBreached) / totalTickets) * 100 : 100}%`,
       gradient: "from-teal-400 to-cyan-500",
@@ -192,7 +192,7 @@ export default function AnalyticsPage() {
                 >
                   <div className="hidden sm:flex w-28 items-center gap-2 shrink-0">
                     <span className="text-sm font-medium text-gray-700 group-hover:text-gray-900 transition-colors">
-                      {channelDisplayNames[ch.channel] || ch.channel}
+                      {getChannelDisplayNames(t)[ch.channel] || ch.channel}
                     </span>
                   </div>
                   <div className="flex-1 h-10 bg-gray-100/80 rounded-full overflow-hidden backdrop-blur-sm">

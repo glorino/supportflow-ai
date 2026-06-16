@@ -43,14 +43,14 @@ const channelMeta: Record<string, { icon: string; color: string; bgColor: string
   instagram: { icon: "📸", color: "text-pink-600", bgColor: "bg-pink-50", status: "connected" },
 };
 
-const channelDisplayNames: Record<string, string> = {
-  whatsapp: "WhatsApp",
-  email: "Email",
-  web: "Web Chat",
-  sms: "SMS",
-  messenger: "Messenger",
-  instagram: "Instagram",
-};
+const getChannelDisplayNames = (t: (key: string) => string): Record<string, string> => ({
+  whatsapp: t("dashboardPage.channels.whatsapp"),
+  email: t("dashboardPage.channels.email"),
+  web: t("dashboardPage.channels.web"),
+  sms: t("dashboardPage.channels.sms"),
+  messenger: t("dashboardPage.channels.messenger"),
+  instagram: t("dashboardPage.channels.instagram"),
+});
 
 const statusColor: Record<string, string> = {
   open: "bg-blue-100/80 text-blue-700",
@@ -73,12 +73,12 @@ const slaColor: Record<string, string> = {
   done: "text-gray-400",
 };
 
-const sentimentMeta: Record<string, { color: string; label: string; emoji: string }> = {
-  positive: { color: "from-emerald-400 to-green-500", label: "Positive", emoji: "😊" },
-  neutral: { color: "from-gray-300 to-gray-400", label: "Neutral", emoji: "😐" },
-  negative: { color: "from-amber-400 to-orange-500", label: "Negative", emoji: "😟" },
-  angry: { color: "from-red-400 to-red-500", label: "Angry", emoji: "😡" },
-  frustrated: { color: "from-orange-400 to-orange-500", label: "Frustrated", emoji: "😤" },
+const sentimentMeta: Record<string, { color: string; emoji: string }> = {
+  positive: { color: "from-emerald-400 to-green-500", emoji: "😊" },
+  neutral: { color: "from-gray-300 to-gray-400", emoji: "😐" },
+  negative: { color: "from-amber-400 to-orange-500", emoji: "😟" },
+  angry: { color: "from-red-400 to-red-500", emoji: "😡" },
+  frustrated: { color: "from-orange-400 to-orange-500", emoji: "😤" },
 };
 
 export default function DashboardPage() {
@@ -181,6 +181,7 @@ export default function DashboardPage() {
         <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 divide-x divide-gray-100/60 max-sm:divide-x-0 max-sm:gap-3 max-sm:p-4">
           {channelData.map((ch) => {
             const meta = channelMeta[ch.channel] || { icon: "💬", color: "text-gray-600", bgColor: "bg-gray-50", status: "active" };
+            const channelDisplayNames = getChannelDisplayNames(t);
             const displayName = channelDisplayNames[ch.channel] || ch.channel;
             return (
               <Link
@@ -220,7 +221,7 @@ export default function DashboardPage() {
             <p className="text-xs text-gray-500 mb-6">{t("dashboardPage.sentimentDesc")}</p>
             <div className="space-y-4">
               {sentimentData.map((s) => {
-                const meta = sentimentMeta[s.sentiment] || { color: "from-gray-300 to-gray-400", label: s.sentiment, emoji: "😐" };
+                const meta = sentimentMeta[s.sentiment] || { color: "from-gray-300 to-gray-400", emoji: "😐" };
                 const pct = totalSentiment > 0 ? Math.round((s.count / totalSentiment) * 100) : 0;
                 return (
                   <div key={s.sentiment}>
@@ -256,6 +257,7 @@ export default function DashboardPage() {
             <div className="space-y-3.5">
               {channelData.map((ch) => {
                 const meta = channelMeta[ch.channel] || { icon: "💬", bgColor: "bg-gray-50" };
+                const channelDisplayNames = getChannelDisplayNames(t);
                 const displayName = channelDisplayNames[ch.channel] || ch.channel;
                 const pct = totalChannelTickets > 0 ? Math.round((ch.count / totalChannelTickets) * 100) : 0;
                 return (
