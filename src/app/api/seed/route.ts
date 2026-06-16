@@ -116,6 +116,7 @@ export async function POST() {
     }
 
     const adminUserId = userIdMap["admin@ssv.com"];
+    await sql`DELETE FROM knowledge_articles`;
     for (const article of demoKnowledgeArticles) {
       await sql`
         INSERT INTO knowledge_articles (title, content, collection, status, views, ai_used, helpful, tags, created_by)
