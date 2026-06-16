@@ -52,8 +52,8 @@ const channelIcon: Record<string, string> = {
   instagram: "📸",
 };
 
-function formatNaira(amount: number): string {
-  return `₦${amount.toLocaleString()}`;
+function formatNaira(amount: number | string): string {
+  return `₦${Number(amount || 0).toLocaleString()}`;
 }
 
 function formatDate(dateStr: string): string {

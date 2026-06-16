@@ -44,8 +44,8 @@ const channelDisplayNames: Record<string, string> = {
   instagram: "Instagram",
 };
 
-function formatNaira(amount: number): string {
-  return `₦${amount.toLocaleString()}`;
+function formatNaira(amount: number | string): string {
+  return `₦${Number(amount || 0).toLocaleString()}`;
 }
 
 function formatDate(dateStr: string): string {
@@ -79,10 +79,10 @@ export default function CustomersPage() {
   const proCount = customers.filter((c) => c.segment === "pro").length;
   const starterCount = customers.filter((c) => c.segment === "starter").length;
 
-  const enterpriseRevenue = customers.filter((c) => c.segment === "enterprise").reduce((sum, c) => sum + (c.ltv || 0), 0);
-  const businessRevenue = customers.filter((c) => c.segment === "business").reduce((sum, c) => sum + (c.ltv || 0), 0);
-  const proRevenue = customers.filter((c) => c.segment === "pro").reduce((sum, c) => sum + (c.ltv || 0), 0);
-  const starterRevenue = customers.filter((c) => c.segment === "starter").reduce((sum, c) => sum + (c.ltv || 0), 0);
+  const enterpriseRevenue = customers.filter((c) => c.segment === "enterprise").reduce((sum, c) => sum + Number(c.ltv || 0), 0);
+  const businessRevenue = customers.filter((c) => c.segment === "business").reduce((sum, c) => sum + Number(c.ltv || 0), 0);
+  const proRevenue = customers.filter((c) => c.segment === "pro").reduce((sum, c) => sum + Number(c.ltv || 0), 0);
+  const starterRevenue = customers.filter((c) => c.segment === "starter").reduce((sum, c) => sum + Number(c.ltv || 0), 0);
 
   if (loading) {
     return (
