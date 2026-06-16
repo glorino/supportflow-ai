@@ -481,6 +481,13 @@ export const translations = {
       angry: { en: "Angry", fr: "En colère" },
       frustrated: { en: "Frustrated", fr: "Frustré" },
     },
+    slaBreached: { en: "SLA Breached", fr: "SLA violé" },
+    escalatedTickets: { en: "Escalated Tickets", fr: "Tickets escaladés" },
+    resolvedTickets: { en: "Resolved Tickets", fr: "Tickets résolus" },
+    ofTotal: { en: "% of total", fr: "% du total" },
+    active: { en: "Active", fr: "Actif" },
+    needsToken: { en: "Needs Token", fr: "Besoin de token" },
+    customers: { en: "Customers", fr: "Clients" },
   },
   inboxPage: {
     title: { en: "Inbox", fr: "Boîte de réception" },

@@ -4,6 +4,7 @@ import { Sidebar } from "@/components/sidebar";
 import { AuthProvider, useAuth, getInitials } from "@/lib/auth/context";
 import Link from "next/link";
 import { useState } from "react";
+import { useLang } from "@/lib/i18n/context";
 
 function MobileMenu({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }) {
   if (!isOpen) return null;
@@ -19,14 +20,15 @@ function MobileMenu({ isOpen, onClose }: { isOpen: boolean; onClose: () => void 
 
 function DashboardHeader() {
   const { user, logout } = useAuth();
+  const { t } = useLang();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   const roleBadge: Record<string, { label: string; color: string; gradient: string }> = {
-    super_admin: { label: "Super Admin", color: "bg-purple-100/80 text-purple-700 border-purple-200/60", gradient: "from-violet-500 to-indigo-600" },
-    admin: { label: "Admin", color: "bg-blue-100/80 text-blue-700 border-blue-200/60", gradient: "from-blue-500 to-indigo-600" },
-    manager: { label: "Manager", color: "bg-emerald-100/80 text-emerald-700 border-emerald-200/60", gradient: "from-emerald-500 to-teal-600" },
-    agent: { label: "Agent", color: "bg-amber-100/80 text-amber-700 border-amber-200/60", gradient: "from-amber-500 to-orange-600" },
-    viewer: { label: "Viewer", color: "bg-gray-100/80 text-gray-600 border-gray-200/60", gradient: "from-gray-500 to-slate-600" },
+    super_admin: { label: t("roles.superAdmin"), color: "bg-purple-100/80 text-purple-700 border-purple-200/60", gradient: "from-violet-500 to-indigo-600" },
+    admin: { label: t("roles.admin"), color: "bg-blue-100/80 text-blue-700 border-blue-200/60", gradient: "from-blue-500 to-indigo-600" },
+    manager: { label: t("roles.manager"), color: "bg-emerald-100/80 text-emerald-700 border-emerald-200/60", gradient: "from-emerald-500 to-teal-600" },
+    agent: { label: t("roles.agent"), color: "bg-amber-100/80 text-amber-700 border-amber-200/60", gradient: "from-amber-500 to-orange-600" },
+    viewer: { label: t("roles.viewer"), color: "bg-gray-100/80 text-gray-600 border-gray-200/60", gradient: "from-gray-500 to-slate-600" },
   };
 
   const badge = roleBadge[user?.role || "agent"] || roleBadge.agent;
@@ -51,7 +53,7 @@ function DashboardHeader() {
               </svg>
               <input
                 type="text"
-                placeholder="Search tickets, customers, articles..."
+                placeholder={t("dashboard.search")}
                 className="w-full rounded-2xl border border-gray-200/60 bg-gray-50/50 pl-10 pr-4 py-2.5 text-sm placeholder-gray-400 focus:border-blue-500 focus:bg-white focus:outline-none focus:ring-4 focus:ring-blue-500/10 transition-all duration-300"
               />
               <kbd className="absolute right-3 top-1/2 -translate-y-1/2 rounded-lg border border-gray-200/60 bg-white/80 px-1.5 py-0.5 text-[10px] font-medium text-gray-400 hidden sm:inline-flex">⌘K</kbd>
@@ -61,9 +63,9 @@ function DashboardHeader() {
           <div className="flex items-center gap-2">
             <div className="hidden sm:flex items-center gap-2 px-3.5 py-2 rounded-2xl bg-gradient-to-r from-green-50/80 to-emerald-50/60 border border-green-200/60 mr-2">
               <span className="h-2 w-2 rounded-full bg-green-500 animate-pulse shadow-sm shadow-green-500/50" />
-              <span className="text-xs font-semibold text-green-700">AI Active</span>
+              <span className="text-xs font-semibold text-green-700">{t("dashboard.aiActive")}</span>
               <span className="text-[10px] text-green-600/60">·</span>
-              <span className="text-[10px] text-green-600 font-medium">67% auto-resolved</span>
+              <span className="text-[10px] text-green-600 font-medium">67% {t("dashboard.autoResolved")}</span>
             </div>
 
             <LangToggleMinimal />
@@ -83,13 +85,13 @@ function DashboardHeader() {
             </button>
 
             <div className="flex items-center gap-2 ml-2 pl-3 border-l border-gray-200/60">
-              <button onClick={logout} className="flex items-center gap-2.5 rounded-2xl p-1.5 hover:bg-gray-100/80 transition-all duration-300 group" title="Click to logout">
+              <button onClick={logout} className="flex items-center gap-2.5 rounded-2xl p-1.5 hover:bg-gray-100/80 transition-all duration-300 group" title={t("dashboard.logout")}>
                 <div className={`relative h-10 w-10 rounded-xl bg-gradient-to-br ${badge.gradient} flex items-center justify-center text-white text-xs font-bold shadow-lg group-hover:shadow-xl transition-shadow duration-300`}>
                   {user ? getInitials(user.name) : "U"}
                   <div className="absolute -bottom-0.5 -right-0.5 h-3 w-3 rounded-full bg-green-500 border-2 border-white shadow-sm" />
                 </div>
                 <div className="text-left hidden sm:block">
-                  <div className="text-sm font-semibold text-gray-900">{user?.name || "User"}</div>
+                  <div className="text-sm font-semibold text-gray-900">{user?.name || t("misc.user")}</div>
                   <div className="text-[11px] text-gray-400 flex items-center gap-1.5">
                     <span className={`inline-flex items-center rounded-full px-1.5 py-0.5 text-[9px] font-bold border ${badge.color}`}>{badge.label}</span>
                   </div>

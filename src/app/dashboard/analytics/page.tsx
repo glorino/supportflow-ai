@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { useLang } from "@/lib/i18n/context";
 
 interface AnalyticsData {
   stats: {
@@ -37,6 +38,7 @@ const channelColors: Record<string, string> = {
 };
 
 export default function AnalyticsPage() {
+  const { t } = useLang();
   const [data, setData] = useState<AnalyticsData | null>(null);
   const [loading, setLoading] = useState(true);
 
@@ -68,13 +70,19 @@ export default function AnalyticsPage() {
   const totalSentiment = sentimentCounts.reduce((sum, s) => sum + s.count, 0);
 
   const kpis = [
-    { label: "Total Tickets", value: totalTickets.toLocaleString(), icon: "🎫", cardBg: "card-premium-blue" },
-    { label: "Open Tickets", value: stats.openTickets.toLocaleString(), icon: "📂", cardBg: "card-premium-green" },
-    { label: "Resolution Rate", value: `${resolutionRate}%`, icon: "✅", cardBg: "card-premium-purple" },
-    { label: "CSAT Score", value: `${(stats.avgCsat || 0).toFixed(1)}/5`, icon: "⭐", cardBg: "card-premium-amber" },
-    { label: "AI Confidence", value: `${Math.round(stats.avgConfidence || 0)}%`, icon: "🤖", cardBg: "card-premium-red" },
-    { label: "SLA Breached", value: stats.slaBreached.toLocaleString(), icon: "⚠️", cardBg: "card-premium-cyan" },
+    { label: t("analyticsPage.totalTickets"), value: totalTickets.toLocaleString(), icon: "🎫", cardBg: "card-premium-blue" },
+    { label: t("analyticsPage.openTickets"), value: stats.openTickets.toLocaleString(), icon: "📂", cardBg: "card-premium-green" },
+    { label: t("analyticsPage.resolutionRate"), value: `${resolutionRate}%`, icon: "✅", cardBg: "card-premium-purple" },
+    { label: t("analyticsPage.csatScore"), value: `${(stats.avgCsat || 0).toFixed(1)}/5`, icon: "⭐", cardBg: "card-premium-amber" },
+    { label: t("analyticsPage.aiConfidence"), value: `${Math.round(stats.avgConfidence || 0)}%`, icon: "🤖", cardBg: "card-premium-red" },
+    { label: t("analyticsPage.slaBreached"), value: stats.slaBreached.toLocaleString(), icon: "⚠️", cardBg: "card-premium-cyan" },
   ];
+
+  const sentimentLabels: Record<string, string> = {
+    positive: t("dashboardPage.sentiment.positive"),
+    neutral: t("dashboardPage.sentiment.neutral"),
+    negative: t("dashboardPage.sentiment.negative"),
+  };
 
   const sentimentEmojis: Record<string, string> = {
     positive: "😊",
@@ -94,21 +102,21 @@ export default function AnalyticsPage() {
 
   const aiMetrics = [
     {
-      label: "AI Confidence",
+      label: t("analyticsPage.aiConfidence"),
       value: `${Math.round(stats.avgConfidence || 0)}%`,
       width: `${stats.avgConfidence || 0}%`,
       gradient: "from-blue-500 to-indigo-600",
       glow: "shadow-blue-500/30",
     },
     {
-      label: "CSAT Score",
+      label: t("analyticsPage.csatScore"),
       value: `${(stats.avgCsat || 0).toFixed(1)}/5`,
       width: `${((stats.avgCsat || 0) / 5) * 100}%`,
       gradient: "from-purple-500 to-pink-600",
       glow: "shadow-purple-500/30",
     },
     {
-      label: "Resolution Rate",
+      label: t("analyticsPage.resolutionRate"),
       value: `${resolutionRate}%`,
       width: `${resolutionRate}%`,
       gradient: "from-green-400 to-emerald-500",
@@ -129,9 +137,9 @@ export default function AnalyticsPage() {
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
           <h1 className="text-3xl font-bold text-gradient bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 bg-clip-text text-transparent">
-            Analytics
+            {t("analyticsPage.title")}
           </h1>
-          <p className="text-sm text-gray-500 mt-1">Real-time insights from your database</p>
+          <p className="text-sm text-gray-500 mt-1">{t("analyticsPage.subtitle")}</p>
         </div>
       </div>
 
@@ -169,8 +177,8 @@ export default function AnalyticsPage() {
               </svg>
             </div>
             <div>
-              <h3 className="text-base font-semibold text-gray-900">Channel Performance</h3>
-              <p className="text-xs text-gray-500">Tickets by communication channel</p>
+              <h3 className="text-base font-semibold text-gray-900">{t("analyticsPage.channelPerformance")}</h3>
+              <p className="text-xs text-gray-500">{t("analyticsPage.channelPerformanceDesc")}</p>
             </div>
           </div>
           <div className="space-y-3 mt-5">
@@ -214,10 +222,10 @@ export default function AnalyticsPage() {
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14.828 14.828a4 4 0 01-5.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                 </svg>
               </div>
-              <div>
-                <h3 className="text-base font-semibold text-gray-900">Sentiment Distribution</h3>
-                <p className="text-xs text-gray-500">Customer emotion breakdown</p>
-              </div>
+            <div>
+              <h3 className="text-base font-semibold text-gray-900">{t("analyticsPage.sentimentDistribution")}</h3>
+              <p className="text-xs text-gray-500">{t("analyticsPage.sentimentDesc")}</p>
+            </div>
             </div>
             <div className="space-y-3 mt-5">
               {sentimentCounts.map((s) => {
@@ -226,7 +234,7 @@ export default function AnalyticsPage() {
                   <div key={s.sentiment} className="flex items-center gap-3 group">
                     <span className="w-24 text-sm font-medium text-gray-600 capitalize flex items-center gap-1.5">
                       <span className="text-lg">{sentimentEmojis[s.sentiment] || "😐"}</span>
-                      <span className="group-hover:text-gray-900 transition-colors">{s.sentiment}</span>
+                      <span className="group-hover:text-gray-900 transition-colors">{sentimentLabels[s.sentiment] || s.sentiment}</span>
                     </span>
                     <div className="flex-1 h-10 bg-gray-100/80 rounded-full overflow-hidden backdrop-blur-sm">
                       <div
@@ -253,8 +261,8 @@ export default function AnalyticsPage() {
               </svg>
             </div>
             <div>
-              <h3 className="text-base font-semibold text-gray-900">AI Performance</h3>
-              <p className="text-xs text-gray-500">Agent metrics</p>
+              <h3 className="text-base font-semibold text-gray-900">{t("analyticsPage.aiPerformance")}</h3>
+              <p className="text-xs text-gray-500">{t("analyticsPage.agentMetrics")}</p>
             </div>
           </div>
           <div className="space-y-4 mt-5">

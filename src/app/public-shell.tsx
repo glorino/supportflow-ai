@@ -129,10 +129,10 @@ export default function PublicShell({ children }: { children: React.ReactNode })
               <p className="text-sm text-gray-400 leading-relaxed">{t("footer.desc")}</p>
             </div>
             {[
-              { title: t("footer.platform"), links: [t("nav.features"), t("nav.channels"), t("nav.agents"), "API Reference", "Documentation"] },
-              { title: "Solutions", links: ["Enterprise Support", "Customer Service", "Technical Support", "Sales Support"] },
-              { title: "Resources", links: ["Documentation", "API Reference", "Customer Stories", "Blog", "Status Page"] },
-              { title: t("footer.company"), links: [t("nav.about"), "Careers", "Privacy Policy", "Terms & Conditions"] },
+              { title: t("footer.platform"), links: [t("nav.features"), t("nav.channels"), t("nav.agents"), t("footer.apiReference"), t("footer.documentation")] },
+              { title: t("footer.solutions"), links: [t("footer.enterpriseSupport"), t("footer.customerService"), t("footer.technicalSupport"), t("footer.salesSupport")] },
+              { title: t("footer.resources"), links: [t("footer.documentation"), t("footer.apiReference"), t("footer.customerStories"), t("footer.blog"), t("footer.statusPage")] },
+              { title: t("footer.company"), links: [t("nav.about"), t("footer.careers"), t("misc.privacyPolicy"), t("misc.terms")] },
             ].map((col) => (
               <div key={col.title}>
                 <h5 className="text-sm font-bold text-gray-900 mb-4">{col.title}</h5>
@@ -148,9 +148,9 @@ export default function PublicShell({ children }: { children: React.ReactNode })
           </div>
           <div className="border-t border-gray-100 pt-8 flex flex-col sm:flex-row items-center justify-between gap-4">
             <div className="flex items-center gap-4 text-xs text-gray-400">
-              <span>© 2026 SSV. All rights reserved.</span>
-              <Link href="/privacy" className="hover:text-gray-600 transition-colors">Privacy Policy</Link>
-              <Link href="/terms" className="hover:text-gray-600 transition-colors">Terms & Conditions</Link>
+              <span>{t("footer.copyright")}</span>
+              <Link href="/privacy" className="hover:text-gray-600 transition-colors">{t("misc.privacyPolicy")}</Link>
+              <Link href="/terms" className="hover:text-gray-600 transition-colors">{t("misc.terms")}</Link>
               <a href="mailto:support@ssv.com" className="hover:text-gray-600 transition-colors">support@ssv.com</a>
             </div>
             <div className="flex items-center gap-3">

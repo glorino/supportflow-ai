@@ -1,57 +1,61 @@
 "use client";
 
-const settingsSections = [
-  {
-    title: "Company",
-    icon: "🏢",
-    items: [
-      { label: "Company Profile", desc: "Company name, logo, and branding", current: "SSV" },
-      { label: "Working Hours", desc: "Business hours and holidays", current: "Mon-Fri, 9AM-6PM EST" },
-      { label: "Timezone", desc: "Default timezone for the organization", current: "America/New_York" },
-      { label: "Contact Information", desc: "Phone, email, and address", current: "Edit" },
-    ],
-  },
-  {
-    title: "AI Configuration",
-    icon: "🤖",
-    items: [
-      { label: "AI Agent Settings", desc: "Configure AI behavior and response style", current: "Active" },
-      { label: "Auto-Resolution Rules", desc: "When AI should auto-resolve tickets", current: "70% confidence" },
-      { label: "Escalation Triggers", desc: "Conditions that trigger human escalation", current: "5 rules active" },
-      { label: "Knowledge Base AI", desc: "AI search and article suggestions", current: "Enabled" },
-    ],
-  },
-  {
-    title: "Channels",
-    icon: "📡",
-    items: [
-      { label: "Web Chat Widget", desc: "Embed and customize the chat widget", current: "Connected" },
-      { label: "WhatsApp Business", desc: "WhatsApp Business API integration", current: "Connected" },
-      { label: "Email Integration", desc: "IMAP/SMTP email configuration", current: "Connected" },
-      { label: "SMS (Twilio)", desc: "SMS messaging configuration", current: "Connected" },
-      { label: "Facebook Messenger", desc: "Messenger integration", current: "Connected" },
-      { label: "Instagram DM", desc: "Instagram Direct Messages", current: "Connected" },
-    ],
-  },
-  {
-    title: "Security",
-    icon: "🔒",
-    items: [
-      { label: "Authentication", desc: "SSO, 2FA, and login settings", current: "2FA Enabled" },
-      { label: "Roles & Permissions", desc: "RBAC configuration", current: "5 roles" },
-      { label: "API Keys", desc: "Manage API keys and tokens", current: "3 active keys" },
-      { label: "Audit Log", desc: "Activity tracking and compliance", current: "Enabled" },
-    ],
-  },
-];
+import { useLang } from "@/lib/i18n/context";
 
 export default function SettingsPage() {
+  const { t } = useLang();
+
+  const settingsSections = [
+    {
+      title: t("settingsPage.company"),
+      icon: "🏢",
+      items: [
+        { label: t("settingsPage.companyProfile"), desc: t("settingsPage.companyProfileDesc"), current: "SSV" },
+        { label: t("settingsPage.workingHours"), desc: t("settingsPage.workingHoursDesc"), current: "Mon-Fri, 9AM-6PM EST" },
+        { label: t("settingsPage.timezone"), desc: t("settingsPage.timezoneDesc"), current: "America/New_York" },
+        { label: t("settingsPage.contactInfo"), desc: t("settingsPage.contactInfoDesc"), current: "Edit" },
+      ],
+    },
+    {
+      title: t("settingsPage.aiConfig"),
+      icon: "🤖",
+      items: [
+        { label: t("settingsPage.aiAgentSettings"), desc: t("settingsPage.aiAgentSettingsDesc"), current: "Active" },
+        { label: t("settingsPage.autoResolution"), desc: t("settingsPage.autoResolutionDesc"), current: "70% confidence" },
+        { label: t("settingsPage.escalationTriggers"), desc: t("settingsPage.escalationTriggersDesc"), current: "5 rules active" },
+        { label: t("settingsPage.knowledgeAi"), desc: t("settingsPage.knowledgeAiDesc"), current: "Enabled" },
+      ],
+    },
+    {
+      title: t("settingsPage.channelsSection"),
+      icon: "📡",
+      items: [
+        { label: t("settingsPage.webChat"), desc: t("settingsPage.webChatDesc"), current: "Connected" },
+        { label: t("settingsPage.whatsapp"), desc: t("settingsPage.whatsappDesc"), current: "Connected" },
+        { label: t("settingsPage.emailIntegration"), desc: t("settingsPage.emailDesc"), current: "Connected" },
+        { label: t("settingsPage.smsTwilio"), desc: t("settingsPage.smsDesc"), current: "Connected" },
+        { label: t("settingsPage.messenger"), desc: t("settingsPage.messengerDesc"), current: "Connected" },
+        { label: t("settingsPage.instagramDm"), desc: t("settingsPage.instagramDesc"), current: "Connected" },
+      ],
+    },
+    {
+      title: t("settingsPage.security"),
+      icon: "🔒",
+      items: [
+        { label: t("settingsPage.authentication"), desc: t("settingsPage.authenticationDesc"), current: "2FA Enabled" },
+        { label: t("settingsPage.rolesPermissions"), desc: t("settingsPage.rolesDesc"), current: "5 roles" },
+        { label: t("settingsPage.apiKeys"), desc: t("settingsPage.apiKeysDesc"), current: "3 active keys" },
+        { label: t("settingsPage.auditLog"), desc: t("settingsPage.auditLogDesc"), current: "Enabled" },
+      ],
+    },
+  ];
+
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900">Settings</h1>
-          <p className="text-sm text-gray-500 mt-1">Configure your company, AI, and integrations</p>
+          <h1 className="text-2xl font-bold text-gray-900">{t("settingsPage.title")}</h1>
+          <p className="text-sm text-gray-500 mt-1">{t("settingsPage.subtitle")}</p>
         </div>
       </div>
 

@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useCallback } from "react";
 import { useRealtimeInbox } from "@/hooks/use-sse";
+import { useLang } from "@/lib/i18n/context";
 
 interface Conversation {
   id: string;
@@ -99,11 +100,11 @@ function getInitials(name: string): string {
     .slice(0, 2);
 }
 
-function timeAgo(dateStr: string): string {
+function timeAgo(dateStr: string, t: (key: string) => string): string {
   const now = Date.now();
   const then = new Date(dateStr).getTime();
   const diffSec = Math.floor((now - then) / 1000);
-  if (diffSec < 60) return "just now";
+  if (diffSec < 60) return t("misc.justNow");
   const diffMin = Math.floor(diffSec / 60);
   if (diffMin < 60) return `${diffMin}m`;
   const diffHr = Math.floor(diffMin / 60);
@@ -113,6 +114,19 @@ function timeAgo(dateStr: string): string {
 }
 
 export default function InboxPage() {
+  const { t } = useLang();
+  const priorityLabels: Record<string, string> = {
+    low: t("inboxPage.low"),
+    medium: t("inboxPage.med"),
+    high: t("inboxPage.high"),
+    urgent: t("inboxPage.urgent"),
+  };
+  const slaLabels: Record<string, string> = {
+    ok: t("inboxPage.onTrack"),
+    warning: t("inboxPage.atRisk"),
+    breached: t("inboxPage.breached"),
+    done: t("inboxPage.completed"),
+  };
   const [inboxData, setInboxData] = useState<InboxData>({
     conversations: [],
     channelCounts: [],
@@ -209,7 +223,7 @@ export default function InboxPage() {
                   ? `bg-gradient-to-br ${meta.gradient} text-white shadow-lg shadow-blue-500/20 scale-110 animate-scale-in`
                   : "hover:bg-white/60 text-gray-500 hover:text-gray-700"
               }`}
-              title={meta.name}
+              title={id === "all" ? t("inboxPage.allChannels") : meta.name}
             >
               {meta.icon}
               {count > 0 && (
@@ -231,9 +245,9 @@ export default function InboxPage() {
         {/* Header */}
         <div className="p-4 border-b border-white/30">
           <div className="flex items-center justify-between mb-3">
-            <h2 className="text-base font-bold text-gradient">Inbox</h2>
+            <h2 className="text-base font-bold text-gradient">{t("inboxPage.title")}</h2>
             <div className="flex items-center gap-2">
-              <span className="text-xs text-gray-400 font-medium">{filteredConversations.length} conversations</span>
+              <span className="text-xs text-gray-400 font-medium">{filteredConversations.length} {t("inboxPage.conversations")}</span>
               <button className="h-7 w-7 rounded-xl hover:bg-white/60 flex items-center justify-center text-gray-400 transition-all hover:text-gray-600">
                 <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 5v.01M12 12v.01M12 19v.01M12 6a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2z" />
@@ -247,7 +261,7 @@ export default function InboxPage() {
             </svg>
             <input
               type="text"
-              placeholder="Search conversations..."
+              placeholder={t("inboxPage.searchPlaceholder")}
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               className="input-search"
@@ -277,8 +291,8 @@ export default function InboxPage() {
               <div className="w-16 h-16 rounded-3xl bg-gradient-to-br from-gray-100 to-gray-200 flex items-center justify-center text-2xl mb-4">
                 📭
               </div>
-              <p className="text-sm font-semibold text-gray-700 mb-1">No conversations</p>
-              <p className="text-xs text-gray-400">Try adjusting your filters or search</p>
+              <p className="text-sm font-semibold text-gray-700 mb-1">{t("inboxPage.noConversations")}</p>
+              <p className="text-xs text-gray-400">{t("inboxPage.adjustFilters")}</p>
             </div>
           ) : (
             filteredConversations.map((c, idx) => {
@@ -313,12 +327,12 @@ export default function InboxPage() {
                   <div className="min-w-0 flex-1">
                     <div className="flex items-center justify-between mb-0.5">
                       <span className="text-sm font-semibold text-gray-900 truncate">{c.customerName}</span>
-                      <span className="text-[11px] text-gray-400 shrink-0 ml-2 font-medium">{timeAgo(c.updatedAt)}</span>
+                      <span className="text-[11px] text-gray-400 shrink-0 ml-2 font-medium">{timeAgo(c.updatedAt, t)}</span>
                     </div>
                     <div className="text-xs text-gray-500 truncate mb-1.5 leading-relaxed">{c.lastMessage}</div>
                     <div className="flex items-center gap-1.5 flex-wrap">
                       <span className={`h-2 w-2 rounded-full ${sentimentDot[c.sentiment]}`} />
-                      <span className={`text-[10px] font-semibold px-1.5 py-0.5 rounded-md ${prio.bg}`}>{prio.label}</span>
+                      <span className={`text-[10px] font-semibold px-1.5 py-0.5 rounded-md ${prio.bg}`}>{priorityLabels[c.priority]}</span>
                       <span className={`text-[10px] font-medium px-1.5 py-0.5 rounded-md ${stat.bg}`}>{stat.label}</span>
                       {c.tags.slice(0, 1).map((tag) => (
                         <span key={tag} className="text-[10px] px-1.5 py-0.5 rounded-md bg-white/60 text-gray-500 font-medium">{tag}</span>
@@ -384,13 +398,13 @@ export default function InboxPage() {
                   <svg className="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
                   </svg>
-                  Assign
+                  {t("inboxPage.assign")}
                 </button>
                 <button className="btn-ghost text-xs">
                   <svg className="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z" />
                   </svg>
-                  Save
+                  {t("inboxPage.save")}
                 </button>
               </div>
             </div>
@@ -403,7 +417,7 @@ export default function InboxPage() {
                     <div className="text-sm text-gray-900 leading-relaxed">{selectedConversation.lastMessage}</div>
                   </div>
                   <div className="flex items-center gap-2 mt-1 px-1">
-                    <span className="text-[11px] text-gray-400">{timeAgo(selectedConversation.updatedAt)} ago</span>
+                    <span className="text-[11px] text-gray-400">{timeAgo(selectedConversation.updatedAt, t)} ago</span>
                     <span className="text-[11px] text-gray-300">·</span>
                     <span className="text-[11px] text-gray-400 capitalize">{selectedConversation.channel}</span>
                   </div>
@@ -415,15 +429,15 @@ export default function InboxPage() {
                   <div className="bg-gradient-to-br from-blue-600 to-indigo-600 text-white rounded-2xl rounded-tr-sm px-4 py-3 shadow-lg shadow-blue-500/20">
                     <div className="flex items-center gap-1.5 text-xs text-blue-200 mb-1.5">
                       <span className="h-1.5 w-1.5 rounded-full bg-blue-300 animate-pulse" />
-                      AI Resolution Agent
+                      {t("inboxPage.aiResolutionAgent")}
                     </div>
                     <div className="text-sm leading-relaxed">
-                      I understand your concern. Let me look into this right away. I&apos;ve found your account and can see the issue. I&apos;m working on a resolution now.
+                      {t("inboxPage.aiDemoResponse")}
                     </div>
                   </div>
                   <div className="flex items-center gap-2 mt-1 px-1 justify-end">
-                    <span className="text-[11px] text-emerald-500 font-semibold">QA Verified ✓</span>
-                    <span className="text-[11px] text-gray-400">just now</span>
+                    <span className="text-[11px] text-emerald-500 font-semibold">{t("inboxPage.qaVerified")}</span>
+                    <span className="text-[11px] text-gray-400">{t("misc.justNow")}</span>
                   </div>
                 </div>
               </div>
@@ -435,7 +449,7 @@ export default function InboxPage() {
                 <div className="flex-1 relative">
                   <textarea
                     rows={1}
-                    placeholder="Type a message... (Shift+Enter for new line)"
+                    placeholder={t("inboxPage.messagePlaceholder")}
                     value={messageText}
                     onChange={(e) => setMessageText(e.target.value)}
                     className="w-full rounded-2xl border border-gray-200/80 bg-white/80 backdrop-blur-sm px-4 py-3 text-sm resize-none focus:border-blue-500 focus:outline-none focus:ring-4 focus:ring-blue-500/10 transition-all duration-300"
@@ -458,13 +472,13 @@ export default function InboxPage() {
                     <svg className="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
                     </svg>
-                    AI Assist
+                    {t("inboxPage.aiAssist")}
                   </button>
                   <button className="btn-primary text-xs">
                     <svg className="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
                     </svg>
-                    Send
+                    {t("inboxPage.send")}
                   </button>
                 </div>
               </div>
@@ -473,11 +487,11 @@ export default function InboxPage() {
                   <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
                   </svg>
-                  AI suggestions available
+                  {t("inboxPage.aiSuggestions")}
                 </div>
                 <div className="flex items-center gap-1.5 text-xs text-gray-400">
                   <span className="h-1.5 w-1.5 rounded-full bg-emerald-500" />
-                  Auto-save enabled
+                  {t("inboxPage.autoSave")}
                 </div>
               </div>
             </div>
@@ -488,8 +502,8 @@ export default function InboxPage() {
               <div className="w-20 h-20 rounded-3xl bg-gradient-to-br from-blue-100 to-indigo-100 flex items-center justify-center text-3xl mx-auto mb-4 animate-scale-in">
                 💬
               </div>
-              <p className="text-sm font-semibold text-gray-700 mb-1">Select a conversation</p>
-              <p className="text-xs text-gray-400">Choose from the list to start messaging</p>
+              <p className="text-sm font-semibold text-gray-700 mb-1">{t("inboxPage.selectConversation")}</p>
+              <p className="text-xs text-gray-400">{t("inboxPage.chooseFromList")}</p>
             </div>
           </div>
         )}
@@ -501,7 +515,7 @@ export default function InboxPage() {
           <>
             {/* Customer Info */}
             <div className="p-4 border-b border-white/30 animate-fade-in animate-stagger-in stagger-1">
-              <div className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-3">Customer</div>
+              <div className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-3">{t("misc.customer")}</div>
               <div className="flex items-center gap-3 mb-3">
                 <div className="h-12 w-12 rounded-2xl bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center text-white font-bold text-sm shadow-lg shadow-blue-500/20">
                   {getInitials(selectedConversation.customerName)}
@@ -513,7 +527,7 @@ export default function InboxPage() {
               </div>
               <div className="grid grid-cols-2 gap-2.5 text-xs">
                 <div className="rounded-xl p-2.5 card-premium-blue">
-                  <div className="text-gray-400 mb-0.5 text-[10px] font-medium">Company</div>
+                  <div className="text-gray-400 mb-0.5 text-[10px] font-medium">{t("inboxPage.company")}</div>
                   <div className="font-bold text-gray-900 truncate">{selectedConversation.customerCompany}</div>
                 </div>
                 <div className="rounded-xl p-2.5 card-premium-green">
@@ -533,16 +547,16 @@ export default function InboxPage() {
 
             {/* AI Insights */}
             <div className="p-4 border-b border-white/30 animate-fade-in animate-stagger-in stagger-2">
-              <div className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-3">AI Insights</div>
+              <div className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-3">{t("inboxPage.aiInsights")}</div>
               <div className="space-y-2.5">
                 <div className={`rounded-xl p-3 border ${sentimentBg[selectedConversation.sentiment]} hover-lift`}>
                   <div className="flex items-center justify-between">
-                    <span className="text-sm font-semibold text-gray-900">Sentiment</span>
+                    <span className="text-sm font-semibold text-gray-900">{t("inboxPage.sentiment")}</span>
                     <span className={`text-sm font-bold ${sentimentColor[selectedConversation.sentiment]}`}>
                       {selectedConversation.sentimentScore > 0 ? "+" : ""}{selectedConversation.sentimentScore}
                     </span>
                   </div>
-                  <div className="text-xs text-gray-500 mt-1 capitalize">{selectedConversation.sentiment} · Trend: Stable</div>
+                  <div className="text-xs text-gray-500 mt-1 capitalize">{selectedConversation.sentiment} · {t("inboxPage.trendStable")}</div>
                 </div>
                 <div className="rounded-xl card-premium-blue p-3 hover-lift">
                   <div className="flex items-center justify-between">
@@ -558,9 +572,9 @@ export default function InboxPage() {
                 </div>
                 <div className={`rounded-xl p-3 border ${slaConfig[selectedConversation.slaStatus]?.bg || "bg-gray-50 border-gray-200"} hover-lift`}>
                   <div className="flex items-center justify-between">
-                    <span className="text-sm font-semibold text-gray-900">SLA Status</span>
+                    <span className="text-sm font-semibold text-gray-900">{t("inboxPage.slaStatus")}</span>
                     <span className={`text-sm font-bold ${slaConfig[selectedConversation.slaStatus]?.text || "text-gray-600"}`}>
-                      {slaConfig[selectedConversation.slaStatus]?.icon} {slaConfig[selectedConversation.slaStatus]?.label || selectedConversation.slaStatus}
+                      {slaConfig[selectedConversation.slaStatus]?.icon} {slaLabels[selectedConversation.slaStatus] || selectedConversation.slaStatus}
                     </span>
                   </div>
                 </div>
@@ -569,14 +583,14 @@ export default function InboxPage() {
 
             {/* Suggested Actions */}
             <div className="p-4 border-b border-white/30 animate-fade-in animate-stagger-in stagger-3">
-              <div className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-3">Suggested Actions</div>
+              <div className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-3">{t("inboxPage.suggestedActions")}</div>
               <div className="space-y-2">
                 <button className="w-full text-left rounded-xl border border-white/40 bg-white/60 backdrop-blur-sm p-3 text-sm hover:bg-white/80 hover:border-blue-200 transition-all duration-300 group hover-lift">
                   <div className="flex items-center gap-2.5">
                     <span className="h-9 w-9 rounded-xl bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center text-white text-sm shadow-lg shadow-blue-500/20 group-hover:scale-110 transition-transform duration-300">🔑</span>
                     <div>
-                      <div className="font-semibold text-gray-900">Send password reset</div>
-                      <div className="text-xs text-gray-400">Already sent · Confirm receipt</div>
+                      <div className="font-semibold text-gray-900">{t("inboxPage.actionPasswordReset")}</div>
+                      <div className="text-xs text-gray-400">{t("inboxPage.actionPasswordResetDesc")}</div>
                     </div>
                   </div>
                 </button>
@@ -584,8 +598,8 @@ export default function InboxPage() {
                   <div className="flex items-center gap-2.5">
                     <span className="h-9 w-9 rounded-xl bg-gradient-to-br from-purple-500 to-violet-600 flex items-center justify-center text-white text-sm shadow-lg shadow-purple-500/20 group-hover:scale-110 transition-transform duration-300">💰</span>
                     <div>
-                      <div className="font-semibold text-gray-900">Issue billing credit</div>
-                      <div className="text-xs text-gray-400">Credit for overcharge</div>
+                      <div className="font-semibold text-gray-900">{t("inboxPage.actionBillingCredit")}</div>
+                      <div className="text-xs text-gray-400">{t("inboxPage.actionBillingCreditDesc")}</div>
                     </div>
                   </div>
                 </button>
@@ -593,8 +607,8 @@ export default function InboxPage() {
                   <div className="flex items-center gap-2.5">
                     <span className="h-9 w-9 rounded-xl bg-gradient-to-br from-amber-500 to-orange-600 flex items-center justify-center text-white text-sm shadow-lg shadow-amber-500/20 group-hover:scale-110 transition-transform duration-300">📋</span>
                     <div>
-                      <div className="font-semibold text-gray-900">View billing history</div>
-                      <div className="text-xs text-gray-400">Last 12 months</div>
+                      <div className="font-semibold text-gray-900">{t("inboxPage.actionBillingHistory")}</div>
+                      <div className="text-xs text-gray-400">{t("inboxPage.actionBillingHistoryDesc")}</div>
                     </div>
                   </div>
                 </button>
@@ -603,7 +617,7 @@ export default function InboxPage() {
 
             {/* Conversation Tags */}
             <div className="p-4 animate-fade-in animate-stagger-in stagger-4">
-              <div className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-3">Tags</div>
+              <div className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-3">{t("inboxPage.tags")}</div>
               <div className="flex flex-wrap gap-2">
                 {selectedConversation.tags.map((tag) => (
                   <span key={tag} className="inline-flex items-center gap-1 rounded-xl bg-white/60 backdrop-blur-sm border border-white/40 px-2.5 py-1 text-xs font-semibold text-gray-600 hover-lift">
@@ -612,7 +626,7 @@ export default function InboxPage() {
                   </span>
                 ))}
                 <button className="inline-flex items-center gap-1 rounded-xl border border-dashed border-gray-300/60 px-2.5 py-1 text-xs font-medium text-gray-400 hover:text-gray-600 hover:border-gray-400 transition-all duration-300">
-                  + Add
+                  {t("inboxPage.addTag")}
                 </button>
               </div>
             </div>

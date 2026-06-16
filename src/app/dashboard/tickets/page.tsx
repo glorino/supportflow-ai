@@ -3,6 +3,7 @@
 import { useState, useEffect, useCallback, Suspense } from "react";
 import Link from "next/link";
 import { useSearchParams, useRouter } from "next/navigation";
+import { useLang } from "@/lib/i18n/context";
 
 interface Ticket {
   id: string;
@@ -73,6 +74,7 @@ const channelDisplayNames: Record<string, string> = {
 };
 
 function TicketsContent() {
+  const { t } = useLang();
   const searchParams = useSearchParams();
   const router = useRouter();
   const urlChannel = searchParams.get("channel") || "all";
@@ -139,11 +141,11 @@ function TicketsContent() {
   }
 
   const statCards = [
-    { label: "Open", count: openCount, gradient: "from-blue-500 via-blue-600 to-indigo-600", cardClass: "card-premium-blue", icon: "📂", filter: "open" },
-    { label: "Pending", count: pendingCount, gradient: "from-amber-400 via-amber-500 to-orange-500", cardClass: "card-premium-amber", icon: "⏳", filter: "pending" },
-    { label: "Escalated", count: escalatedCount, gradient: "from-red-500 via-red-600 to-rose-600", cardClass: "card-premium-red", icon: "🚨", filter: "escalated" },
-    { label: "Resolved", count: resolvedCount, gradient: "from-green-500 via-green-600 to-emerald-600", cardClass: "card-premium-green", icon: "✅", filter: "resolved" },
-    { label: "SLA Breached", count: breachedCount, gradient: "from-red-600 via-red-700 to-red-800", cardClass: "card-premium-red", icon: "⚠️", filter: "breached" },
+    { label: t("dashboardPage.status.open"), count: openCount, gradient: "from-blue-500 via-blue-600 to-indigo-600", cardClass: "card-premium-blue", icon: "📂", filter: "open" },
+    { label: t("dashboardPage.status.pending"), count: pendingCount, gradient: "from-amber-400 via-amber-500 to-orange-500", cardClass: "card-premium-amber", icon: "⏳", filter: "pending" },
+    { label: t("dashboardPage.status.escalated"), count: escalatedCount, gradient: "from-red-500 via-red-600 to-rose-600", cardClass: "card-premium-red", icon: "🚨", filter: "escalated" },
+    { label: t("dashboardPage.status.resolved"), count: resolvedCount, gradient: "from-green-500 via-green-600 to-emerald-600", cardClass: "card-premium-green", icon: "✅", filter: "resolved" },
+    { label: `${t("ticketsPage.sla")} ${t("ticketsPage.breached")}`, count: breachedCount, gradient: "from-red-600 via-red-700 to-red-800", cardClass: "card-premium-red", icon: "⚠️", filter: "breached" },
   ];
 
   return (
@@ -151,13 +153,13 @@ function TicketsContent() {
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 animate-fade-in">
         <div>
-          <h1 className="text-3xl font-bold text-gradient">Tickets</h1>
-          <p className="text-sm text-gray-500 mt-1">{tickets.length} tickets from database</p>
+          <h1 className="text-3xl font-bold text-gradient">{t("ticketsPage.title")}</h1>
+          <p className="text-sm text-gray-500 mt-1">{tickets.length} {t("ticketsPage.fromDatabase")}</p>
         </div>
         <div className="flex flex-wrap gap-2">
           <button className="btn-secondary hover-lift">
             <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" /></svg>
-            Export
+            {t("ticketsPage.export")}
           </button>
         </div>
       </div>
@@ -199,7 +201,7 @@ function TicketsContent() {
           <svg className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg>
           <input
             type="text"
-            placeholder="Search tickets by ID, subject, customer..."
+            placeholder={t("ticketsPage.searchPlaceholder")}
             className="input-premium pl-12"
             value={search}
             onChange={(e) => setSearch(e.target.value)}
@@ -210,7 +212,7 @@ function TicketsContent() {
           onChange={(e) => handleChannelChange(e.target.value)}
           className="rounded-2xl border-2 border-gray-100 bg-white/80 backdrop-blur-sm px-4 py-3.5 text-sm font-medium text-gray-700 focus:border-blue-500 focus:outline-none focus:ring-4 focus:ring-blue-500/10 transition-all duration-300"
         >
-          <option value="all">All Channels</option>
+          <option value="all">{t("ticketsPage.allChannels")}</option>
           <option value="whatsapp">WhatsApp</option>
           <option value="email">Email</option>
           <option value="web">Web Chat</option>
@@ -223,11 +225,11 @@ function TicketsContent() {
           onChange={(e) => setStatusFilter(e.target.value)}
           className="rounded-2xl border-2 border-gray-100 bg-white/80 backdrop-blur-sm px-4 py-3.5 text-sm font-medium text-gray-700 focus:border-blue-500 focus:outline-none focus:ring-4 focus:ring-blue-500/10 transition-all duration-300"
         >
-          <option value="all">All Status</option>
-          <option value="open">Open</option>
-          <option value="pending">Pending</option>
-          <option value="escalated">Escalated</option>
-          <option value="resolved">Resolved</option>
+          <option value="all">{t("ticketsPage.allStatus")}</option>
+          <option value="open">{t("dashboardPage.status.open")}</option>
+          <option value="pending">{t("dashboardPage.status.pending")}</option>
+          <option value="escalated">{t("dashboardPage.status.escalated")}</option>
+          <option value="resolved">{t("dashboardPage.status.resolved")}</option>
         </select>
       </div>
 
@@ -238,11 +240,11 @@ function TicketsContent() {
             <div className="h-6 w-6 rounded-lg bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center">
               <span className="text-[10px] font-bold text-white">{selectedTickets.length}</span>
             </div>
-            <span className="text-sm text-blue-700 font-semibold">{selectedTickets.length} selected</span>
+            <span className="text-sm text-blue-700 font-semibold">{selectedTickets.length} {t("ticketsPage.selected")}</span>
           </div>
-          <button className="btn-ghost text-xs hover:bg-blue-100/80">Assign to...</button>
-          <button className="btn-ghost text-xs hover:bg-blue-100/80">Change status</button>
-          <button className="btn-ghost text-xs text-red-600 hover:bg-red-50">Close tickets</button>
+          <button className="btn-ghost text-xs hover:bg-blue-100/80">{t("ticketsPage.assignTo")}</button>
+          <button className="btn-ghost text-xs hover:bg-blue-100/80">{t("ticketsPage.changeStatus")}</button>
+          <button className="btn-ghost text-xs text-red-600 hover:bg-red-50">{t("ticketsPage.closeTickets")}</button>
         </div>
       )}
 
@@ -255,36 +257,36 @@ function TicketsContent() {
                 <th className="w-12 px-5 py-4">
                   <input type="checkbox" className="rounded-lg border-gray-300 text-blue-600 focus:ring-blue-500/20" />
                 </th>
-                <th className="text-left px-5 py-4 text-xs font-bold text-gray-500 uppercase tracking-wider">Ticket</th>
-                <th className="text-left px-5 py-4 text-xs font-bold text-gray-500 uppercase tracking-wider">Customer</th>
-                <th className="text-left px-5 py-4 text-xs font-bold text-gray-500 uppercase tracking-wider">Status</th>
-                <th className="hidden sm:table-cell text-left px-5 py-4 text-xs font-bold text-gray-500 uppercase tracking-wider">Priority</th>
-                <th className="text-left px-5 py-4 text-xs font-bold text-gray-500 uppercase tracking-wider">SLA</th>
-                <th className="hidden sm:table-cell text-left px-5 py-4 text-xs font-bold text-gray-500 uppercase tracking-wider">AI</th>
-                <th className="text-right px-5 py-4 text-xs font-bold text-gray-500 uppercase tracking-wider">Actions</th>
+                <th className="text-left px-5 py-4 text-xs font-bold text-gray-500 uppercase tracking-wider">{t("dashboardPage.th.ticket")}</th>
+                <th className="text-left px-5 py-4 text-xs font-bold text-gray-500 uppercase tracking-wider">{t("dashboardPage.th.customer")}</th>
+                <th className="text-left px-5 py-4 text-xs font-bold text-gray-500 uppercase tracking-wider">{t("dashboardPage.th.status")}</th>
+                <th className="hidden sm:table-cell text-left px-5 py-4 text-xs font-bold text-gray-500 uppercase tracking-wider">{t("dashboardPage.th.priority")}</th>
+                <th className="text-left px-5 py-4 text-xs font-bold text-gray-500 uppercase tracking-wider">{t("ticketsPage.sla")}</th>
+                <th className="hidden sm:table-cell text-left px-5 py-4 text-xs font-bold text-gray-500 uppercase tracking-wider">{t("ticketsPage.ai")}</th>
+                <th className="text-right px-5 py-4 text-xs font-bold text-gray-500 uppercase tracking-wider">{t("ticketsPage.actions")}</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-100/80">
-              {filteredTickets.map((t, i) => (
-                <tr key={t.id} className={`animate-fade-in stagger-${(i % 6) + 1} hover:bg-blue-50/30 transition-all duration-200 group`}>
+              {filteredTickets.map((tk, i) => (
+                <tr key={tk.id} className={`animate-fade-in stagger-${(i % 6) + 1} hover:bg-blue-50/30 transition-all duration-200 group`}>
                   <td className="px-5 py-4">
                     <input
                       type="checkbox"
-                      checked={selectedTickets.includes(t.id)}
-                      onChange={() => toggleTicket(t.id)}
+                      checked={selectedTickets.includes(tk.id)}
+                      onChange={() => toggleTicket(tk.id)}
                       className="rounded-lg border-gray-300 text-blue-600 focus:ring-blue-500/20"
                     />
                   </td>
                   <td className="px-5 py-4">
-                    <Link href={`/dashboard/tickets/${t.ticketNumber.replace("SSV-", "")}`} className="block hover-lift rounded-xl p-1 -m-1">
+                    <Link href={`/dashboard/tickets/${tk.ticketNumber.replace("SSV-", "")}`} className="block hover-lift rounded-xl p-1 -m-1">
                       <div className="flex items-center gap-2 mb-1">
-                        <span className="text-xs font-mono text-gray-400">{t.ticketNumber}</span>
-                        <span className={`text-[10px] px-2 py-0.5 rounded-full font-semibold ${channelColor[t.channel] || "bg-gray-100 text-gray-600"}`}>{channelDisplayNames[t.channel] || t.channel}</span>
+                        <span className="text-xs font-mono text-gray-400">{tk.ticketNumber}</span>
+                        <span className={`text-[10px] px-2 py-0.5 rounded-full font-semibold ${channelColor[tk.channel] || "bg-gray-100 text-gray-600"}`}>{channelDisplayNames[tk.channel] || tk.channel}</span>
                       </div>
-                      <div className="text-sm font-semibold text-gray-900 group-hover:text-blue-600 transition-colors truncate max-w-xs">{t.subject}</div>
-                      {t.tags && t.tags.length > 0 && (
+                      <div className="text-sm font-semibold text-gray-900 group-hover:text-blue-600 transition-colors truncate max-w-xs">{tk.subject}</div>
+                      {tk.tags && tk.tags.length > 0 && (
                         <div className="flex items-center gap-1.5 mt-1.5">
-                          {t.tags.slice(0, 2).map((tag) => (
+                          {tk.tags.slice(0, 2).map((tag) => (
                             <span key={tag} className="text-[10px] px-2 py-0.5 rounded-full bg-gray-100/80 text-gray-500 font-medium">{tag}</span>
                           ))}
                         </div>
@@ -294,31 +296,31 @@ function TicketsContent() {
                   <td className="px-5 py-4">
                     <div className="flex items-center gap-3">
                       <div className="h-9 w-9 rounded-2xl bg-gradient-to-br from-gray-100 to-gray-200 flex items-center justify-center text-xs font-bold text-gray-600 shadow-sm">
-                        {(t.customerName || "U").split(" ").map((n) => n[0]).join("")}
+                        {(tk.customerName || "U").split(" ").map((n) => n[0]).join("")}
                       </div>
                       <div>
-                        <div className="text-sm font-semibold text-gray-900">{t.customerName || "Unknown"}</div>
-                        <div className="text-xs text-gray-400">{t.customerCompany || ""}</div>
+                        <div className="text-sm font-semibold text-gray-900">{tk.customerName || t("misc.unknown")}</div>
+                        <div className="text-xs text-gray-400">{tk.customerCompany || ""}</div>
                       </div>
                     </div>
                   </td>
                   <td className="px-5 py-4">
-                    <span className={`inline-flex items-center rounded-full px-3 py-1 text-xs font-semibold ${statusColor[t.status] || "bg-gray-100 text-gray-700"}`}>
-                      {t.status}
+                    <span className={`inline-flex items-center rounded-full px-3 py-1 text-xs font-semibold ${statusColor[tk.status] || "bg-gray-100 text-gray-700"}`}>
+                      {tk.status}
                     </span>
                   </td>
                   <td className="hidden sm:table-cell px-5 py-4">
-                    <span className={`text-xs capitalize font-medium ${priorityColor[t.priority] || "text-gray-500"}`}>{t.priority}</span>
+                    <span className={`text-xs capitalize font-medium ${priorityColor[tk.priority] || "text-gray-500"}`}>{tk.priority}</span>
                   </td>
                   <td className="px-5 py-4">
-                    <div className={`text-xs font-semibold ${slaColor[t.slaStatus] || "text-gray-400"}`}>
-                      {t.slaStatus === "breached" ? "BREACHED" : t.slaStatus === "ok" ? "OK" : t.slaStatus}
+                    <div className={`text-xs font-semibold ${slaColor[tk.slaStatus] || "text-gray-400"}`}>
+                      {tk.slaStatus === "breached" ? t("ticketsPage.breached") : tk.slaStatus === "ok" ? t("ticketsPage.ok") : tk.slaStatus}
                     </div>
                   </td>
                   <td className="hidden sm:table-cell px-5 py-4">
                     <div className="flex items-center gap-2">
-                      <span className="text-sm">{sentimentIcon[t.sentiment] || "😐"}</span>
-                      <span className="text-xs text-gray-500 font-medium">{t.aiConfidence}%</span>
+                      <span className="text-sm">{sentimentIcon[tk.sentiment] || "😐"}</span>
+                      <span className="text-xs text-gray-500 font-medium">{tk.aiConfidence}%</span>
                     </div>
                   </td>
                   <td className="px-5 py-4 text-right">
@@ -341,8 +343,8 @@ function TicketsContent() {
                         📭
                       </div>
                       <div>
-                        <p className="text-gray-500 font-medium">No tickets found.</p>
-                        <p className="text-sm text-gray-400 mt-1">{channelFilter !== "all" ? `No tickets for channel "${channelFilter}".` : "Create some tickets to see them here."}</p>
+                        <p className="text-gray-500 font-medium">{t("ticketsPage.notFound")}</p>
+                        <p className="text-sm text-gray-400 mt-1">{channelFilter !== "all" ? t("ticketsPage.notFoundForChannel") : t("ticketsPage.createSome")}</p>
                       </div>
                     </div>
                   </td>
@@ -352,7 +354,7 @@ function TicketsContent() {
           </table>
         </div>
         <div className="flex items-center justify-between gap-3 px-5 py-4 border-t border-gray-200/60 bg-gradient-to-r from-gray-50/50 to-white/30">
-          <span className="text-sm text-gray-500 font-medium">Showing {filteredTickets.length} tickets</span>
+          <span className="text-sm text-gray-500 font-medium">{t("ticketsPage.showing")} {filteredTickets.length} {t("ticketsPage.fromDatabase")}</span>
         </div>
       </div>
     </div>

@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { useLang } from "@/lib/i18n/context";
 
 interface Article {
   id: string;
@@ -43,20 +44,8 @@ const statusDot: Record<string, string> = {
   review: "bg-amber-500",
 };
 
-function formatDate(dateStr: string): string {
-  if (!dateStr) return "N/A";
-  const date = new Date(dateStr);
-  const now = new Date();
-  const diff = now.getTime() - date.getTime();
-  const hours = Math.floor(diff / 3600000);
-  const days = Math.floor(diff / 86400000);
-  if (hours < 1) return "Just now";
-  if (hours < 24) return `${hours}h ago`;
-  if (days < 7) return `${days}d ago`;
-  return date.toLocaleDateString("en-US", { month: "short", day: "numeric" });
-}
-
 export default function KnowledgePage() {
+  const { t } = useLang();
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedCollection, setSelectedCollection] = useState<string | null>(null);
   const [view, setView] = useState<"grid" | "list">("grid");
@@ -64,6 +53,19 @@ export default function KnowledgePage() {
   const [collections, setCollections] = useState<Collection[]>([]);
   const [stats, setStats] = useState({ totalArticles: 0, published: 0, totalViews: 0, totalAiUsed: 0, avgHelpful: 0 });
   const [loading, setLoading] = useState(true);
+
+  function formatDate(dateStr: string): string {
+    if (!dateStr) return "N/A";
+    const date = new Date(dateStr);
+    const now = new Date();
+    const diff = now.getTime() - date.getTime();
+    const hours = Math.floor(diff / 3600000);
+    const days = Math.floor(diff / 86400000);
+    if (hours < 1) return t("misc.justNow");
+    if (hours < 24) return `${hours}h ago`;
+    if (days < 7) return `${days}d ago`;
+    return date.toLocaleDateString("en-US", { month: "short", day: "numeric" });
+  }
 
   useEffect(() => {
     const params = new URLSearchParams();
@@ -89,7 +91,7 @@ export default function KnowledgePage() {
             <div className="animate-spin rounded-full h-12 w-12 border-4 border-blue-200 border-t-blue-600" />
             <div className="absolute inset-0 animate-spin rounded-full h-12 w-12 border-4 border-transparent border-t-indigo-500" style={{ animationDuration: "1.5s", animationDirection: "reverse" }} />
           </div>
-          <div className="text-sm font-medium text-gray-500">Loading knowledge base...</div>
+          <div className="text-sm font-medium text-gray-500">{t("knowledgePage.loading")}</div>
         </div>
       </div>
     );
@@ -101,14 +103,14 @@ export default function KnowledgePage() {
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div className="animate-slide-up">
           <h1 className="text-3xl font-bold text-gray-900 tracking-tight">
-            <span className="text-gradient">Knowledge Base</span>
+            <span className="text-gradient">{t("knowledgePage.title")}</span>
           </h1>
-          <p className="text-sm text-gray-500 mt-1.5">{articles.length} articles from database</p>
+          <p className="text-sm text-gray-500 mt-1.5">{articles.length} {t("knowledgePage.fromDatabase")}</p>
         </div>
         <div className="flex flex-wrap gap-3 animate-slide-up" style={{ animationDelay: "0.1s" }}>
           <button className="btn-primary hover-lift group flex items-center gap-2 px-5 py-2.5 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 text-white text-sm font-semibold shadow-lg shadow-blue-500/25 hover:shadow-xl hover:shadow-blue-500/30 transition-all duration-300">
             <svg className="w-4 h-4 group-hover:rotate-90 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" /></svg>
-            New Article
+            {t("knowledgePage.newArticle")}
           </button>
         </div>
       </div>
@@ -123,15 +125,15 @@ export default function KnowledgePage() {
             <div className="absolute -top-0.5 -right-0.5 h-3 w-3 bg-gradient-to-r from-green-400 to-emerald-500 rounded-full border-2 border-white animate-bounce-subtle" />
           </div>
           <div>
-            <h3 className="text-sm font-bold text-gray-900">AI-Powered Search</h3>
-            <p className="text-xs text-gray-500">Semantic understanding across all articles</p>
+            <h3 className="text-sm font-bold text-gray-900">{t("knowledgePage.aiSearch")}</h3>
+            <p className="text-xs text-gray-500">{t("knowledgePage.aiSearchDesc")}</p>
           </div>
         </div>
         <div className="relative group">
           <svg className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-blue-400 group-focus-within:text-blue-600 transition-colors duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg>
           <input
             type="text"
-            placeholder="Search articles with AI..."
+            placeholder={t("knowledgePage.searchPlaceholder")}
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             className="w-full rounded-xl border border-blue-200/60 bg-white/80 backdrop-blur-sm pl-12 pr-4 py-4 text-sm placeholder-gray-400 focus:border-blue-500 focus:bg-white focus:outline-none focus:ring-4 focus:ring-blue-500/10 transition-all duration-300 shadow-sm hover:shadow-md"
@@ -150,10 +152,10 @@ export default function KnowledgePage() {
       {/* Stats */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 animate-slide-up" style={{ animationDelay: "0.2s" }}>
         {[
-          { label: "Total Articles", value: stats.totalArticles, icon: "📚", gradient: "from-blue-500 via-blue-600 to-indigo-600", bgGradient: "from-blue-50 to-indigo-50", borderColor: "border-blue-200/50" },
-          { label: "Published", value: stats.published, icon: "✅", gradient: "from-emerald-500 via-green-500 to-teal-600", bgGradient: "from-emerald-50 to-green-50", borderColor: "border-emerald-200/50" },
-          { label: "Total Views", value: stats.totalViews, icon: "👁️", gradient: "from-purple-500 via-violet-500 to-indigo-600", bgGradient: "from-purple-50 to-violet-50", borderColor: "border-purple-200/50" },
-          { label: "Helpful Rating", value: `${Math.round(stats.avgHelpful)}%`, icon: "👍", gradient: "from-amber-400 via-orange-500 to-red-500", bgGradient: "from-amber-50 to-orange-50", borderColor: "border-amber-200/50" },
+          { label: t("knowledgePage.totalArticles"), value: stats.totalArticles, icon: "📚", gradient: "from-blue-500 via-blue-600 to-indigo-600", bgGradient: "from-blue-50 to-indigo-50", borderColor: "border-blue-200/50" },
+          { label: t("knowledgePage.published"), value: stats.published, icon: "✅", gradient: "from-emerald-500 via-green-500 to-teal-600", bgGradient: "from-emerald-50 to-green-50", borderColor: "border-emerald-200/50" },
+          { label: t("knowledgePage.totalViews"), value: stats.totalViews, icon: "👁️", gradient: "from-purple-500 via-violet-500 to-indigo-600", bgGradient: "from-purple-50 to-violet-50", borderColor: "border-purple-200/50" },
+          { label: t("knowledgePage.helpfulRating"), value: `${Math.round(stats.avgHelpful)}%`, icon: "👍", gradient: "from-amber-400 via-orange-500 to-red-500", bgGradient: "from-amber-50 to-orange-50", borderColor: "border-amber-200/50" },
         ].map((s) => (
           <div key={s.label} className={`card-premium rounded-2xl border ${s.borderColor} bg-gradient-to-br ${s.bgGradient} p-5 hover-lift group cursor-default`}>
             <div className="flex items-center gap-2.5 mb-3">
@@ -173,7 +175,7 @@ export default function KnowledgePage() {
           <div className="flex items-center justify-between mb-4">
             <h2 className="text-base font-bold text-gray-900 flex items-center gap-2">
               <span className="w-1 h-5 rounded-full bg-gradient-to-b from-blue-500 to-indigo-600" />
-              Collections
+              {t("knowledgePage.collections")}
             </h2>
           </div>
           <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3 sm:gap-4">
@@ -195,7 +197,7 @@ export default function KnowledgePage() {
                   {collectionIcons[c.name] || "📄"}
                 </div>
                 <div className="text-sm font-bold text-gray-900 mb-0.5 truncate">{c.name}</div>
-                <div className="text-xs text-gray-500 font-medium">{c.count} articles</div>
+                <div className="text-xs text-gray-500 font-medium">{c.count} {t("knowledgePage.articles")}</div>
               </button>
             ))}
           </div>
@@ -207,7 +209,7 @@ export default function KnowledgePage() {
         <div className="flex items-center justify-between px-6 py-4 border-b border-gray-100/80 bg-gradient-to-r from-gray-50/80 to-white/50">
           <h3 className="text-base font-bold text-gray-900 flex items-center gap-2">
             <span className="w-1 h-5 rounded-full bg-gradient-to-b from-emerald-500 to-teal-600" />
-            Articles
+            {t("knowledgePage.articlesTitle")}
             <span className="text-xs font-semibold text-gray-400 bg-gray-100 px-2 py-0.5 rounded-full">{articles.length}</span>
           </h3>
           <div className="flex items-center gap-1.5 bg-gray-100/80 rounded-xl p-1">
@@ -239,13 +241,13 @@ export default function KnowledgePage() {
             <table className="w-full">
               <thead>
                 <tr className="border-b border-gray-100/80 bg-gradient-to-r from-gray-50/60 to-transparent">
-                  <th className="text-left px-6 py-3.5 text-[11px] font-bold text-gray-500 uppercase tracking-wider">Article</th>
-                  <th className="text-left px-6 py-3.5 text-[11px] font-bold text-gray-500 uppercase tracking-wider">Collection</th>
-                  <th className="text-left px-6 py-3.5 text-[11px] font-bold text-gray-500 uppercase tracking-wider">Status</th>
-                  <th className="hidden sm:table-cell text-left px-6 py-3.5 text-[11px] font-bold text-gray-500 uppercase tracking-wider">Views</th>
-                  <th className="hidden sm:table-cell text-left px-6 py-3.5 text-[11px] font-bold text-gray-500 uppercase tracking-wider">AI Used</th>
-                  <th className="text-left px-6 py-3.5 text-[11px] font-bold text-gray-500 uppercase tracking-wider">Helpful</th>
-                  <th className="hidden sm:table-cell text-right px-6 py-3.5 text-[11px] font-bold text-gray-500 uppercase tracking-wider">Updated</th>
+                  <th className="text-left px-6 py-3.5 text-[11px] font-bold text-gray-500 uppercase tracking-wider">{t("knowledgePage.th.article")}</th>
+                  <th className="text-left px-6 py-3.5 text-[11px] font-bold text-gray-500 uppercase tracking-wider">{t("knowledgePage.th.collection")}</th>
+                  <th className="text-left px-6 py-3.5 text-[11px] font-bold text-gray-500 uppercase tracking-wider">{t("knowledgePage.th.status")}</th>
+                  <th className="hidden sm:table-cell text-left px-6 py-3.5 text-[11px] font-bold text-gray-500 uppercase tracking-wider">{t("knowledgePage.th.views")}</th>
+                  <th className="hidden sm:table-cell text-left px-6 py-3.5 text-[11px] font-bold text-gray-500 uppercase tracking-wider">{t("knowledgePage.th.aiUsed")}</th>
+                  <th className="text-left px-6 py-3.5 text-[11px] font-bold text-gray-500 uppercase tracking-wider">{t("knowledgePage.th.helpful")}</th>
+                  <th className="hidden sm:table-cell text-right px-6 py-3.5 text-[11px] font-bold text-gray-500 uppercase tracking-wider">{t("knowledgePage.th.updated")}</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-50">
@@ -261,7 +263,7 @@ export default function KnowledgePage() {
                         </div>
                       )}
                     </td>
-                    <td className="px-6 py-4 text-sm text-gray-600 font-medium">{a.collection || "Uncategorized"}</td>
+                    <td className="px-6 py-4 text-sm text-gray-600 font-medium">{a.collection || t("knowledgePage.uncategorized")}</td>
                     <td className="px-6 py-4">
                       <span className={`inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-xs font-semibold ${statusColor[a.status] || "bg-gray-100 text-gray-600"}`}>
                         <span className={`h-1.5 w-1.5 rounded-full ${statusDot[a.status] || "bg-gray-400"}`} />
@@ -282,8 +284,8 @@ export default function KnowledgePage() {
                           📭
                         </div>
                         <div>
-                          <p className="text-sm font-semibold text-gray-900">No articles found</p>
-                          <p className="text-xs text-gray-500 mt-1">Create your first article to get started</p>
+                          <p className="text-sm font-semibold text-gray-900">{t("knowledgePage.notFound")}</p>
+                          <p className="text-xs text-gray-500 mt-1">{t("knowledgePage.createFirst")}</p>
                         </div>
                       </div>
                     </td>
@@ -306,7 +308,7 @@ export default function KnowledgePage() {
                 <h4 className="text-sm font-bold text-gray-900 group-hover:text-blue-600 transition-colors duration-300 mb-2 line-clamp-2">{a.title}</h4>
                 <p className="text-xs text-gray-500 font-medium mb-4 flex items-center gap-1.5">
                   <span className="h-4 w-4 rounded bg-gray-100 flex items-center justify-center text-[10px]">{collectionIcons[a.collection] || "📄"}</span>
-                  {a.collection || "Uncategorized"}
+                  {a.collection || t("knowledgePage.uncategorized")}
                 </p>
                 <div className="flex items-center gap-4 text-xs text-gray-400 font-medium">
                   <span className="flex items-center gap-1">
@@ -340,7 +342,7 @@ export default function KnowledgePage() {
                     📭
                   </div>
                   <div>
-                    <p className="text-base font-bold text-gray-900">No articles found</p>
+                    <p className="text-base font-bold text-gray-900">{t("knowledgePage.notFound")}</p>
                     <p className="text-sm text-gray-500 mt-1">Try adjusting your search or filters</p>
                   </div>
                 </div>
