@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
+import { useLang } from "@/lib/i18n/context";
 
 interface Escalation {
   id: string;
@@ -43,20 +44,21 @@ const sentimentIcon: Record<string, string> = {
   frustrated: "😤",
 };
 
-function timeAgo(dateStr: string): string {
+function timeAgo(dateStr: string, t: (key: string) => string): string {
   const date = new Date(dateStr);
   const now = new Date();
   const diff = now.getTime() - date.getTime();
   const minutes = Math.floor(diff / 60000);
   const hours = Math.floor(diff / 3600000);
   const days = Math.floor(diff / 86400000);
-  if (minutes < 1) return "Just now";
-  if (minutes < 60) return `${minutes} min ago`;
-  if (hours < 24) return `${hours} hours ago`;
-  return `${days} days ago`;
+  if (minutes < 1) return t("misc.justNow");
+  if (minutes < 60) return `${minutes} ${t("misc.minAgo")}`;
+  if (hours < 24) return `${hours} ${t("misc.hoursAgo")}`;
+  return `${days} ${t("misc.daysAgo")}`;
 }
 
 export default function EscalationPage() {
+  const { t } = useLang();
   const [escalations, setEscalations] = useState<Escalation[]>([]);
   const [stats, setStats] = useState({ totalEscalated: 0, pending: 0, slaBreached: 0 });
   const [loading, setLoading] = useState(true);
@@ -89,10 +91,10 @@ export default function EscalationPage() {
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 animate-slide-up">
         <div>
           <h1 className="text-3xl font-bold bg-gradient-to-r from-red-600 via-amber-500 to-blue-600 bg-clip-text text-transparent">
-            Escalation Center
+            {t("escalationPage.title")}
           </h1>
           <p className="text-sm text-gray-500 mt-1">
-            {escalations.length} escalated tickets from database
+            {escalations.length} {t("escalationPage.fromDatabase")}
           </p>
         </div>
       </div>
@@ -101,7 +103,7 @@ export default function EscalationPage() {
       <div className="grid grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4">
         {[
           {
-            label: "Escalated",
+            label: t("escalationPage.escalated"),
             value: stats.totalEscalated,
             icon: "🚨",
             gradient: "from-red-500 to-rose-600",
@@ -109,7 +111,7 @@ export default function EscalationPage() {
             delay: "0",
           },
           {
-            label: "SLA Breached",
+            label: t("escalationPage.slaBreached"),
             value: stats.slaBreached,
             icon: "⚠️",
             gradient: "from-amber-400 to-orange-500",
@@ -117,7 +119,7 @@ export default function EscalationPage() {
             delay: "100",
           },
           {
-            label: "Total Escalations",
+            label: t("escalationPage.totalEscalations"),
             value: stats.totalEscalated,
             icon: "📊",
             gradient: "from-blue-500 to-indigo-600",
@@ -169,10 +171,10 @@ export default function EscalationPage() {
             </div>
             <div>
               <h3 className="text-base font-bold text-gradient">
-                AI Routing Rules
+                {t("escalationPage.aiRoutingRules")}
               </h3>
               <p className="text-xs text-gray-500">
-                Intelligent escalation triggers
+                {t("escalationPage.aiRoutingDesc")}
               </p>
             </div>
           </div>
@@ -248,11 +250,11 @@ export default function EscalationPage() {
                 </svg>
               </div>
               <h3 className="text-base font-bold text-gradient">
-                Escalation Queue
+                {t("escalationPage.queue")}
               </h3>
             </div>
             <span className="text-xs font-semibold text-gray-400 bg-gray-100/50 px-3 py-1 rounded-full">
-              {escalations.length} tickets
+              {escalations.length} {t("misc.tickets")}
             </span>
           </div>
         </div>
@@ -300,7 +302,7 @@ export default function EscalationPage() {
                   {e.subject}
                 </div>
                 <div className="text-xs text-gray-500 mt-0.5">
-                  {e.customerName || "Unknown"} · {e.customerCompany || ""}
+                  {e.customerName || t("misc.unknown")} · {e.customerCompany || ""}
                 </div>
               </div>
 
@@ -308,11 +310,11 @@ export default function EscalationPage() {
               <div className="hidden sm:flex items-center gap-4 shrink-0">
                 <div className="text-right">
                   <div className="text-xs text-gray-400 mb-1">
-                    {timeAgo(e.createdAt)}
+                    {timeAgo(e.createdAt, t)}
                   </div>
                   {e.assigneeName && (
                     <div className="text-xs text-gray-500">
-                      <span className="text-gray-400">Assigned:</span>{" "}
+                      <span className="text-gray-400">{t("escalationPage.assigned")}</span>{" "}
                       <span className="font-semibold text-blue-600">
                         {e.assigneeName}
                       </span>
@@ -323,10 +325,10 @@ export default function EscalationPage() {
                 {/* Hover Action Buttons */}
                 <div className="flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-all duration-300 translate-x-2 group-hover:translate-x-0">
                   <button className="btn-ghost text-xs hover:bg-white/50 rounded-lg px-3 py-1.5 transition-all duration-200">
-                    Assign
+                    {t("escalationPage.assign")}
                   </button>
                   <button className="btn-primary text-xs shadow-lg hover:shadow-xl transition-all duration-200 rounded-lg px-3 py-1.5">
-                    Accept
+                    {t("escalationPage.accept")}
                   </button>
                 </div>
               </div>
@@ -340,10 +342,10 @@ export default function EscalationPage() {
                 ✅
               </div>
               <h3 className="text-lg font-bold text-gradient mb-2">
-                All Clear!
+                {t("escalationPage.allClear")}
               </h3>
               <p className="text-sm text-gray-400 max-w-sm mx-auto">
-                No escalated tickets. All tickets are being handled properly.
+                {t("escalationPage.allClearDesc")}
               </p>
             </div>
           )}

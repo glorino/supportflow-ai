@@ -41,11 +41,11 @@ export default function LoginPage() {
         window.location.href = "/dashboard";
       } else {
         setStatus("error");
-        setError(data.error || "Login failed");
+        setError(data.error || t("loginPage.errorLoginFailed"));
       }
     } catch {
       setStatus("error");
-      setError("Connection failed. Please try again.");
+      setError(t("loginPage.errorConnection"));
     }
   };
 
@@ -98,10 +98,10 @@ export default function LoginPage() {
           {/* Features */}
           <div className="space-y-5 mb-14 animate-slide-up stagger-2">
             {[
-              { icon: "🤖", title: "9 AI Agents", desc: "Intelligent automation pipeline", color: "from-violet-500/20 to-purple-500/20" },
-              { icon: "📡", title: "6 Channels Unified", desc: "WhatsApp, Email, SMS, Web, Messenger, Instagram", color: "from-blue-500/20 to-cyan-500/20" },
-              { icon: "⚡", title: "56% Auto-Resolution", desc: "AI resolves tickets without human intervention", color: "from-amber-500/20 to-orange-500/20" },
-              { icon: "🛡️", title: "99.99% Uptime", desc: "Enterprise-grade reliability", color: "from-green-500/20 to-emerald-500/20" },
+              { icon: "🤖", title: t("loginPage.feature1Title"), desc: t("loginPage.feature1Desc"), color: "from-violet-500/20 to-purple-500/20" },
+              { icon: "📡", title: t("loginPage.feature2Title"), desc: t("loginPage.feature2Desc"), color: "from-blue-500/20 to-cyan-500/20" },
+              { icon: "⚡", title: t("loginPage.feature3Title"), desc: t("loginPage.feature3Desc"), color: "from-amber-500/20 to-orange-500/20" },
+              { icon: "🛡️", title: t("loginPage.feature4Title"), desc: t("loginPage.feature4Desc"), color: "from-green-500/20 to-emerald-500/20" },
             ].map((f, i) => (
               <div key={f.title} className="flex items-center gap-4 group">
                 <div className={`h-14 w-14 rounded-2xl bg-gradient-to-br ${f.color} backdrop-blur-sm flex items-center justify-center text-xl shrink-0 border border-white/10 group-hover:scale-110 group-hover:border-white/20 transition-all duration-500`}>
@@ -118,13 +118,13 @@ export default function LoginPage() {
           {/* Testimonial */}
           <div className="p-6 rounded-3xl bg-white/[0.07] backdrop-blur-xl border border-white/[0.08] animate-slide-up stagger-4">
             <div className="text-sm text-white/80 leading-relaxed mb-5 italic">
-              &quot;SSV CRM cut our response time by 73% and our team can focus on complex issues instead of repetitive questions.&quot;
+              &quot;{t("loginPage.testimonial")}&quot;
             </div>
             <div className="flex items-center gap-3">
               <div className="h-11 w-11 rounded-2xl bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center text-white text-sm font-bold border border-white/10">SC</div>
               <div>
                 <div className="text-sm font-semibold text-white">Sarah Chen</div>
-                <div className="text-xs text-blue-200/40">Head of Support, SSV</div>
+                <div className="text-xs text-blue-200/40">{t("loginPage.testimonialRole")}</div>
               </div>
             </div>
           </div>
@@ -273,19 +273,19 @@ export default function LoginPage() {
           <div className="mt-8 flex items-center justify-center gap-6 text-xs text-gray-400 animate-slide-up stagger-5">
             <span className="flex items-center gap-1.5">
               <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" /></svg>
-              SSL Encrypted
+              {t("loginPage.sslEncrypted")}
             </span>
             <span className="flex items-center gap-1.5">
               <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" /></svg>
-              SOC 2 Compliant
+              {t("loginPage.soc2Compliant")}
             </span>
           </div>
 
           {/* Legal Links */}
           <div className="mt-6 flex items-center justify-center gap-4 text-xs text-gray-400 animate-slide-up stagger-6">
-            <Link href="/privacy" className="hover:text-gray-600 transition">Privacy Policy</Link>
+            <Link href="/privacy" className="hover:text-gray-600 transition">{t("misc.privacyPolicy")}</Link>
             <span className="text-gray-300">·</span>
-            <Link href="/terms" className="hover:text-gray-600 transition">Terms &amp; Conditions</Link>
+            <Link href="/terms" className="hover:text-gray-600 transition">{t("misc.terms")}</Link>
           </div>
         </div>
       </div>

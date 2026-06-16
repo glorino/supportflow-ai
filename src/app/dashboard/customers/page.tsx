@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
+import { useLang } from "@/lib/i18n/context";
 
 interface Customer {
   id: string;
@@ -55,6 +56,7 @@ function formatDate(dateStr: string): string {
 }
 
 export default function CustomersPage() {
+  const { t } = useLang();
   const [searchQuery, setSearchQuery] = useState("");
   const [segmentFilter, setSegmentFilter] = useState("all");
   const [customers, setCustomers] = useState<Customer[]>([]);
@@ -99,18 +101,18 @@ export default function CustomersPage() {
     <div className="space-y-8">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 animate-slide-up">
         <div>
-          <h1 className="text-3xl font-bold text-gradient-premium">Customers</h1>
-          <p className="text-sm text-gray-500 mt-1.5">{customers.length} customers from database</p>
+          <h1 className="text-3xl font-bold text-gradient-premium">{t("customersPage.title")}</h1>
+          <p className="text-sm text-gray-500 mt-1.5">{customers.length} {t("customersPage.fromDatabase")}</p>
         </div>
       </div>
 
       {/* Segment Cards */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-5">
         {[
-          { label: "Enterprise", count: enterpriseCount, revenue: formatNaira(enterpriseRevenue), icon: "🏢", gradient: "from-purple-500 via-violet-500 to-indigo-600", cardClass: "card-premium-purple" },
-          { label: "Business", count: businessCount, revenue: formatNaira(businessRevenue), icon: "📈", gradient: "from-blue-500 via-blue-600 to-cyan-600", cardClass: "card-premium-blue" },
-          { label: "Pro", count: proCount, revenue: formatNaira(proRevenue), icon: "⭐", gradient: "from-green-500 via-emerald-500 to-teal-600", cardClass: "card-premium-green" },
-          { label: "Starter", count: starterCount, revenue: formatNaira(starterRevenue), icon: "🚀", gradient: "from-amber-400 via-orange-500 to-red-500", cardClass: "card-premium-amber" },
+          { label: t("customersPage.enterprise"), count: enterpriseCount, revenue: formatNaira(enterpriseRevenue), icon: "🏢", gradient: "from-purple-500 via-violet-500 to-indigo-600", cardClass: "card-premium-purple" },
+          { label: t("customersPage.business"), count: businessCount, revenue: formatNaira(businessRevenue), icon: "📈", gradient: "from-blue-500 via-blue-600 to-cyan-600", cardClass: "card-premium-blue" },
+          { label: t("customersPage.pro"), count: proCount, revenue: formatNaira(proRevenue), icon: "⭐", gradient: "from-green-500 via-emerald-500 to-teal-600", cardClass: "card-premium-green" },
+          { label: t("customersPage.starter"), count: starterCount, revenue: formatNaira(starterRevenue), icon: "🚀", gradient: "from-amber-400 via-orange-500 to-red-500", cardClass: "card-premium-amber" },
         ].map((s, i) => (
           <div
             key={s.label}
@@ -122,11 +124,11 @@ export default function CustomersPage() {
               </div>
               <div>
                 <div className="text-sm font-semibold text-gray-900">{s.label}</div>
-                <div className="text-xs text-gray-500">{s.count} customers</div>
+                <div className="text-xs text-gray-500">{s.count} {t("customersPage.customers")}</div>
               </div>
             </div>
             <div className="text-2xl font-bold text-gray-900 mb-0.5">{s.revenue}</div>
-            <div className="text-xs text-gray-500">Total LTV</div>
+            <div className="text-xs text-gray-500">{t("customersPage.totalLtv")}</div>
           </div>
         ))}
       </div>
@@ -139,7 +141,7 @@ export default function CustomersPage() {
           </svg>
           <input
             type="text"
-            placeholder="Search customers by name, email, or company..."
+            placeholder={t("customersPage.searchPlaceholder")}
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             className="input-premium"
@@ -150,11 +152,11 @@ export default function CustomersPage() {
           onChange={(e) => setSegmentFilter(e.target.value)}
           className="rounded-2xl border-2 border-gray-100 bg-white/80 backdrop-blur-sm px-4 py-3.5 text-sm font-medium text-gray-700 focus:border-blue-500 focus:outline-none focus:ring-4 focus:ring-blue-500/10 transition-all duration-300"
         >
-          <option value="all">All Segments</option>
-          <option value="enterprise">Enterprise</option>
-          <option value="business">Business</option>
-          <option value="pro">Pro</option>
-          <option value="starter">Starter</option>
+          <option value="all">{t("customersPage.allSegments")}</option>
+          <option value="enterprise">{t("customersPage.enterprise")}</option>
+          <option value="business">{t("customersPage.business")}</option>
+          <option value="pro">{t("customersPage.pro")}</option>
+          <option value="starter">{t("customersPage.starter")}</option>
         </select>
       </div>
 
@@ -165,10 +167,10 @@ export default function CustomersPage() {
             <thead>
               <tr className="border-b border-gray-100 bg-gradient-to-r from-gray-50/80 to-gray-100/50">
                 <th className="text-left px-6 py-4 text-xs font-semibold text-gray-500 uppercase tracking-wider">Customer</th>
-                <th className="text-left px-6 py-4 text-xs font-semibold text-gray-500 uppercase tracking-wider">Source</th>
-                <th className="text-left px-6 py-4 text-xs font-semibold text-gray-500 uppercase tracking-wider">Segment</th>
-                <th className="hidden sm:table-cell text-left px-6 py-4 text-xs font-semibold text-gray-500 uppercase tracking-wider">Plan</th>
-                <th className="text-left px-6 py-4 text-xs font-semibold text-gray-500 uppercase tracking-wider">LTV</th>
+                <th className="text-left px-6 py-4 text-xs font-semibold text-gray-500 uppercase tracking-wider">{t("customersPage.source")}</th>
+                <th className="text-left px-6 py-4 text-xs font-semibold text-gray-500 uppercase tracking-wider">{t("customersPage.segment")}</th>
+                <th className="hidden sm:table-cell text-left px-6 py-4 text-xs font-semibold text-gray-500 uppercase tracking-wider">{t("customersPage.plan")}</th>
+                <th className="text-left px-6 py-4 text-xs font-semibold text-gray-500 uppercase tracking-wider">{t("customersPage.ltv")}</th>
                 <th className="hidden sm:table-cell text-left px-6 py-4 text-xs font-semibold text-gray-500 uppercase tracking-wider">Tickets</th>
                 <th className="hidden sm:table-cell text-left px-6 py-4 text-xs font-semibold text-gray-500 uppercase tracking-wider">CSAT</th>
                 <th className="text-left px-6 py-4 text-xs font-semibold text-gray-500 uppercase tracking-wider">Status</th>
@@ -199,12 +201,12 @@ export default function CustomersPage() {
                         <div>
                           <div className="text-sm font-medium text-gray-900 group-hover/source:text-blue-600 transition-colors">{channelDisplayNames[c.sourceChannel] || c.sourceChannel}</div>
                           {c.firstTicketDate && (
-                            <div className="text-[10px] text-gray-400">since {formatDate(c.firstTicketDate)}</div>
+                            <div className="text-[10px] text-gray-400">{t("customersPage.since")} {formatDate(c.firstTicketDate)}</div>
                           )}
                         </div>
                       </Link>
                     ) : (
-                      <span className="text-sm text-gray-400">No tickets</span>
+                      <span className="text-sm text-gray-400">{t("customersPage.noTickets")}</span>
                     )}
                   </td>
                   <td className="px-6 py-4">
@@ -233,8 +235,8 @@ export default function CustomersPage() {
                 <tr>
                   <td colSpan={8} className="px-6 py-16 text-center">
                     <div className="text-5xl mb-4">🔍</div>
-                    <div className="text-lg font-bold text-gradient-premium mb-1">No customers found</div>
-                    <p className="text-sm text-gray-400">Try adjusting your search or filters</p>
+                    <div className="text-lg font-bold text-gradient-premium mb-1">{t("customersPage.notFound")}</div>
+                    <p className="text-sm text-gray-400">{t("customersPage.adjustFilters")}</p>
                   </td>
                 </tr>
               )}

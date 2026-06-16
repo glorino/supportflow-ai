@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { useLang } from "@/lib/i18n/context";
 
 interface TeamUser {
   id: string;
@@ -58,6 +59,7 @@ export default function TeamsPage() {
   const [users, setUsers] = useState<TeamUser[]>([]);
   const [teams, setTeams] = useState<TeamInfo[]>([]);
   const [loading, setLoading] = useState(true);
+  const { t } = useLang();
 
   useEffect(() => {
     fetch("/api/teams")
@@ -78,7 +80,7 @@ export default function TeamsPage() {
             <div className="h-14 w-14 rounded-full border-4 border-blue-100 border-t-blue-600 animate-spin" />
             <div className="absolute inset-0 h-14 w-14 rounded-full border-4 border-transparent border-b-indigo-400 animate-spin" style={{ animationDirection: "reverse", animationDuration: "1.5s" }} />
           </div>
-          <p className="text-sm font-medium text-gray-500 animate-pulse">Loading teams...</p>
+          <p className="text-sm font-medium text-gray-500 animate-pulse">{t("teamsPage.loading")}</p>
         </div>
       </div>
     );
@@ -89,9 +91,9 @@ export default function TeamsPage() {
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h1 className="text-3xl font-bold text-gradient">Teams</h1>
+          <h1 className="text-3xl font-bold text-gradient">{t("teamsPage.title")}</h1>
           <p className="text-sm text-gray-500 mt-1.5">
-            {users.length} members across {teams.length} teams
+            {users.length} {t("teamsPage.membersAcross")} {teams.length} {t("teamsPage.teamsWord")}
           </p>
         </div>
 
@@ -113,7 +115,7 @@ export default function TeamsPage() {
             <svg className="w-4 h-4 inline-block mr-1.5 -mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
             </svg>
-            Teams
+            {t("teamsPage.tabTeams")}
           </button>
           <button
             onClick={() => setView("members")}
@@ -124,7 +126,7 @@ export default function TeamsPage() {
             <svg className="w-4 h-4 inline-block mr-1.5 -mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
             </svg>
-            Members
+            {t("teamsPage.tabMembers")}
           </button>
         </div>
       </div>
@@ -132,16 +134,16 @@ export default function TeamsPage() {
       {/* Teams View */}
       {view === "teams" ? (
         <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-          {teams.map((t, i) => {
-            const color = teamColors[t.name] || "from-gray-500 to-gray-600";
-            const cardClass = teamCardClasses[t.name] || "card-premium-blue";
-            const teamMembers = users.filter((u) => u.team === t.name);
+          {teams.map((tm, i) => {
+            const color = teamColors[tm.name] || "from-gray-500 to-gray-600";
+            const cardClass = teamCardClasses[tm.name] || "card-premium-blue";
+            const teamMembers = users.filter((u) => u.team === tm.name);
             const lead = teamMembers.find(
               (u) => u.role === "manager" || u.role === "admin"
             );
             return (
               <div
-                key={t.name}
+                key={tm.name}
                 className={`rounded-3xl p-6 hover-lift group animate-scale-in stagger-${i + 1} ${cardClass}`}
               >
                 <div className="flex items-start justify-between mb-5">
@@ -149,24 +151,24 @@ export default function TeamsPage() {
                     <div
                       className={`h-14 w-14 rounded-2xl bg-gradient-to-br ${color} flex items-center justify-center text-white font-bold text-lg shadow-lg group-hover:scale-110 group-hover:rotate-3 transition-all duration-500`}
                     >
-                      {t.name
+                      {tm.name
                         .split(" ")
                         .map((n) => n[0])
                         .join("")}
                     </div>
                     <div>
                       <h3 className="text-lg font-bold text-gray-900">
-                        {t.name}
+                        {tm.name}
                       </h3>
                       <p className="text-xs text-gray-500 font-medium mt-0.5">
-                        {t.memberCount} members
+                        {tm.memberCount} {t("teamsPage.membersLabel")}
                       </p>
                     </div>
                   </div>
                   <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-white/60 backdrop-blur-sm border border-white/80">
                     <div className="h-2 w-2 rounded-full bg-green-500 animate-pulse" />
                     <span className="text-[11px] font-semibold text-gray-600">
-                      Active
+                      {t("misc.active")}
                     </span>
                   </div>
                 </div>
@@ -174,18 +176,18 @@ export default function TeamsPage() {
                 <div className="grid grid-cols-2 gap-3 mb-5">
                   <div className="rounded-2xl bg-white/60 backdrop-blur-sm border border-white/80 p-4 text-center group-hover:bg-white/80 transition-colors duration-300">
                     <div className="text-2xl font-bold text-gray-900">
-                      {t.memberCount}
+                      {tm.memberCount}
                     </div>
                     <div className="text-[11px] text-gray-500 font-semibold mt-0.5">
-                      Members
+                      {t("teamsPage.membersCount")}
                     </div>
                   </div>
                   <div className="rounded-2xl bg-white/60 backdrop-blur-sm border border-white/80 p-4 text-center group-hover:bg-white/80 transition-colors duration-300">
                     <div className="text-2xl font-bold text-gray-900">
-                      {t.openTickets}
+                      {tm.openTickets}
                     </div>
                     <div className="text-[11px] text-gray-500 font-semibold mt-0.5">
-                      Open Tickets
+                      {t("teamsPage.openTickets")}
                     </div>
                   </div>
                 </div>
@@ -203,7 +205,7 @@ export default function TeamsPage() {
                       </div>
                       <div>
                         <span className="text-[11px] text-gray-400 font-medium block">
-                          Team Lead
+                          {t("teamsPage.teamLead")}
                         </span>
                         <span className="text-sm font-semibold text-gray-700">
                           {lead.name}
@@ -229,7 +231,7 @@ export default function TeamsPage() {
                 {!lead && (
                   <div className="flex items-center justify-between pt-4 border-t border-gray-200/50">
                     <span className="text-xs text-gray-400 italic">
-                      No lead assigned
+                      {t("teamsPage.noLeadAssigned")}
                     </span>
                     <svg
                       className="w-5 h-5 text-gray-300 group-hover:text-gray-500 group-hover:translate-x-1 transition-all duration-300"
@@ -268,10 +270,10 @@ export default function TeamsPage() {
                 </svg>
               </div>
               <p className="text-base font-semibold text-gray-600">
-                No teams found
+                {t("teamsPage.notFound")}
               </p>
               <p className="text-sm text-gray-400 mt-1">
-                Teams will appear here once they are created.
+                {t("teamsPage.willAppear")}
               </p>
             </div>
           )}
@@ -284,22 +286,22 @@ export default function TeamsPage() {
               <thead>
                 <tr className="border-b border-gray-100/80">
                   <th className="text-left px-6 py-4 text-xs font-bold text-gray-400 uppercase tracking-wider">
-                    Member
+                    {t("teamsPage.th.member")}
                   </th>
                   <th className="text-left px-6 py-4 text-xs font-bold text-gray-400 uppercase tracking-wider">
-                    Role
+                    {t("teamsPage.th.role")}
                   </th>
                   <th className="hidden sm:table-cell text-left px-6 py-4 text-xs font-bold text-gray-400 uppercase tracking-wider">
-                    Team
+                    {t("teamsPage.th.team")}
                   </th>
                   <th className="text-left px-6 py-4 text-xs font-bold text-gray-400 uppercase tracking-wider">
-                    Status
+                    {t("teamsPage.th.status")}
                   </th>
                   <th className="hidden sm:table-cell text-left px-6 py-4 text-xs font-bold text-gray-400 uppercase tracking-wider">
-                    Active
+                    {t("teamsPage.th.active")}
                   </th>
                   <th className="hidden sm:table-cell text-left px-6 py-4 text-xs font-bold text-gray-400 uppercase tracking-wider">
-                    Resolved
+                    {t("teamsPage.th.resolved")}
                   </th>
                 </tr>
               </thead>
@@ -416,10 +418,10 @@ export default function TeamsPage() {
                 </svg>
               </div>
               <p className="text-base font-semibold text-gray-600">
-                No members found
+                {t("teamsPage.noMembersFound")}
               </p>
               <p className="text-sm text-gray-400 mt-1">
-                Members will appear here once they join a team.
+                {t("teamsPage.membersWillAppear")}
               </p>
             </div>
           )}
