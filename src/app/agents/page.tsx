@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import PublicShell from "@/app/public-shell";
 import { useLang } from "@/lib/i18n/context";
+import { BookDemoModal } from "@/components/book-demo-modal";
 
 const agents = [
   {
@@ -103,6 +104,7 @@ export default function AgentsPage() {
   const [heroVisible, setHeroVisible] = useState(false);
   const [statsVisible, setStatsVisible] = useState(false);
   const [pipelineVisible, setPipelineVisible] = useState(false);
+  const [demoOpen, setDemoOpen] = useState(false);
   const cardRefs = useRef<(HTMLDivElement | null)[]>([]);
   const heroRef = useRef<HTMLDivElement>(null);
   const statsRef = useRef<HTMLDivElement>(null);
@@ -389,10 +391,10 @@ export default function AgentsPage() {
                 )}
               </p>
               <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-                <button className="px-8 py-3.5 rounded-xl bg-gradient-to-r from-blue-500 to-purple-600 text-white font-medium hover:from-blue-600 hover:to-purple-700 transition-all duration-300 shadow-lg shadow-blue-500/25 hover:shadow-blue-500/40 hover:scale-[1.02]">
-                  {t("agents.cta.primary", "Get Started Free")}
-                </button>
-                <button className="px-8 py-3.5 rounded-xl bg-white/[0.06] border border-white/[0.1] text-white/80 font-medium hover:bg-white/[0.1] hover:text-white transition-all duration-300">
+                <a href="/login" className="px-8 py-3.5 rounded-xl bg-gradient-to-r from-blue-500 to-purple-600 text-white font-medium hover:from-blue-600 hover:to-purple-700 transition-all duration-300 shadow-lg shadow-blue-500/25 hover:shadow-blue-500/40 hover:scale-[1.02]">
+                  {t("agents.cta.primary", "Get Started")}
+                </a>
+                <button onClick={() => setDemoOpen(true)} className="px-8 py-3.5 rounded-xl bg-white/[0.06] border border-white/[0.1] text-white/80 font-medium hover:bg-white/[0.1] hover:text-white transition-all duration-300">
                   {t("agents.cta.secondary", "Schedule a Demo")}
                 </button>
               </div>
@@ -400,6 +402,7 @@ export default function AgentsPage() {
           </div>
         </section>
       </div>
+      <BookDemoModal isOpen={demoOpen} onClose={() => setDemoOpen(false)} />
     </PublicShell>
   );
 }
