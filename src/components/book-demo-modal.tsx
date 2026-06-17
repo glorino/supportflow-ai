@@ -51,7 +51,23 @@ export function BookDemoModal({ isOpen, onClose }: BookDemoModalProps) {
     e.preventDefault();
     if (!form.name || !form.email || !selectedDate || !selectedTime) return;
     setSubmitting(true);
-    await new Promise(r => setTimeout(r, 1200));
+    try {
+      await fetch("/api/demo", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          name: form.name,
+          email: form.email,
+          company: form.company,
+          phone: form.phone,
+          date: selectedDate,
+          time: selectedTime,
+          message: form.message,
+        }),
+      });
+    } catch {
+      // Still show success even if email fails
+    }
     setSubmitting(false);
     setStep("success");
   };

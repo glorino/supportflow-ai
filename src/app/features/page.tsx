@@ -3,6 +3,7 @@
 import { useState, useEffect, useRef } from "react";
 import PublicShell from "@/app/public-shell";
 import { useLang } from "@/lib/i18n/context";
+import { BookDemoModal } from "@/components/book-demo-modal";
 
 function useScrollReveal(threshold = 0.15) {
   const ref = useRef<HTMLDivElement>(null);
@@ -89,6 +90,7 @@ export default function FeaturesPage() {
   const [counters, setCounters] = useState([0, 0, 0, 0]);
   const statsRef = useRef<HTMLDivElement>(null);
   const [statsVisible, setStatsVisible] = useState(false);
+  const [demoOpen, setDemoOpen] = useState(false);
   const suffixes = ["%", "ms", "%", "B+"];
   const decimals = [1, 0, 0, 0];
 
@@ -216,12 +218,13 @@ export default function FeaturesPage() {
               {t("featuresPage.cta.title") || "Ready to Transform Your Support?"}
             </h2>
             <p className="text-gray-300/80 text-lg mb-10">{t("featuresPage.cta.desc") || "Start resolving tickets with AI in minutes, not months."}</p>
-            <a href="/login" className="inline-flex items-center gap-2 px-10 py-4 bg-white text-gray-900 rounded-full text-[15px] font-semibold hover:bg-gray-100 transition-all shadow-lg">
-              {t("featuresPage.cta.button") || "Get Started Free"}
-            </a>
+            <button onClick={() => setDemoOpen(true)} className="inline-flex items-center gap-2 px-10 py-4 bg-white text-gray-900 rounded-full text-[15px] font-semibold hover:bg-gray-100 transition-all shadow-lg">
+              {t("featuresPage.cta.button") || "Book a Demo"}
+            </button>
           </RevealSection>
         </div>
       </section>
+      <BookDemoModal isOpen={demoOpen} onClose={() => setDemoOpen(false)} />
     </PublicShell>
   );
 }

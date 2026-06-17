@@ -93,7 +93,7 @@ export const translations = {
     title: { en: "Your customers trust you at the moment that matters most.", fr: "Vos clients vous font confiance au moment qui compte le plus." },
     desc: { en: "Every ticket is a promise. SSV CRM makes sure you keep it.", fr: "Chaque ticket est une promesse. SSV CRM s'assure que vous la tenez." },
     book: { en: "Book a demo", fr: "Réserver une démo" },
-    start: { en: "Start Free Trial", fr: "Essai Gratuit" },
+    start: { en: "Get Started", fr: "Commencer" },
   },
   featuresPage: {
     title: { en: "Platform Features", fr: "Fonctionnalités de la Plateforme" },
@@ -109,7 +109,7 @@ export const translations = {
     cta: {
       title: { en: "Ready to Transform Your Support?", fr: "Prêt à transformer votre support ?" },
       desc: { en: "Start resolving tickets with AI in minutes, not months.", fr: "Commencez à résoudre les tickets avec l'IA en minutes, pas en mois." },
-      button: { en: "Get Started Free", fr: "Commencer gratuitement" },
+      button: { en: "Book a Demo", fr: "Réserver une démo" },
     },
   },
   channelsPage: {
