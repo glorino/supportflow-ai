@@ -98,6 +98,8 @@ export const translations = {
   featuresPage: {
     title: { en: "Platform Features", fr: "Fonctionnalités de la Plateforme" },
     subtitle: { en: "Everything you need to deliver exceptional customer support, powered by AI.", fr: "Tout ce dont vous avez besoin pour offrir un support client exceptionnel, propulsé par l'IA." },
+    sectionTitle: { en: "Six Core Capabilities", fr: "Six Capacités Principales" },
+    sectionSubtitle: { en: "One unified platform. Zero compromises.", fr: "Une plateforme unifiée. Zéro compromis." },
     stats: {
       uptime: { en: "Uptime", fr: "Disponibilité" },
       response: { en: "Response Time", fr: "Temps de réponse" },

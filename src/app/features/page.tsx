@@ -165,8 +165,8 @@ export default function FeaturesPage() {
         <RevealSection className="text-center mb-16">
           <p className="text-sm font-bold text-blue-600 uppercase tracking-[0.2em] mb-4">{t("nav.features") || "Features"}</p>
           <h2 className="text-[36px] sm:text-[48px] font-extrabold tracking-tight leading-[1.05]">
-            {t("featuresPage.title") || "Everything You Need"}{" "}
-            <span className="italic text-blue-600">{t("featuresPage.subtitle") || "In One Platform"}</span>
+            {t("featuresPage.sectionTitle") || "Six Core Capabilities"}{" "}
+            <span className="italic text-blue-600">{t("featuresPage.sectionSubtitle") || "One unified platform. Zero compromises."}</span>
           </h2>
         </RevealSection>
 
