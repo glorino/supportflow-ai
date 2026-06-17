@@ -391,7 +391,7 @@ export default function AgentsPage() {
                 )}
               </p>
               <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-                <a href="/login" className="px-8 py-3.5 rounded-xl bg-gradient-to-r from-blue-500 to-purple-600 text-white font-medium hover:from-blue-600 hover:to-purple-700 transition-all duration-300 shadow-lg shadow-blue-500/25 hover:shadow-blue-500/40 hover:scale-[1.02]">
+                <a href="/support" className="px-8 py-3.5 rounded-xl bg-gradient-to-r from-blue-500 to-purple-600 text-white font-medium hover:from-blue-600 hover:to-purple-700 transition-all duration-300 shadow-lg shadow-blue-500/25 hover:shadow-blue-500/40 hover:scale-[1.02]">
                   {t("agents.cta.primary", "Get Started")}
                 </a>
                 <button onClick={() => setDemoOpen(true)} className="px-8 py-3.5 rounded-xl bg-white/[0.06] border border-white/[0.1] text-white/80 font-medium hover:bg-white/[0.1] hover:text-white transition-all duration-300">

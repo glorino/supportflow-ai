@@ -533,7 +533,7 @@ export default function HomePage() {
               <button onClick={() => setDemoOpen(true)} className="inline-flex items-center justify-center gap-2 px-10 py-4 bg-white text-gray-900 rounded-2xl text-[15px] font-semibold hover:bg-gray-50 transition-all shadow-xl hover:shadow-2xl hover:scale-[1.02] active:scale-[0.98]">
                 {t("cta.book")}
               </button>
-              <Link href="/login" className="inline-flex items-center justify-center gap-2 px-10 py-4 border-2 border-blue-300/30 text-blue-200 rounded-2xl text-[15px] font-semibold hover:bg-white/5 transition-all hover:scale-[1.02] active:scale-[0.98]">
+              <Link href="/support" className="inline-flex items-center justify-center gap-2 px-10 py-4 border-2 border-blue-300/30 text-blue-200 rounded-2xl text-[15px] font-semibold hover:bg-white/5 transition-all hover:scale-[1.02] active:scale-[0.98]">
                 {t("cta.start")}
               </Link>
             </div>
