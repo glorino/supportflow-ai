@@ -67,10 +67,42 @@ const values = [
 ];
 
 const team = [
-  { name: "Chidinma Okafor", role: "CEO", tagline: "Building the future of support", gradient: "from-[#1e40af] to-[#3b82f6]" },
-  { name: "Emeka Nwosu", role: "CTO", tagline: "AI infrastructure at scale", gradient: "from-[#0891b2] to-[#06b6d4]" },
-  { name: "Aisha Bello", role: "Head of Product", tagline: "User experience is everything", gradient: "from-[#7c3aed] to-[#8b5cf6]" },
-  { name: "Tunde Adesanya", role: "Head of Growth", tagline: "Scaling globally from Lagos", gradient: "from-[#059669] to-[#10b981]" },
+  {
+    name: "Chidinma Okafor",
+    role: "CEO & Founder",
+    tagline: "Building the future of support",
+    image: "https://i.pravatar.cc/200?img=47",
+    shortBio: "Former VP of Engineering at Flutterwave. 12+ years building scalable platforms across Africa.",
+    fullBio: "Chidinma founded SSV after witnessing firsthand how fragmented support tools were losing customers for businesses across Nigeria. With a background in electrical engineering from the University of Lagos and an MBA from Lagos Business School, she previously led engineering teams at Flutterwave and Paystack. Under her leadership, SSV has grown from a 3-person team in Lagos to a 50+ person operation serving hundreds of businesses across Africa. She is a recipient of the Forbes Africa 30 Under 30 award and a frequent speaker on AI and African tech.",
+    linkedin: "https://linkedin.com/in/chidinmaokafor",
+  },
+  {
+    name: "Emeka Nwosu",
+    role: "CTO",
+    tagline: "AI infrastructure at scale",
+    image: "https://i.pravatar.cc/200?img=11",
+    shortBio: "Ex-Google AI engineer. Built NLP systems processing 1B+ messages daily.",
+    fullBio: "Emeka brings deep expertise in natural language processing and machine learning infrastructure. Before joining SSV, he spent 6 years at Google AI working on multilingual NLP models used by millions. He holds a PhD in Computer Science from the University of Oxford and has published 15+ papers on transformer architectures and sentiment analysis. At SSV, he leads the AI agent pipeline that classifies, routes, and resolves 67% of tickets autonomously. He is passionate about making AI accessible to African businesses.",
+    linkedin: "https://linkedin.com/in/emekanosu",
+  },
+  {
+    name: "Aisha Bello",
+    role: "Head of Product",
+    tagline: "User experience is everything",
+    image: "https://i.pravatar.cc/200?img=32",
+    shortBio: "Designed products used by 50M+ users across 3 continents.",
+    fullBio: "Aisha is a product design veteran with a track record of building intuitive enterprise software. She spent 5 years at Andela leading product design for their talent platform, and prior to that, she was a senior designer at Interswitch. She holds a degree in Human-Computer Interaction from the University of Lagos. At SSV, she obsesses over every pixel and interaction, ensuring that even complex AI workflows feel simple and natural. She mentors junior designers across Lagos and is an advocate for inclusive design.",
+    linkedin: "https://linkedin.com/in/aishabello",
+  },
+  {
+    name: "Tunde Adesanya",
+    role: "Head of Growth",
+    tagline: "Scaling globally from Lagos",
+    image: "https://i.pravatar.cc/200?img=33",
+    shortBio: "Grew 3 startups from seed to Series B. Deep expertise in African markets.",
+    fullBio: "Tunde is a growth strategist who has helped multiple African startups scale from local operations to pan-African presence. He previously led growth at Kuda Bank, taking them from 100K to 3M users in 18 months, and before that, he ran marketing operations at Carbon (formerly Paylater). He holds a degree in Economics from the University of Ibadan and an MSc from the London School of Economics. At SSV, he drives customer acquisition, partnerships, and expansion into new African markets.",
+    linkedin: "https://linkedin.com/in/tundeadesanya",
+  },
 ];
 
 const statItems = [
@@ -85,6 +117,7 @@ export default function AboutPage() {
   const [counters, setCounters] = useState([0, 0, 0, 0]);
   const statsRef = useRef<HTMLDivElement>(null);
   const [statsVisible, setStatsVisible] = useState(false);
+  const [selectedMember, setSelectedMember] = useState<typeof team[number] | null>(null);
   const suffixes = ["+", "B+", "%", "ms"];
   const decimals = [0, 0, 2, 0];
 
@@ -232,12 +265,22 @@ export default function AboutPage() {
           {team.map((member, i) => (
             <RevealSection key={member.name} delay={i * 80}>
               <div className="group text-center p-8 rounded-3xl border border-gray-100 bg-white hover:border-transparent transition-all duration-500 hover:shadow-2xl hover:shadow-gray-200/50">
-                <div className={`h-24 w-24 rounded-full bg-gradient-to-br ${member.gradient} flex items-center justify-center mx-auto mb-6 group-hover:scale-110 transition-transform duration-300 shadow-lg`}>
-                  <span className="text-2xl font-extrabold text-white">{member.name.split(" ").map((n) => n[0]).join("")}</span>
+                <div className="relative h-28 w-28 rounded-full mx-auto mb-6 group-hover:scale-110 transition-transform duration-300 shadow-lg overflow-hidden ring-4 ring-white">
+                  <img
+                    src={member.image}
+                    alt={member.name}
+                    className="w-full h-full object-cover"
+                  />
                 </div>
                 <h3 className="text-lg font-bold text-gray-900 mb-1">{member.name}</h3>
                 <p className="text-sm font-semibold text-blue-600 mb-3">{member.role}</p>
-                <p className="text-sm text-gray-400 italic">{member.tagline}</p>
+                <p className="text-sm text-gray-500 mb-4 leading-relaxed">{member.shortBio}</p>
+                <button
+                  onClick={() => setSelectedMember(member)}
+                  className="text-sm font-semibold text-blue-600 hover:text-blue-700 hover:underline transition-colors"
+                >
+                  Read more →
+                </button>
               </div>
             </RevealSection>
           ))}
@@ -295,6 +338,37 @@ export default function AboutPage() {
           </RevealSection>
         </div>
       </section>
+
+      {selectedMember && (
+        <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
+          <div className="absolute inset-0 bg-black/50 backdrop-blur-sm" onClick={() => setSelectedMember(null)} />
+          <div className="relative w-full max-w-lg bg-white rounded-3xl shadow-2xl overflow-hidden" style={{ animation: "modalSlideUp 0.3s ease-out" }}>
+            <style>{`@keyframes modalSlideUp { from { opacity: 0; transform: translateY(20px) scale(0.96); } to { opacity: 1; transform: translateY(0) scale(1); } }`}</style>
+            <div className="bg-gradient-to-r from-[#1e40af] to-[#3b82f6] px-8 py-8 text-center relative overflow-hidden">
+              <button onClick={() => setSelectedMember(null)} className="absolute top-4 right-4 text-white/70 hover:text-white h-8 w-8 rounded-lg hover:bg-white/10 flex items-center justify-center transition-colors">
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /></svg>
+              </button>
+              <div className="relative h-24 w-24 rounded-full mx-auto mb-4 overflow-hidden ring-4 ring-white/30 shadow-xl">
+                <img src={selectedMember.image} alt={selectedMember.name} className="w-full h-full object-cover" />
+              </div>
+              <h3 className="text-xl font-bold text-white mb-1">{selectedMember.name}</h3>
+              <p className="text-blue-100 text-sm font-medium">{selectedMember.role}</p>
+            </div>
+            <div className="p-8">
+              <p className="text-gray-700 leading-relaxed text-[15px] mb-6">{selectedMember.fullBio}</p>
+              <a
+                href={selectedMember.linkedin}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-blue-50 text-blue-600 text-sm font-semibold hover:bg-blue-100 transition-colors"
+              >
+                <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z" /></svg>
+                Connect on LinkedIn
+              </a>
+            </div>
+          </div>
+        </div>
+      )}
     </PublicShell>
   );
 }
