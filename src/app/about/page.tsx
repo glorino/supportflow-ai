@@ -285,7 +285,7 @@ export default function AboutPage() {
               {t("aboutPage.cta.desc") || "Whether you're a business looking for better support or an engineer passionate about AI."}
             </p>
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-              <Link href="/login" className="inline-flex items-center gap-2 px-10 py-4 bg-white text-gray-900 rounded-full text-[15px] font-semibold hover:bg-gray-100 transition-all shadow-lg">
+              <Link href="/support" className="inline-flex items-center gap-2 px-10 py-4 bg-white text-gray-900 rounded-full text-[15px] font-semibold hover:bg-gray-100 transition-all shadow-lg">
                 {t("aboutPage.cta.getStarted") || "Get Started"}
               </Link>
               <a href="mailto:careers@ssv.com" className="inline-flex items-center gap-2 px-10 py-4 bg-transparent border-2 border-blue-400/40 text-blue-300 rounded-full text-[15px] font-semibold hover:bg-blue-400/10 transition-all">

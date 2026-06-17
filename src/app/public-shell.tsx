@@ -68,7 +68,7 @@ export default function PublicShell({ children }: { children: React.ReactNode })
               {t("nav.signIn")}
             </Link>
             <Link
-              href="/login"
+              href="/support"
               className="relative text-[14px] font-semibold text-white bg-gradient-to-r from-[#1e40af] to-[#3b82f6] px-5 py-2.5 rounded-xl hover:from-[#1e3a8a] hover:to-[#2563eb] transition-all shadow-lg shadow-blue-500/25 hover:shadow-blue-500/40 flex items-center gap-2"
             >
               <span className="h-2 w-2 rounded-full bg-blue-300 animate-pulse" />
@@ -105,7 +105,7 @@ export default function PublicShell({ children }: { children: React.ReactNode })
               <Link href="/login" className="text-center text-sm font-medium text-gray-700 py-2" onClick={() => setMobileOpen(false)}>
                 {t("nav.signIn")}
               </Link>
-              <Link href="/login" className="text-center text-sm font-semibold text-white bg-gradient-to-r from-[#1e40af] to-[#3b82f6] rounded-xl py-3" onClick={() => setMobileOpen(false)}>
+              <Link href="/support" className="text-center text-sm font-semibold text-white bg-gradient-to-r from-[#1e40af] to-[#3b82f6] rounded-xl py-3" onClick={() => setMobileOpen(false)}>
                 {t("nav.getStarted")}
               </Link>
             </div>

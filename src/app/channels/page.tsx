@@ -487,7 +487,7 @@ console.log(status);`}</code>
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
                 <a
-                  href="/login"
+                  href="/support"
                   className="inline-flex items-center justify-center gap-2 px-8 py-4 bg-gradient-to-r from-[#1e40af] to-[#3b82f6] text-white rounded-full text-[15px] font-semibold hover:from-[#1e3a8a] hover:to-[#2563eb] transition-all shadow-lg shadow-blue-500/25 hover:shadow-blue-500/40"
                 >
                   {t("cta.start") || "Get Started"}
