@@ -33,7 +33,7 @@ export default function SettingsPage() {
         { label: t("settingsPage.webChat"), desc: t("settingsPage.webChatDesc"), current: "Connected" },
         { label: t("settingsPage.whatsapp"), desc: t("settingsPage.whatsappDesc"), current: "Connected" },
         { label: t("settingsPage.emailIntegration"), desc: t("settingsPage.emailDesc"), current: "Connected" },
-        { label: t("settingsPage.smsTwilio"), desc: t("settingsPage.smsDesc"), current: "Connected" },
+        { label: t("settingsPage.smsTermii"), desc: t("settingsPage.smsDesc"), current: "Connected" },
         { label: t("settingsPage.messenger"), desc: t("settingsPage.messengerDesc"), current: "Connected" },
         { label: t("settingsPage.instagramDm"), desc: t("settingsPage.instagramDesc"), current: "Connected" },
       ],

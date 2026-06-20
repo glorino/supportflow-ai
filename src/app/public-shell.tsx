@@ -26,10 +26,8 @@ export default function PublicShell({ children }: { children: React.ReactNode })
         <div className="max-w-[1200px] mx-auto px-6 h-[72px] flex items-center justify-between">
           <div className="flex items-center gap-10">
             <Link href="/" className="flex items-center gap-2.5 group">
-              <div className="h-9 w-9 rounded-xl bg-gradient-to-br from-[#1e40af] to-[#3b82f6] flex items-center justify-center shadow-lg shadow-blue-500/20 group-hover:shadow-blue-500/40 transition-shadow">
-                <img src="/logo.svg" alt="SSV" className="h-5 w-5 brightness-0 invert" />
-              </div>
-              <span className="text-[22px] font-extrabold tracking-tight text-gray-900">SSV</span>
+              <img src="/logo.svg" alt="SSV CRM" className="h-9 w-9" />
+              <span className="text-[22px] font-extrabold tracking-tight text-gray-900">SSV CRM</span>
             </Link>
             <div className="hidden lg:flex items-center gap-1">
               {navItems.map((item) => (
@@ -122,10 +120,8 @@ export default function PublicShell({ children }: { children: React.ReactNode })
           <div className="grid grid-cols-2 md:grid-cols-5 gap-10 mb-16">
             <div className="col-span-2 md:col-span-1">
               <div className="flex items-center gap-2.5 mb-4">
-                <div className="h-8 w-8 rounded-xl bg-gradient-to-br from-[#1e40af] to-[#3b82f6] flex items-center justify-center">
-                  <img src="/logo.svg" alt="SSV" className="h-4 w-4 brightness-0 invert" />
-                </div>
-                <span className="text-lg font-extrabold">SSV</span>
+                <img src="/logo.svg" alt="SSV CRM" className="h-8 w-8" />
+                <span className="text-lg font-extrabold">SSV CRM</span>
               </div>
               <p className="text-sm text-gray-400 leading-relaxed">{t("footer.desc")}</p>
             </div>
@@ -152,7 +148,7 @@ export default function PublicShell({ children }: { children: React.ReactNode })
               <span>{t("footer.copyright")}</span>
               <Link href="/privacy" className="hover:text-gray-600 transition-colors">{t("misc.privacyPolicy")}</Link>
               <Link href="/terms" className="hover:text-gray-600 transition-colors">{t("misc.terms")}</Link>
-              <a href="mailto:support@ssv.com" className="hover:text-gray-600 transition-colors">support@ssv.com</a>
+              <a href="mailto:info@glopresc.com" className="hover:text-gray-600 transition-colors">info@glopresc.com</a>
             </div>
             <div className="flex items-center gap-3">
               <a href="https://facebook.com" target="_blank" rel="noopener noreferrer" className="h-8 w-8 rounded-full border border-gray-200 flex items-center justify-center text-gray-400 hover:text-gray-700 hover:border-gray-300 transition-all">

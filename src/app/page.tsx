@@ -129,7 +129,7 @@ export default function HomePage() {
                 {t("hero.desc")}
               </p>
               <div className="flex flex-col sm:flex-row gap-4">
-                <Link href="/login" className="px-8 py-4 bg-white text-gray-900 rounded-2xl text-[15px] font-semibold hover:bg-gray-50 transition-all text-center shadow-xl hover:shadow-2xl hover:scale-[1.02] active:scale-[0.98]">
+                <Link href="/support" className="px-8 py-4 bg-white text-gray-900 rounded-2xl text-[15px] font-semibold hover:bg-gray-50 transition-all text-center shadow-xl hover:shadow-2xl hover:scale-[1.02] active:scale-[0.98]">
                   {t("hero.cta")}
                 </Link>
                 <button onClick={() => setDemoOpen(true)} className="px-8 py-4 bg-transparent border-2 border-blue-300/30 text-blue-200 rounded-2xl text-[15px] font-semibold hover:bg-white/5 transition-all text-center hover:scale-[1.02] active:scale-[0.98]">
@@ -511,7 +511,7 @@ export default function HomePage() {
               ))}
             </div>
             <p className="text-gray-400 text-sm mb-6">{t("integrations.noTool")}</p>
-            <Link href="/login" className="inline-flex items-center gap-2 px-8 py-3.5 border-2 border-gray-200 rounded-xl text-[15px] font-semibold text-gray-700 hover:border-gray-300 hover:bg-white transition-all">
+            <Link href="/support" className="inline-flex items-center gap-2 px-8 py-3.5 border-2 border-gray-200 rounded-xl text-[15px] font-semibold text-gray-700 hover:border-gray-300 hover:bg-white transition-all">
               {t("integrations.apiCta")} <span>→</span>
             </Link>
           </RevealSection>

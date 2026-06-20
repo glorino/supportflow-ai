@@ -2,6 +2,7 @@
 
 import { useRef, useEffect, useState, Component, ReactNode, ErrorInfo } from "react";
 import { useChat } from "@ai-sdk/react";
+import { useIndustry, useIndustryColors, useIndustryChatbot } from "@/lib/industry/context";
 
 class ChatErrorBoundary extends Component<{ children: ReactNode }, { hasError: boolean }> {
   state = { hasError: false };
@@ -21,6 +22,10 @@ function ChatWidgetInner() {
   const inputRef = useRef<HTMLInputElement>(null);
   const isLoading = status === "streaming" || status === "submitted";
 
+  const { config } = useIndustry();
+  const colors = useIndustryColors();
+  const chatbot = useIndustryChatbot();
+
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
@@ -36,20 +41,14 @@ function ChatWidgetInner() {
     setInput("");
   };
 
-  const quickActions = [
-    { label: "Reset my password", icon: "🔑", color: "from-blue-500 to-blue-600" },
-    { label: "Check order status", icon: "📦", color: "from-green-500 to-emerald-600" },
-    { label: "Talk to a human", icon: "👤", color: "from-purple-500 to-indigo-600" },
-    { label: "Billing question", icon: "💳", color: "from-amber-500 to-orange-600" },
-  ];
-
   return (
     <>
       {/* Floating Button */}
       {!isOpen && (
         <button
           onClick={() => setIsOpen(true)}
-          className="fixed bottom-6 right-6 z-50 h-14 w-14 rounded-full bg-gradient-to-br from-blue-600 to-indigo-700 shadow-lg shadow-blue-600/30 flex items-center justify-center hover:shadow-xl hover:shadow-blue-600/40 transition-all duration-300 hover:scale-110 group"
+          className={`fixed bottom-6 right-6 z-50 h-14 w-14 rounded-full bg-gradient-to-br ${colors.gradient} shadow-lg flex items-center justify-center hover:shadow-xl transition-all duration-300 hover:scale-110 group`}
+          style={{ boxShadow: `0 10px 25px -5px ${colors.primary}40` }}
           aria-label="Open chat"
         >
           <svg className="w-6 h-6 text-white transition-transform duration-300 group-hover:scale-110" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -65,20 +64,18 @@ function ChatWidgetInner() {
       {isOpen && (
         <div className="fixed bottom-6 right-6 z-50 w-[400px] h-[600px] max-h-[calc(100vh-48px)] rounded-2xl bg-white shadow-2xl border border-gray-200 flex flex-col overflow-hidden" style={{ animation: "chatSlideUp 0.3s ease-out" }}>
           {/* Header */}
-          <div className="bg-gradient-to-r from-blue-600 via-blue-700 to-indigo-700 px-5 py-4 flex items-center justify-between shrink-0 relative overflow-hidden">
+          <div className={`bg-gradient-to-r ${colors.gradient} px-5 py-4 flex items-center justify-between shrink-0 relative overflow-hidden`}>
             <div className="absolute inset-0 opacity-10">
               <div className="absolute top-0 right-0 w-32 h-32 bg-white rounded-full -translate-y-1/2 translate-x-1/2 blur-2xl" />
               <div className="absolute bottom-0 left-0 w-24 h-24 bg-white rounded-full translate-y-1/2 -translate-x-1/2 blur-2xl" />
             </div>
             <div className="flex items-center gap-3 relative z-10">
-              <div className="h-10 w-10 rounded-xl bg-white/20 backdrop-blur-sm flex items-center justify-center border border-white/20">
-                <img src="/logo.svg" alt="SSV" className="h-6 w-6" />
-              </div>
+              <img src={config.logo} alt={config.name} className="h-10 w-10" />
               <div>
-                <h3 className="text-white font-semibold text-sm">SSV AI Support</h3>
+                <h3 className="text-white font-semibold text-sm">{chatbot.name} Support</h3>
                 <div className="flex items-center gap-1.5">
                   <span className="h-2 w-2 rounded-full bg-green-400 animate-pulse" />
-                  <p className="text-blue-100 text-xs">Online · Typically replies instantly</p>
+                  <p className="text-white/80 text-xs">Online · Typically replies instantly</p>
                 </div>
               </div>
             </div>
@@ -96,22 +93,23 @@ function ChatWidgetInner() {
           <div className="flex-1 overflow-y-auto p-4 space-y-4" style={{ scrollBehavior: "smooth" }}>
             {messages.length === 0 && (
               <div className="text-center py-6">
-                <div className="h-16 w-16 rounded-2xl bg-gradient-to-br from-blue-500 to-indigo-600 mx-auto mb-4 flex items-center justify-center shadow-lg shadow-blue-600/20">
-                  <img src="/logo.svg" alt="SSV" className="h-10 w-10" />
-                </div>
-                <h4 className="text-gray-900 font-bold text-lg mb-1">Welcome to SSV</h4>
+                <img src={config.logo} alt={config.name} className="h-16 w-16 mx-auto mb-4" />
+                <h4 className="text-gray-900 font-bold text-lg mb-1">Welcome to {config.name}</h4>
                 <p className="text-sm text-gray-500 mb-6">Our AI agents are ready to help you.</p>
                 <div className="grid grid-cols-2 gap-2">
-                  {quickActions.map((action) => (
+                  {chatbot.quickActions.map((action) => (
                     <button
                       key={action.label}
                       onClick={() => {
                         setInput(action.label);
                         sendMessage({ text: action.label });
                       }}
-                      className="flex items-center gap-2.5 p-3 rounded-xl border border-gray-200 hover:border-blue-300 hover:bg-blue-50 text-left text-xs text-gray-700 transition-all duration-200 hover:shadow-sm group"
+                      className="flex items-center gap-2.5 p-3 rounded-xl border border-gray-200 hover:border-gray-300 hover:bg-gray-50 text-left text-xs text-gray-700 transition-all duration-200 hover:shadow-sm group"
                     >
-                      <div className={`h-8 w-8 rounded-lg bg-gradient-to-br ${action.color} flex items-center justify-center text-white text-sm shrink-0 group-hover:scale-110 transition-transform`}>
+                      <div
+                        className="h-8 w-8 rounded-lg flex items-center justify-center text-white text-sm shrink-0 group-hover:scale-110 transition-transform"
+                        style={{ background: colors.gradientCSS }}
+                      >
                         {action.icon}
                       </div>
                       <span className="font-medium">{action.label}</span>
@@ -130,16 +128,19 @@ function ChatWidgetInner() {
                 <div
                   className={`max-w-[85%] rounded-2xl px-4 py-3 text-sm leading-relaxed ${
                     message.role === "user"
-                      ? "bg-gradient-to-br from-blue-600 to-indigo-600 text-white rounded-br-md shadow-sm"
+                      ? `bg-gradient-to-br ${colors.gradient} text-white rounded-br-md shadow-sm`
                       : "bg-gray-100 text-gray-900 rounded-bl-md"
                   }`}
                 >
                   {message.role === "assistant" && (
                     <div className="flex items-center gap-1.5 mb-1.5">
-                      <div className="h-5 w-5 rounded-md bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center">
+                      <div
+                        className="h-5 w-5 rounded-md flex items-center justify-center"
+                        style={{ background: colors.gradientCSS }}
+                      >
                         <span className="text-white text-[8px] font-bold">AI</span>
                       </div>
-                      <span className="text-[10px] font-medium text-gray-500">SSV AI</span>
+                      <span className="text-[10px] font-medium text-gray-500">{chatbot.name}</span>
                     </div>
                   )}
                   <p className="whitespace-pre-wrap">
@@ -156,15 +157,18 @@ function ChatWidgetInner() {
               <div className="flex justify-start" style={{ animation: "messageFadeIn 0.3s ease-out" }}>
                 <div className="bg-gray-100 rounded-2xl rounded-bl-md px-4 py-3">
                   <div className="flex items-center gap-1.5 mb-1.5">
-                    <div className="h-5 w-5 rounded-md bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center">
+                    <div
+                      className="h-5 w-5 rounded-md flex items-center justify-center"
+                      style={{ background: colors.gradientCSS }}
+                    >
                       <span className="text-white text-[8px] font-bold">AI</span>
                     </div>
                     <span className="text-[10px] font-medium text-gray-500">Thinking...</span>
                   </div>
                   <div className="flex gap-1">
-                    <span className="h-2 w-2 rounded-full bg-blue-400 animate-bounce [animation-delay:-0.3s]" />
-                    <span className="h-2 w-2 rounded-full bg-blue-400 animate-bounce [animation-delay:-0.15s]" />
-                    <span className="h-2 w-2 rounded-full bg-blue-400 animate-bounce" />
+                    <span className="h-2 w-2 rounded-full animate-bounce [animation-delay:-0.3s]" style={{ backgroundColor: colors.primary }} />
+                    <span className="h-2 w-2 rounded-full animate-bounce [animation-delay:-0.15s]" style={{ backgroundColor: colors.primary }} />
+                    <span className="h-2 w-2 rounded-full animate-bounce" style={{ backgroundColor: colors.primary }} />
                   </div>
                 </div>
               </div>
@@ -194,12 +198,13 @@ function ChatWidgetInner() {
                 onChange={(e) => setInput(e.target.value)}
                 placeholder="Type a message..."
                 disabled={isLoading}
-                className="flex-1 rounded-xl border border-gray-200 bg-gray-50 px-4 py-3 text-sm placeholder-gray-400 focus:border-blue-500 focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500/20 transition-all disabled:opacity-50"
+                className="flex-1 rounded-xl border border-gray-200 bg-gray-50 px-4 py-3 text-sm placeholder-gray-400 focus:bg-white focus:outline-none focus:ring-2 transition-all disabled:opacity-50"
+                style={{ "--tw-ring-color": `${colors.primary}40` } as React.CSSProperties}
               />
               <button
                 type="submit"
                 disabled={!input.trim() || isLoading}
-                className="h-12 w-12 rounded-xl bg-gradient-to-br from-blue-600 to-indigo-700 text-white flex items-center justify-center hover:shadow-lg transition-all disabled:opacity-50 disabled:cursor-not-allowed shrink-0"
+                className={`h-12 w-12 rounded-xl bg-gradient-to-br ${colors.gradient} text-white flex items-center justify-center hover:shadow-lg transition-all disabled:opacity-50 disabled:cursor-not-allowed shrink-0`}
               >
                 {isLoading ? (
                   <svg className="animate-spin h-5 w-5" fill="none" viewBox="0 0 24 24">
@@ -214,7 +219,7 @@ function ChatWidgetInner() {
               </button>
             </div>
             <p className="text-[10px] text-gray-400 mt-2 text-center">
-              Powered by SSV AI · 9 Intelligent Agents
+              Powered by {chatbot.name} · AI-Powered Support
             </p>
           </form>
         </div>

@@ -13,7 +13,7 @@ const channels = [
     border: "border-green-200",
     hoverBorder: "hover:border-green-400",
     desc: "Chat with us instantly on WhatsApp",
-    action: "https://wa.me/2348000000000",
+    action: "https://wa.me/2347082529729",
     external: true,
   },
   {

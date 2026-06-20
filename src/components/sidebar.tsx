@@ -86,10 +86,7 @@ export function Sidebar() {
       {/* Logo */}
       <div className="flex h-[68px] items-center gap-3 border-b border-gray-100/80 px-5">
         <Link href="/dashboard" className="flex items-center gap-2.5 group">
-          <div className="relative">
-            <img src="/logo.svg" alt="SSV Logo" className="h-9 w-9 group-hover:scale-105 transition-transform duration-300" />
-            <div className="absolute inset-0 bg-blue-500/10 rounded-xl blur-lg opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-          </div>
+          <img src="/logo.svg" alt="SSV CRM" className="h-9 w-9 group-hover:scale-105 transition-transform duration-300" />
           <div>
             <span className="text-lg font-bold text-gray-900 tracking-tight">SSV</span>
             <span className="text-lg font-bold text-blue-600 ml-1">CRM</span>
@@ -117,6 +114,26 @@ export function Sidebar() {
           {filterByRole(settingsNav).map((item) => renderNavItem(item, "from-amber-50 to-orange-50/80", "text-amber-700", "text-amber-600", "border-amber-100/80", "bg-amber-600"))}
         </div>
       </nav>
+
+      {/* Main Site Link */}
+      <div className="px-3 pb-3">
+        <a
+          href="https://supportflow-ai-six.vercel.app"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="group flex items-center gap-3 rounded-2xl px-3.5 py-2.5 text-sm font-medium text-gray-500 hover:bg-gray-50/80 hover:text-gray-900 hover:shadow-sm transition-all duration-300 border border-gray-200/60"
+        >
+          <div className="flex items-center justify-center w-5 h-5 text-gray-400 group-hover:text-gray-600 transition-colors duration-300">
+            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+            </svg>
+          </div>
+          <span className="flex-1">Main Site</span>
+          <svg className="w-4 h-4 text-gray-400 group-hover:text-gray-600 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+          </svg>
+        </a>
+      </div>
 
       {/* User Profile */}
       <div className="p-3 border-t border-gray-100/80">
