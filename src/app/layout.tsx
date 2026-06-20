@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import { DM_Sans } from "next/font/google";
 import "./globals.css";
 import { LanguageProvider } from "@/lib/i18n/context";
+import { IndustryProvider } from "@/lib/industry/context";
+import { getIndustryFromEnv } from "@/lib/industry/config";
 
 const dmSans = DM_Sans({
   subsets: ["latin"],
@@ -9,12 +11,17 @@ const dmSans = DM_Sans({
   weight: ["300", "400", "500", "600", "700", "800"],
 });
 
+const industry = getIndustryFromEnv();
+const industryConfig = (() => {
+  const { industries } = require("@/lib/industry/config");
+  return industries[industry] || industries.ssv;
+})();
+
 export const metadata: Metadata = {
-  title: "SSV CRM — AI-Powered Customer Support Platform",
-  description:
-    "AI-powered customer support platform for SSV. Unify every channel with 9 intelligent agents that classify, route, respond, and resolve.",
+  title: industryConfig.metaTitle,
+  description: industryConfig.metaDescription,
   icons: {
-    icon: "/logo.svg",
+    icon: industryConfig.favicon,
   },
 };
 
@@ -26,7 +33,9 @@ export default function RootLayout({
   return (
     <html lang="en" className="scroll-smooth">
       <body className={`${dmSans.variable} font-sans`}>
-        <LanguageProvider>{children}</LanguageProvider>
+        <IndustryProvider slug={industry}>
+          <LanguageProvider>{children}</LanguageProvider>
+        </IndustryProvider>
       </body>
     </html>
   );

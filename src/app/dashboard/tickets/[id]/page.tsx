@@ -3,6 +3,7 @@
 import { useParams } from "next/navigation";
 import Link from "next/link";
 import { useState, useEffect } from "react";
+import { useLang } from "@/lib/i18n/context";
 
 interface TicketData {
   id: string;
@@ -58,14 +59,14 @@ const priorityColor: Record<string, string> = {
   urgent: "text-red-500 font-semibold",
 };
 
-const channelDisplayNames: Record<string, string> = {
-  whatsapp: "WhatsApp",
-  email: "Email",
-  web: "Web Chat",
-  sms: "SMS",
-  messenger: "Messenger",
-  instagram: "Instagram",
-};
+const getChannelDisplayNames = (t: (key: string) => string): Record<string, string> => ({
+  whatsapp: t("channels.whatsapp.name") || "WhatsApp",
+  email: t("channels.email.name") || "Email",
+  web: t("channels.webchat.name") || "Web Chat",
+  sms: t("channels.sms.name") || "SMS",
+  messenger: t("channels.messenger.name") || "Messenger",
+  instagram: t("channels.instagram.name") || "Instagram",
+});
 
 function formatTime(dateStr: string): string {
   return new Date(dateStr).toLocaleTimeString("en-US", {
@@ -76,6 +77,7 @@ function formatTime(dateStr: string): string {
 }
 
 export default function TicketDetailPage() {
+  const { t } = useLang();
   const params = useParams();
   const id = params.id as string;
   const [ticket, setTicket] = useState<TicketData | null>(null);
@@ -119,9 +121,9 @@ export default function TicketDetailPage() {
             </svg>
           </div>
         </div>
-        <h2 className="text-2xl font-bold text-gradient mb-2">Ticket Not Found</h2>
+        <h2 className="text-2xl font-bold text-gradient mb-2">{t("ticketDetailPage.notFound")}</h2>
         <p className="text-sm text-gray-500 mb-8 text-center max-w-xs">
-          The ticket you&apos;re looking for doesn&apos;t exist or has been removed.
+          {t("ticketDetailPage.notFoundDesc")}
         </p>
         <Link
           href="/dashboard/tickets"
@@ -130,7 +132,7 @@ export default function TicketDetailPage() {
           <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
           </svg>
-          Back to Tickets
+          {t("ticketDetailPage.backToTickets")}
         </Link>
       </div>
     );
@@ -153,7 +155,7 @@ export default function TicketDetailPage() {
           <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
           </svg>
-          Back
+          {t("ticketDetailPage.back")}
         </Link>
 
         <div className="flex flex-wrap items-center gap-3">
@@ -221,9 +223,9 @@ export default function TicketDetailPage() {
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
                     </svg>
                   </div>
-                  <p className="font-medium text-gray-500 mb-2">No messages yet</p>
+                  <p className="font-medium text-gray-500 mb-2">{t("ticketDetailPage.noMessages")}</p>
                   <div className="mt-4 p-5 bg-white/60 backdrop-blur-sm rounded-2xl border border-gray-100 text-left max-w-lg mx-auto">
-                    <div className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2">Initial Message</div>
+                    <div className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2">{t("ticketDetailPage.initialMessage")}</div>
                     <div className="text-sm text-gray-700 leading-relaxed whitespace-pre-wrap">{ticket.message}</div>
                   </div>
                 </div>
@@ -235,14 +237,14 @@ export default function TicketDetailPage() {
               <div className="flex gap-3">
                 <input
                   type="text"
-                  placeholder="Type a message..."
+                  placeholder={t("ticketDetailPage.typeMessage")}
                   className="flex-1 rounded-xl border border-gray-200 bg-white px-4 py-3 text-sm focus:outline-none focus:border-transparent focus:ring-2 focus:ring-blue-500 focus:shadow-lg focus:shadow-blue-500/10 transition-all duration-200 placeholder:text-gray-400"
                 />
                 <button className="inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 px-6 py-3 text-sm font-semibold text-white shadow-lg shadow-blue-500/25 hover:shadow-blue-500/40 hover-lift transition-all duration-200">
                   <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
                   </svg>
-                  Send
+                  {t("ticketDetailPage.send")}
                 </button>
               </div>
             </div>
@@ -257,7 +259,7 @@ export default function TicketDetailPage() {
               <svg className="h-5 w-5 text-blue-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
               </svg>
-              Customer
+              {t("ticketDetailPage.customer")}
             </h3>
             <div className="flex items-center gap-4 mb-5">
               <div className="relative">
@@ -267,23 +269,23 @@ export default function TicketDetailPage() {
                 <div className="absolute -bottom-0.5 -right-0.5 h-4 w-4 rounded-full bg-emerald-400 border-2 border-white" />
               </div>
               <div>
-                <div className="font-semibold text-gray-900">{ticket.customer?.name || "Unknown"}</div>
+                <div className="font-semibold text-gray-900">{ticket.customer?.name || t("ticketDetailPage.unknown")}</div>
                 <div className="text-sm text-gray-500">{ticket.customer?.email || ""}</div>
               </div>
             </div>
             <div className="space-y-3 text-sm">
               <div className="flex items-center justify-between py-2 border-b border-gray-100">
-                <span className="text-gray-400">Company</span>
+                <span className="text-gray-400">{t("ticketDetailPage.company")}</span>
                 <span className="font-medium text-gray-700">{ticket.customer?.company || "—"}</span>
               </div>
               <div className="flex items-center justify-between py-2 border-b border-gray-100">
-                <span className="text-gray-400">Segment</span>
+                <span className="text-gray-400">{t("ticketDetailPage.segment")}</span>
                 <span className="inline-flex items-center rounded-full bg-blue-50 px-2.5 py-0.5 text-xs font-medium text-blue-700 capitalize">
                   {ticket.customer?.segment || "—"}
                 </span>
               </div>
               <div className="flex items-center justify-between py-2">
-                <span className="text-gray-400">Total Tickets</span>
+                <span className="text-gray-400">{t("ticketDetailPage.totalTickets")}</span>
                 <span className="font-medium text-gray-700">{ticket.customer?.totalTickets || 0}</span>
               </div>
             </div>
@@ -296,7 +298,7 @@ export default function TicketDetailPage() {
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.066 2.573c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.573 1.066c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.066-2.573c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
               </svg>
-              Properties
+              {t("ticketDetailPage.properties")}
             </h3>
             <div className="space-y-3 text-sm">
               <div className="flex items-center justify-between py-2 border-b border-gray-100">
@@ -308,25 +310,25 @@ export default function TicketDetailPage() {
                 </span>
               </div>
               <div className="flex items-center justify-between py-2 border-b border-gray-100">
-                <span className="text-gray-400">Priority</span>
+                <span className="text-gray-400">{t("ticketDetailPage.priority")}</span>
                 <span className={`font-medium capitalize ${priorityColor[ticket.priority] || "text-gray-500"}`}>
                   {ticket.priority}
                 </span>
               </div>
               <div className="flex items-center justify-between py-2 border-b border-gray-100">
-                <span className="text-gray-400">Channel</span>
+                <span className="text-gray-400">{t("ticketDetailPage.channel")}</span>
                 <span className="inline-flex items-center gap-1.5 font-medium text-gray-700">
-                  {channelDisplayNames[ticket.channel] || ticket.channel}
+                  {getChannelDisplayNames(t)[ticket.channel] || ticket.channel}
                 </span>
               </div>
               {ticket.assignee?.name && (
                 <div className="flex items-center justify-between py-2 border-b border-gray-100">
-                  <span className="text-gray-400">Assignee</span>
+                  <span className="text-gray-400">{t("ticketDetailPage.assignee")}</span>
                   <span className="font-medium text-gray-700">{ticket.assignee.name}</span>
                 </div>
               )}
               <div className="flex items-center justify-between py-2 border-b border-gray-100">
-                <span className="text-gray-400">AI Confidence</span>
+                <span className="text-gray-400">{t("ticketDetailPage.aiConfidence")}</span>
                 <div className="flex items-center gap-2">
                   <div className="h-1.5 w-16 rounded-full bg-gray-100 overflow-hidden">
                     <div
@@ -338,7 +340,7 @@ export default function TicketDetailPage() {
                 </div>
               </div>
               <div className="flex items-center justify-between py-2">
-                <span className="text-gray-400">Sentiment</span>
+                <span className="text-gray-400">{t("ticketDetailPage.sentiment")}</span>
                 <span className="inline-flex items-center rounded-full bg-gradient-to-r from-blue-50 to-indigo-50 px-2.5 py-0.5 text-xs font-medium text-indigo-700 capitalize">
                   {ticket.sentiment}
                 </span>
@@ -352,12 +354,12 @@ export default function TicketDetailPage() {
               <svg className="h-5 w-5 text-blue-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
               </svg>
-              SLA Status
+              {t("ticketDetailPage.slaStatus")}
             </h3>
             <div className="space-y-4">
               <div>
                 <div className="flex items-center justify-between text-sm mb-3">
-                  <span className="text-gray-400">Status</span>
+                <span className="text-gray-400">{t("ticketDetailPage.status")}</span>
                   <span
                     className={`inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-xs font-bold ${
                       ticket.slaStatus === "breached"
@@ -377,9 +379,9 @@ export default function TicketDetailPage() {
                       }`}
                     />
                     {ticket.slaStatus === "breached"
-                      ? "BREACHED"
+                      ? t("ticketDetailPage.breached")
                       : ticket.slaStatus === "ok"
-                        ? "On Track"
+                        ? t("ticketDetailPage.onTrack")
                         : ticket.slaStatus}
                   </span>
                 </div>
@@ -400,7 +402,7 @@ export default function TicketDetailPage() {
               {/* Tags */}
               {ticket.tags && ticket.tags.length > 0 && (
                 <div>
-                  <div className="text-sm text-gray-400 mb-3 font-medium">Tags</div>
+                  <div className="text-sm text-gray-400 mb-3 font-medium">{t("ticketDetailPage.tags")}</div>
                   <div className="flex flex-wrap gap-2">
                     {ticket.tags.map((tag) => (
                       <span

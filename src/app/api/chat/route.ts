@@ -3,8 +3,66 @@ import { streamText, tool, stepCountIs } from "ai";
 import { z } from "zod";
 import { sql } from "@/lib/db";
 
+function fuzzyMatch(input: string, keywords: string[]): boolean {
+  const lower = input.toLowerCase().trim();
+  for (const keyword of keywords) {
+    if (lower.includes(keyword)) return true;
+    const words = lower.split(/\s+/);
+    for (const word of words) {
+      if (Math.abs(word.length - keyword.length) <= 2) {
+        let diff = 0;
+        const minLen = Math.min(word.length, keyword.length);
+        for (let i = 0; i < minLen; i++) {
+          if (word[i] !== keyword[i]) diff++;
+        }
+        diff += Math.abs(word.length - keyword.length);
+        if (diff <= Math.floor(keyword.length * 0.35)) return true;
+      }
+    }
+  }
+  return false;
+}
+
 export async function POST(req: Request) {
   const { messages } = await req.json();
+
+  const apiKey = process.env.OPENAI_API_KEY;
+
+  if (!apiKey) {
+    const lastMessage = messages[messages.length - 1]?.content || "";
+    const lowerMsg = lastMessage.toLowerCase();
+
+    let response = "";
+
+    if (fuzzyMatch(lowerMsg, ["password", "reset", "login", "forgot", "locked"])) {
+      response = "To reset your password:\n\n1. Go to supportflow-ai-six.vercel.app/forgot-password\n2. Enter your email address\n3. Check your email for the reset link\n4. Click the link and create a new password\n\nIf you still can't access your account, please email us at info@glopresc.com and we'll help you right away.";
+    } else if (fuzzyMatch(lowerMsg, ["order", "status", "delivery", "shipping", "track"])) {
+      response = "I'd be happy to check your order status! To look up your order, I'll need your ticket number or email address. Could you please provide one of those?";
+    } else if (fuzzyMatch(lowerMsg, ["human", "agent", "talk to", "speak", "person"])) {
+      response = "I understand you'd like to speak with a human agent. I'm connecting you now. In the meantime, you can also reach us directly:\n\n📧 Email: info@glopresc.com\n📱 WhatsApp: +2347082529729\n\nOur team typically responds within 2 minutes during business hours.";
+    } else if (fuzzyMatch(lowerMsg, ["billing", "invoice", "payment", "charge", "refund"])) {
+      response = "For billing questions, I can help! Here's what I need to know:\n\n• Do you have your invoice number or account email?\n• What specific billing issue are you experiencing?\n\nCommon billing topics:\n- Invoice discrepancies\n- Payment method updates\n- Subscription changes\n- Refund requests\n\nPlease share the details and I'll look into it for you.";
+    } else if (fuzzyMatch(lowerMsg, ["hello", "hi", "hey", "good morning", "good afternoon"])) {
+      response = "Hello! Welcome to SSV Support. I'm here to help you with any questions about our platform.\n\nI can assist with:\n• Account and billing questions\n• Technical support\n• Feature inquiries\n• Ticket creation\n\nHow can I help you today?";
+    } else {
+      response = "Thank you for reaching out! I'm here to help.\n\nI can assist you with:\n• Account and password issues\n• Billing and invoice questions\n• Technical support\n• Creating support tickets\n\nCould you tell me more about what you need help with? For immediate assistance, you can also reach us at:\n\n📧 info@glopresc.com\n📱 WhatsApp: +2347082529729";
+    }
+
+    const encoder = new TextEncoder();
+    const stream = new ReadableStream({
+      start(controller) {
+        controller.enqueue(encoder.encode(response));
+        controller.close();
+      },
+    });
+
+    return new Response(stream, {
+      headers: {
+        "Content-Type": "text/plain; charset=utf-8",
+        "Transfer-Encoding": "chunked",
+      },
+    });
+  }
 
   const result = streamText({
     model: openai("gpt-4o"),
@@ -20,6 +78,8 @@ Guidelines:
 - Keep responses concise but thorough
 - You work for a company called SSV
 - All currency is in Naira (₦)
+- Contact email: info@glopresc.com
+- WhatsApp: +2347082529729
 
 You have access to tools to:
 - Search the knowledge base for relevant articles

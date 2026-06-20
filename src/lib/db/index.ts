@@ -27,6 +27,7 @@ export async function initDB() {
       id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
       email VARCHAR(255) UNIQUE NOT NULL,
       name VARCHAR(255) NOT NULL,
+      phone VARCHAR(50),
       company VARCHAR(255),
       segment VARCHAR(50) DEFAULT 'starter',
       plan VARCHAR(50) DEFAULT 'starter',
@@ -102,4 +103,15 @@ export async function initDB() {
       created_at TIMESTAMP DEFAULT NOW()
     );
   `;
+
+  await sql`ALTER TABLE customers ADD COLUMN IF NOT EXISTS phone VARCHAR(50)`;
+
+  await sql`
+    CREATE SEQUENCE IF NOT EXISTS ticket_seq START WITH 1235 INCREMENT BY 1
+  `;
+}
+
+export async function generateTicketNumber(): Promise<string> {
+  const result = await sql`SELECT nextval('ticket_seq') as num`;
+  return `SSV-${result[0].num}`;
 }

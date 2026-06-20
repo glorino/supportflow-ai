@@ -1,105 +1,84 @@
 import { NextRequest, NextResponse } from "next/server";
-import { sql } from "@/lib/db";
+import { processIncomingEmail } from "@/lib/channels/email";
+import { broadcastInboxUpdate } from "@/lib/events";
 
-async function processIncomingEmail(from: string, subject: string, body: string): Promise<{ ticketNumber: string; customerId: string }> {
-  let customers = await sql`SELECT id FROM customers WHERE email = ${from}`;
-  let customerId: string;
-
-  if (customers.length === 0) {
-    const name = from.split("@")[0].replace(/[._]/g, " ").replace(/\b\w/g, (c) => c.toUpperCase());
-    const result = await sql`
-      INSERT INTO customers (email, name, company, segment, plan)
-      VALUES (${from}, ${name}, 'Unknown', 'starter', 'starter')
-      RETURNING id
-    `;
-    customerId = result[0].id;
-  } else {
-    customerId = customers[0].id;
-  }
-
-  const count = await sql`SELECT COUNT(*) as cnt FROM tickets`;
-  const num = Number(count[0].cnt) + 1235;
-  const ticketNumber = `SSV-${num}`;
-  const slaDue = new Date(Date.now() + 14400000);
-
-  await sql`
-    INSERT INTO tickets (ticket_number, subject, message, status, priority, channel, customer_id, sla_status, sla_due, tags)
-    VALUES (${ticketNumber}, ${subject}, ${body}, 'open', 'medium', 'email', ${customerId}, 'ok', ${slaDue.toISOString()}, ARRAY['email', 'inbound'])
-  `;
-
-  await sql`
-    INSERT INTO messages (ticket_id, sender_type, sender_id, content, channel, metadata)
-    SELECT id, 'customer', ${customerId}, ${body}, 'email', ${JSON.stringify({ from, subject })}::jsonb
-    FROM tickets WHERE ticket_number = ${ticketNumber}
-  `;
-
-  return { ticketNumber, customerId };
-}
-
-export async function POST(request: NextRequest) {
-  try {
-    const body = await request.json();
-    const { from, subject, text, html, messageId } = body;
-
-    if (!from || !subject) {
-      return NextResponse.json({ error: "Missing from or subject" }, { status: 400 });
-    }
-
-    const existing = await sql`
-      SELECT id FROM messages WHERE channel = 'email' AND metadata->>'messageId' = ${messageId || ''}
-    `;
-    if (existing.length > 0) {
-      return NextResponse.json({ message: "Duplicate email skipped" });
-    }
-
-    const result = await processIncomingEmail(from, subject, text || html || "");
-
-    return NextResponse.json({
-      message: "Email processed",
-      ticketNumber: result.ticketNumber,
-    });
-  } catch (error) {
-    console.error("Email poll error:", error);
-    return NextResponse.json({ error: "Failed to process email" }, { status: 500 });
-  }
-}
-
-export async function GET() {
+export async function POST(req: NextRequest) {
   try {
     const imapHost = process.env.IMAP_HOST;
-    const emailAddr = process.env.EMAIL_ADDRESS;
-    const configured = !!(imapHost && emailAddr);
+    const imapPort = parseInt(process.env.IMAP_PORT || "993");
+    const email = process.env.SMTP_USER || process.env.EMAIL_ADDRESS;
+    const password = process.env.SMTP_PASS || process.env.EMAIL_PASSWORD;
 
-    const recentEmails = await sql`
-      SELECT 
-        t.ticket_number,
-        t.subject,
-        t.status,
-        t.created_at,
-        c.name as customer_name,
-        c.email as customer_email
-      FROM tickets t
-      LEFT JOIN customers c ON t.customer_id = c.id
-      WHERE t.channel = 'email'
-      ORDER BY t.created_at DESC
-      LIMIT 20
-    `;
+    if (!imapHost || !email || !password) {
+      return NextResponse.json({ error: "IMAP credentials not configured" }, { status: 500 });
+    }
 
-    return NextResponse.json({
-      configured,
-      imapHost: imapHost || "Not configured",
-      email: emailAddr || "Not configured",
-      recentEmails: recentEmails.map(e => ({
-        ticketNumber: e.ticket_number,
-        subject: e.subject,
-        status: e.status,
-        customerName: e.customer_name,
-        customerEmail: e.customer_email,
-        createdAt: e.created_at,
-      })),
-    });
+    const imap = require("imap-simple");
+
+    const config = {
+      imap: {
+        user: email,
+        password: password,
+        host: imapHost,
+        port: imapPort,
+        tls: true,
+        tlsOptions: { rejectUnauthorized: false },
+        authTimeout: 10000,
+      },
+    };
+
+    const connection = await imap.connect(config);
+    await connection.openBox("INBOX");
+
+    const searchCriteria = ["UNSEEN"];
+    const fetchOptions = {
+      bodies: ["HEADER", "TEXT"],
+      markSeen: true,
+    };
+
+    const messages = await connection.search(searchCriteria, fetchOptions);
+    let processedCount = 0;
+
+    for (const message of messages) {
+      try {
+        const all = message.parts.find((part: { which: string }) => part.which === "TEXT");
+        const header = message.parts.find((part: { which: string }) => part.which === "HEADER");
+
+        if (header && all) {
+          const headerData = header.body;
+          const from = headerData.from?.[0]?.address || headerData.from || "";
+          const subject = headerData.subject || "No Subject";
+          const body = all.body || "";
+
+          if (from && !from.includes(email)) {
+            const ticketNumber = await processIncomingEmail(from, subject, body);
+
+            if (ticketNumber !== "error") {
+              broadcastInboxUpdate({
+                type: "new_message",
+                channel: "email",
+                from,
+                message: body.substring(0, 200),
+                ticketNumber,
+              });
+              processedCount++;
+            }
+          }
+        }
+      } catch (e) {
+        console.error("Error processing email message:", e);
+      }
+    }
+
+    connection.end();
+
+    return NextResponse.json({ status: "ok", processed: processedCount });
   } catch (error) {
-    console.error("Email status error:", error);
-    return NextResponse.json({ error: "Failed to check email status" }, { status: 500 });
+    console.error("Email poll error:", error);
+    return NextResponse.json({ error: "Email polling failed" }, { status: 500 });
   }
+}
+
+export async function GET(req: NextRequest) {
+  return NextResponse.json({ status: "ok", message: "Email polling endpoint is active" });
 }
