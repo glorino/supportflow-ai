@@ -3,7 +3,8 @@ import { sendWhatsAppMessage, verifyWhatsAppSignature } from "@/lib/channels/wha
 import { broadcastInboxUpdate } from "@/lib/events";
 import { initDB, sql, generateTicketNumber } from "@/lib/db";
 
-const WHATSAPP_NUMBER = "+2347082529729";
+const WHATSAPP_NUMBER = process.env.WHATSAPP_NUMBER || "+2347082529729";
+const APP_URL = process.env.NEXT_PUBLIC_APP_URL || "https://supportflow-ai-six.vercel.app";
 
 export async function POST(req: NextRequest) {
   try {
@@ -73,7 +74,7 @@ async function processIncomingWhatsApp(from: string, text: string) {
 
   let customerId: string | null = null;
   let customerName = "there";
-  let ticketNumber = `SSV-${Date.now().toString().slice(-6)}`;
+  let ticketNumber = `DNT-${Date.now().toString().slice(-6)}`;
 
   if (dbReady) {
     try {
@@ -193,7 +194,7 @@ I understand you're having trouble logging in, ${customerName}. Let's get this r
 
 *Step-by-step to reset your password:*
 
-1. Visit: supportflow-ai-six.vercel.app/forgot-password
+1. Visit: ${APP_URL}/forgot-password
 2. Enter the email address associated with your account
 3. Check your inbox (and spam/junk folder) for the reset email
 4. Click the reset link in the email
@@ -253,7 +254,7 @@ Our billing team responds within 1 hour during business hours (Mon-Fri, 9AM-6PM 
 I'd be happy to help you track your order or resolve a delivery issue, ${customerName}.
 
 *To look up your order, please provide:*
-• Your order number (starts with # or SSV-)
+• Your order number (starts with # or DNT-)
 • OR the email address used to place the order
 • OR the name on the order
 
@@ -286,11 +287,11 @@ Here's exactly how to update your profile details, ${customerName}:
 *Step-by-step instructions:*
 
 1. *Log in* to your account at:
-   supportflow-ai-six.vercel.app/login
+   ${APP_URL}/login
 
 2. *Navigate to Settings:*
    • Click the gear icon (⚙️) in the top-right corner
-   • Or go to: supportflow-ai-six.vercel.app/dashboard/settings
+   • Or go to: ${APP_URL}/dashboard/settings
 
 3. *Edit your profile:*
    • Click on "Profile" or "Account Settings"
@@ -323,7 +324,7 @@ For your security, email and password changes require verification.
 
 *To Change Your Email:*
 
-1. Log in at: supportflow-ai-six.vercel.app/login
+1. Log in at: ${APP_URL}/login
 2. Go to Settings → Account Security
 3. Click "Change Email Address"
 4. Enter your new email address
@@ -333,7 +334,7 @@ For your security, email and password changes require verification.
 
 *To Change Your Password:*
 
-1. Log in at: supportflow-ai-six.vercel.app/login
+1. Log in at: ${APP_URL}/login
 2. Go to Settings → Account Security
 3. Click "Change Password"
 4. Enter your current password
@@ -348,7 +349,7 @@ For your security, email and password changes require verification.
 • Never share your password with anyone
 
 Ticket created: *${ticketNumber}*
-Locked out? Visit: supportflow-ai-six.vercel.app/forgot-password`;
+Locked out? Visit: ${APP_URL}/forgot-password`;
     }
 
     if (fuzzyMatch(lower, ["delete", "remove account", "close account", "delet account"])) {
@@ -405,9 +406,9 @@ I'm here to help with your account, ${customerName}. What do you need assistance
    Can't log in or locked out
 
 *Quick links:*
-• Dashboard: supportflow-ai-six.vercel.app/dashboard
-• Settings: supportflow-ai-six.vercel.app/dashboard/settings
-• Password reset: supportflow-ai-six.vercel.app/forgot-password
+• Dashboard: ${APP_URL}/dashboard
+• Settings: ${APP_URL}/dashboard/settings
+• Password reset: ${APP_URL}/forgot-password
 
 Ticket created: *${ticketNumber}*
 Just tell me which option you need help with.`;
@@ -456,7 +457,7 @@ Please provide the details above, and I'll escalate this to our technical team.`
 
 Great question, ${customerName}! Here's everything you need to know about our pricing.
 
-*SSV CRM Plans:*
+*DentalCRM Plans:*
 
 • *Starter Plan* — Perfect for small teams
   - Up to 500 tickets/month
@@ -479,7 +480,7 @@ Great question, ${customerName}! Here's everything you need to know about our pr
   - 24/7 phone support
 
 *To view detailed pricing:*
-Visit: supportflow-ai-six.vercel.app/features
+Visit: ${APP_URL}/features
 
 *Special offers:*
 ✓ 14-day free trial (no credit card required)
@@ -487,13 +488,13 @@ Visit: supportflow-ai-six.vercel.app/features
 ✓ Startup discount available
 
 Ticket created: *${ticketNumber}*
-Need help choosing? Book a free consultation: supportflow-ai-six.vercel.app/demo`;
+Need help choosing? Book a free consultation: ${APP_URL}/demo`;
   }
 
   if (fuzzyMatch(lower, ["demo", "trial", "try", "free", "book demo", "schedule demo", "demo request"])) {
     return `🎯 *Book a Free Demo*
 
-We'd love to show you how SSV CRM can transform your customer support, ${customerName}!
+We'd love to show you how DentalCRM can transform your customer support, ${customerName}!
 
 *What to expect:*
 ✓ 30-minute personalized walkthrough
@@ -504,7 +505,7 @@ We'd love to show you how SSV CRM can transform your customer support, ${custome
 
 *How to book:*
 
-1. Visit: supportflow-ai-six.vercel.app/demo
+1. Visit: ${APP_URL}/demo
 2. Select your preferred date and time
 3. Choose your industry (so we can customize the demo)
 4. Add your team size
@@ -521,7 +522,7 @@ Subject: "Demo Request - [Your Company Name]"
 • Budget range (optional)
 
 Ticket created: *${ticketNumber}*
-Already know you want to start? Sign up: supportflow-ai-six.vercel.app/login`;
+Already know you want to start? Sign up: ${APP_URL}/login`;
   }
 
   if (fuzzyMatch(lower, ["human", "agent", "person", "speak", "talk", "call", "representative", "support team", "real person", "talk to someone", "speak to someone"])) {
@@ -578,7 +579,7 @@ I understand you'd like to make changes to your subscription, ${customerName}. L
 
 *To cancel your subscription:*
 
-1. Log in at: supportflow-ai-six.vercel.app/login
+1. Log in at: ${APP_URL}/login
 2. Go to: Settings → Billing → Subscription
 3. Click "Manage Subscription"
 4. Select "Cancel Subscription"
@@ -602,8 +603,8 @@ I'm glad I could help. Your satisfaction is our priority.
 *Is there anything else I can assist you with today?*
 
 Quick links:
-• Account settings: supportflow-ai-six.vercel.app/dashboard/settings
-• Knowledge base: supportflow-ai-six.vercel.app/knowledge
+• Account settings: ${APP_URL}/dashboard/settings
+• Knowledge base: ${APP_URL}/knowledge
 • Contact support: info@glopresc.com
 
 Ticket *${ticketNumber}* is open and our team is on it.
@@ -612,7 +613,7 @@ Have a wonderful day! ✨`;
   }
 
   if (fuzzyMatch(lower, ["hello", "hi", "hey", "good morning", "good afternoon", "good evening", "helo", "heloo", "hii", "heythere"])) {
-    return `Hello ${customerName}! 👋 Welcome to SSV Support.
+    return `Hello ${customerName}! 👋 Welcome to DentalCRM Support.
 
 I'm your AI assistant, ready to help you with:
 
