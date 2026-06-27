@@ -10,10 +10,10 @@ export default function LoginPage() {
   const { t } = useLang();
 
   const demoLogins = [
-    { email: "emeka@dentalcrm.com", role: t("roles.superAdmin"), name: "Dr. Chukwuemeka Obi", avatar: "CO", gradient: "from-violet-500 to-indigo-600" },
-    { email: "folake@dentalcrm.com", role: t("roles.manager"), name: "Folake Ogundipe", avatar: "FO", gradient: "from-emerald-500 to-teal-600" },
-    { email: "ngozi@dentalcrm.com", role: t("roles.agent"), name: "Ngozi Okolo", avatar: "NO", gradient: "from-blue-500 to-cyan-600" },
-    { email: "dayo@dentalcrm.com", role: t("roles.viewer"), name: "Dayo Fadugba", avatar: "DF", gradient: "from-gray-500 to-slate-600" },
+    { email: "emeka@supportflow-ai.com", role: t("roles.superAdmin"), name: "Dr. Chukwuemeka Obi", avatar: "CO", gradient: "from-violet-500 to-indigo-600" },
+    { email: "folake@supportflow-ai.com", role: t("roles.manager"), name: "Folake Ogundipe", avatar: "FO", gradient: "from-emerald-500 to-teal-600" },
+    { email: "ngozi@supportflow-ai.com", role: t("roles.agent"), name: "Ngozi Okolo", avatar: "NO", gradient: "from-blue-500 to-cyan-600" },
+    { email: "dayo@supportflow-ai.com", role: t("roles.viewer"), name: "Dayo Fadugba", avatar: "DF", gradient: "from-gray-500 to-slate-600" },
   ];
 
   const [email, setEmail] = useState("");
@@ -212,7 +212,7 @@ export default function LoginPage() {
                   type="email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  placeholder="you@dentalcrm.com"
+                  placeholder="you@supportflow-ai.com"
                   required
                   className="input-premium"
                 />
