@@ -7,10 +7,10 @@ const demoSchema = z.object({
 });
 
 const DEMO_ACCOUNTS: Record<string, string> = {
-  "emeka@dentalcrm.com": "admin123",
-  "folake@dentalcrm.com": "demo123",
-  "ngozi@dentalcrm.com": "demo123",
-  "dayo@dentalcrm.com": "demo123",
+  "emeka@supportflow-ai.com": "admin123",
+  "folake@supportflow-ai.com": "demo123",
+  "ngozi@supportflow-ai.com": "demo123",
+  "dayo@supportflow-ai.com": "demo123",
 };
 
 export async function POST(req: Request) {
